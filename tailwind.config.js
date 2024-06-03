@@ -87,6 +87,11 @@ module.exports = {
         "collapsible-down": "collapsible-down 0.2s ease-in-out",
         "collapsible-up": "collapsible-up 0.2s ease-in-out",
       },
+        fontFamily:{
+            inter: ["Inter"],
+            poppins: ["Poppins"],
+            sans: ["Poppins"]
+        }
     },
   },
   plugins: [animate],
