@@ -31,13 +31,13 @@ const updateNumberOfCards = (action) => {
         <InputLabel value="Please select number of cartela's"/>
         <div class="flex justify-between">
             <div  @click="updateNumberOfCards('decrement')"
-                  class="bg-gradient-to-l from-purple-500 to-violet-500  text-white font-semibold font w-12 text-center flex items-center justify-center rounded-md">
+                  class="bg-gray-800  text-white font-semibold font w-12 text-center flex items-center justify-center rounded-md">
                 -
             </div>
-            <Input type="text" class=" w-7/12" v-model="numberOfCards"/>
+            <Input type="text" class=" w-8/12" v-model="numberOfCards"/>
             <div
                 @click="updateNumberOfCards('increment')"
-                class="bg-gradient-to-l from-purple-500 to-violet-500  text-white font-semibold font w-12 text-center flex items-center justify-center rounded-md">
+                class="bg-gray-800 text-white font-semibold font w-12 text-center flex items-center justify-center rounded-md">
                 +
             </div>
         </div>
@@ -48,10 +48,10 @@ const updateNumberOfCards = (action) => {
         <InputLabel value="Enter your lucky cartela number"/>
         <div class="flex">
             <div  @click="updateNumberOfCards('decrement')"
-                  class="bg-gradient-to-l from-purple-500 to-violet-500 text-white font-semibold  w-12 text-center flex items-center justify-center rounded-l-md">
+                  class="bg-gray-800 text-white font-semibold  w-12 text-center flex items-center justify-center rounded-l-md">
                 #
             </div>
-            <Input type="text" class=" !rounded-none !rounded-r-md w-full" v-model="numberOfCards"/>
+            <Input type="number" class=" !rounded-none !rounded-r-md w-full"/>
         </div>
             <div class="text-xs font-light">You can select from # 1 - 3000</div>
     </div>

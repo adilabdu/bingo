@@ -19,7 +19,7 @@ import {Gift, CircleDollarSign} from "lucide-vue-next";
     </Header>
 
     <div class="flex flex-col space-y-3 text-sm font-poppins">
-        <div v-for="(item, index) in [10,15,20,30,50,100,200]" class="flex space-x-4 justify-between items-center bg-white p-3 rounded-md">
+        <div v-for="(item, index) in [10,15,20,30,50,100,200]" class="flex space-x-4 justify-between items-center bg-white p-4 rounded-md">
             <div class="flex space-x-4 items-center">
             <CircleDollarSign/>
             <div class="font-medium">{{ item }} Birr</div>

@@ -28,12 +28,12 @@ const formattedBingoData = computed(() => {
 
 
 <template>
-    <div class="flex justify-center border-2 py-3 shadow-md rounded-md border-gray-800">
+    <div class="flex justify-center py-3 rounded-md ">
         <div v-for="(column, index) in formattedBingoData" :key="index" class="mx-2 text-center">
-            <h3 class="bg-gradient-to-l from-purple-500 to-violet-500 font-semibold text-white rounded py-2">{{ columnLabels[index] }}</h3>
+            <h3 class="bg-gray-800 font-semibold text-white rounded py-2">{{ columnLabels[index] }}</h3>
             <ul>
                 <li v-for="(num, ind) in column" :key="ind" class="w-12">
-                    <div v-if="columnLabels[index] === 'N' && ind === 2" class="bg-gray-800 font-semibold text-white rounded p-2">FREE</div>
+                    <div v-if="columnLabels[index] === 'N' && ind === 2" class="bg-gradient-to-l from-emerald-500 to-green-500 font-semibold text-white rounded p-2">FREE</div>
                     <div v-else class="bg-white w-full rounded font-medium my-2 p-2">
                         {{ num }}
                     </div>
