@@ -16,4 +16,9 @@ class GameController extends Controller
     {
         return Inertia::render('Game/Initiate/Cartela');
     }
+
+    public function playGame()
+    {
+        return Inertia::render('Game/Play');
+    }
 }
