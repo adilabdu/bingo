@@ -24,4 +24,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+$directory = new RecursiveDirectoryIterator(__DIR__.'/web');
+$iterator = new RecursiveIteratorIterator($directory);
+
+foreach ($iterator as $file) {
+    if ($file->getExtension() === 'php') {
+        include $file->getPathname();
+    }
+}
 require __DIR__.'/auth.php';
