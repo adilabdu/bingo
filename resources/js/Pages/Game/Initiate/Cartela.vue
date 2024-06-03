@@ -5,11 +5,10 @@ import Header from "@/Components/Header.vue";
 import {Input} from "@/Components/shadcn/ui/input/index.js";
 import {ref} from "vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import {Button} from "@/Components/shadcn/ui/button/index.js";
+import ConfirmCartelaDrawer from "@/Views/Game/ConfirmCartelaDrawer.vue";
 
 const numberOfCards = ref(1);
 
-// function to increment/decrement the number of cards, the value must be between 1 and 3
 const updateNumberOfCards = (action) => {
     if (action === 'increment' && numberOfCards.value < 3) {
         numberOfCards.value++;
@@ -57,9 +56,8 @@ const updateNumberOfCards = (action) => {
             <div class="text-xs font-light">You can select from # 1 - 3000</div>
     </div>
 
-        <Button class="bg-gradient-to-l from-purple-500 to-violet-500 text-white font-semibold w-full">
-            Play Bingo
-        </Button>
+
+    <ConfirmCartelaDrawer project="project" />
 </AuthenticatedLayout>
 </template>
 
