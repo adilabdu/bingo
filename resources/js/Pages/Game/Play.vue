@@ -16,12 +16,12 @@ const bingoNumbers = [
 
 <template>
 <AuthenticatedLayout>
-    <div class="flex justify-between p-3 rounded-lg  h-full items-center">
+    <div class="flex justify-between space-x-4 rounded-lg w-full h-full items-center">
         <div class="w-3/12 text-center py-3 text-white font-bold text-5xl rounded-lg bg-gradient-to-l from-emerald-500 to-green-500">
             41
         </div>
-        <div class="w-8/12 flex flex-wrap ">
-            <div v-for="item in 8" class="w-10 py-2 font-semibold text-center rounded-lg  border-2 border-black bg-white  m-1">
+        <div class="w-9/12 flex flex-wrap ">
+            <div v-for="item in 8" class="w-12 py-2 font-semibold text-center rounded-lg  border-2 border-black bg-white  m-1">
                 {{item * item * 2}}
             </div>
         </div>

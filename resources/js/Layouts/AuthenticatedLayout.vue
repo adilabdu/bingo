@@ -16,8 +16,8 @@ const showingNavigationDropdown = ref(false);
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
-                        <div class="flex">
+                    <div class="flex w-full justify-between h-16">
+                        <div class="flex ">
 
                             <!-- Navigation Links -->
                             <div class="sm:space-x-8 sm:-my-px sm:ms-10 flex min-w-full justify-center font-poppins font-medium text-lg w-full items-center">
@@ -101,11 +101,6 @@ const showingNavigationDropdown = ref(false);
                     :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
                     class="sm:hidden"
                 >
-                    <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
-                        </ResponsiveNavLink>
-                    </div>
 
                     <!-- Responsive Settings Options -->
                     <div class="pt-4 pb-1 border-t border-gray-200">
@@ -134,7 +129,7 @@ const showingNavigationDropdown = ref(false);
             </header>
 
             <!-- Page Content -->
-            <main class="container py-3 flex flex-col space-y-6 w-full">
+            <main class="px-4 sm:px-0 sm:container py-3 flex flex-col space-y-6 w-full">
                 <slot />
             </main>
         </div>
