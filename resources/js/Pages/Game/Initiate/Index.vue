@@ -4,13 +4,16 @@ import Header from "@/Components/Header.vue";
 import { Gift, CircleDollarSign } from "lucide-vue-next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/shadcn/ui/tabs/index.js';
 import { computed } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 import GameCategoryCard from "@/Views/Game/GameCategoryCard.vue";
 
 const props = usePage().props;
-const basicCategories = computed(() => props.categories.filter(cat => cat.category === 'basic'));
-const vipCategories = computed(() => props.categories.filter(cat => cat.category === 'vip'));
+const basicCategories = computed(() => props.gameCategories.filter(cat => cat.category === 'basic'));
+const vipCategories = computed(() => props.gameCategories.filter(cat => cat.category === 'vip'));
 
+function redirectToGame(categoryId) {
+    router.visit(`/game/initiate/${categoryId}`)
+}
 </script>
 
 
@@ -33,10 +36,10 @@ const vipCategories = computed(() => props.categories.filter(cat => cat.category
                 <TabsTrigger value="vip" class="w-full">VIP</TabsTrigger>
             </TabsList>
             <TabsContent value="basic">
-                <GameCategoryCard :name="item.name" :amount="item.amount" v-for="(item, index) in basicCategories" :key="index" />
+                <GameCategoryCard @click="redirectToGame(item.id)" :name="item.name" :amount="item.amount" v-for="(item, index) in basicCategories" :key="index" />
             </TabsContent>
             <TabsContent value="vip">
-                <GameCategoryCard :name="item.name" :amount="item.amount" v-for="(item, index) in vipCategories" :key="index" />
+                <GameCategoryCard @click="redirectToGame(item.id)"  :name="item.name" :amount="item.amount" v-for="(item, index) in vipCategories" :key="index" />
             </TabsContent>
         </Tabs>
     </AuthenticatedLayout>
