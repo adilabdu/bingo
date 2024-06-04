@@ -20,8 +20,13 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex ">
 
                             <!-- Navigation Links -->
-                            <div class="sm:space-x-8 sm:-my-px sm:ms-10 flex min-w-full justify-center font-poppins font-medium text-lg w-full items-center">
-                                    #01 Bingo
+                            <div class="sm:space-x-8 sm:-my-px sm:ms-10 flex min-w-full justify-center space-x-1 font-poppins font-semibold text-lg w-full items-center">
+                                    <span class="text-blue-600 text-2xl font-bold">
+                                        #01
+                                    </span>
+                                <span>
+                                    Bingo
+                                </span>
                             </div>
                         </div>
 
@@ -65,7 +70,7 @@ const showingNavigationDropdown = ref(false);
 
                         <!-- Hamburger -->
                         <div class="-me-2 flex items-center sm:hidden">
-                            <div class="px-2 bg-gray-100 text-lg mr-2 rounded-lg h-fit font-bold my-auto">
+                            <div class="px-2 bg-gray-50 text-lg mr-2 rounded-lg h-fit font-bold my-auto">
                                 {{ $page.props.auth.user?.player?.balance }} Br
                             </div>
                             <button

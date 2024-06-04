@@ -21,6 +21,7 @@ const updateNumberOfCards = (action) => {
 }
 
 const gameCategory = usePage().props.gameCategory;
+// Todo: Add query params from url on refresh
 const cartelaName = ref('');
 const isLoading = ref(false);
 

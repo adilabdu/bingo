@@ -6,9 +6,10 @@ import {
     DrawerRoot,
     DrawerTrigger,
 } from "vaul-vue";
-import { ref } from "vue";
+import {computed, ref} from "vue";
 import {Button} from "@/Components/shadcn/ui/button/index.js";
 import BingoBoard from "@/Views/Game/BingoBoard.vue";
+import {usePage} from "@inertiajs/vue3";
 
 const isDrawerOpen = ref(false);
 
@@ -22,6 +23,14 @@ const bingoNumbers = [
     {G: [45, 88, 43, 12, 54]},
     {O: [33, 65, 23, 78, 12]}
 ];
+
+const cartela = computed(() => {
+    return usePage().props?.cartela || [];
+});
+
+const cartelaNumbers = computed(() => {
+    return usePage().props?.cartela?.numbers || [];
+});
 </script>
 
 <template>
@@ -31,8 +40,9 @@ const bingoNumbers = [
         @update:open="setDrawerOpen"
     >
         <DrawerTrigger>
-            <Button class="bg-gradient-to-l from-purple-500 to-violet-500 text-white font-semibold w-full">
-               Confirm & Play Bingo
+            <!--   Todo: Check disabled reactivity         -->
+            <Button class="bg-blue-600 text-white font-semibold w-full" :disabled="cartela.length < 0">
+                Confirm & Play Bingo
             </Button>
         </DrawerTrigger>
         <DrawerPortal>
@@ -44,18 +54,18 @@ const bingoNumbers = [
                     class="mt-4 mx-auto w-14 h-1.5 flex-shrink-0 rounded-full bg-gray-300"
                 />
 
-                    <div class="text-center font-semibold text-2xl">
-                        Confirm Your Cartela
-                    </div>
+                <div class="text-center font-semibold text-2xl">
+                    Confirm Your Cartela
+                </div>
 
                 <div>
                     <div class="pb-4">
-                        Cartela No: <span class="font-bold bg-gray-800 px-2 italic text-white">#123</span>
+                        Cartela No: <span class="font-bold bg-blue-600 px-2 italic text-white">#{{ cartela?.name }}</span>
                     </div>
-                <BingoBoard :numbers="bingoNumbers" />
+                    <BingoBoard v-if="cartelaNumbers" :numbers="cartelaNumbers" card-size="w-14" />
                 </div>
 
-                <Button class="bg-gradient-to-l from-purple-500 to-violet-500 text-white font-semibold w-full">
+                <Button class="bg-blue-600 text-white font-semibold w-full">
                     Start Bingo
                 </Button>
             </DrawerContent>
