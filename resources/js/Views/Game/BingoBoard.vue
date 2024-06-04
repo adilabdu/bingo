@@ -5,6 +5,10 @@ const props = defineProps({
     numbers: {
         type: Array,
         default: () => []
+    },
+    cardSize: {
+        type: String,
+        default: 'w-16'
     }
 });
 
@@ -32,7 +36,7 @@ const formattedBingoData = computed(() => {
         <div v-for="(column, index) in formattedBingoData" :key="index" class=" text-center">
             <h3 class="bg-gray-800 font-semibold text-white rounded py-2">{{ columnLabels[index] }}</h3>
             <ul>
-                <li v-for="(num, ind) in column" :key="ind" class="w-16">
+                <li v-for="(num, ind) in column" :key="ind" :class="cardSize">
                     <div v-if="columnLabels[index] === 'N' && ind === 2" class="bg-gradient-to-l from-emerald-500 to-green-500 font-semibold text-white rounded my-2.5 py-3 px-2">FREE</div>
                     <div v-else class="bg-white w-full rounded font-medium text-lg my-2 py-3 px-2">
                         {{ num }}

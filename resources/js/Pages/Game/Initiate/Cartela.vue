@@ -57,7 +57,7 @@ const updateNumberOfCards = (action) => {
     </div>
 
 
-    <ConfirmCartelaDrawer project="project" />
+    <ConfirmCartelaDrawer />
 </AuthenticatedLayout>
 </template>
 

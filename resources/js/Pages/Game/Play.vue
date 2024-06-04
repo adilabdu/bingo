@@ -1,9 +1,8 @@
 <script setup>
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import Header from "@/Components/Header.vue";
 import BingoBoard from "@/Views/Game/BingoBoard.vue";
-import {Button} from "@/Components/shadcn/ui/button/index.js";
+import CompleteGameDrawer from "@/Views/Game/CompleteGameDrawer.vue";
 
 const bingoNumbers = [
     {B: [12, 11, 23, 34, 45]},
@@ -39,9 +38,7 @@ const bingoNumbers = [
         </div>
     </div>
 
-    <Button class="bg-gradient-to-l from-emerald-500 to-green-500 text-white text-xl font-semibold uppercase w-full">
-         Bingo
-    </Button>
+    <CompleteGameDrawer />
 </AuthenticatedLayout>
 </template>
 

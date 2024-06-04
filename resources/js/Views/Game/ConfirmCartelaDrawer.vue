@@ -10,12 +10,6 @@ import { ref } from "vue";
 import {Button} from "@/Components/shadcn/ui/button/index.js";
 import BingoBoard from "@/Views/Game/BingoBoard.vue";
 
-defineProps({
-    project: {
-        type: Object,
-        required: true,
-    },
-});
 const isDrawerOpen = ref(false);
 
 function setDrawerOpen(val) {
