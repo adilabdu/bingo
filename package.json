@@ -21,6 +21,7 @@
         "@vueuse/core": "^10.10.0",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
+        "lodash": "^4.17.21",
         "lucide-vue-next": "^0.382.0",
         "radix-vue": "^1.8.2",
         "shadcn-vue": "^0.10.5",
