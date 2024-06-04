@@ -11,7 +11,12 @@ const props = usePage().props;
 const basicCategories = computed(() => props.gameCategories.filter(cat => cat.category === 'basic'));
 const vipCategories = computed(() => props.gameCategories.filter(cat => cat.category === 'vip'));
 
-function redirectToGame(categoryId) {
+const balance = usePage().props.auth.user?.player?.balance;
+function redirectToGame(categoryId, amount) {
+    if (balance < amount) {
+        // Todo: Show a dialog to show the user that they don't have enough balance
+        return;
+    }
     router.visit(`/game/initiate/${categoryId}`)
 }
 </script>
@@ -36,10 +41,10 @@ function redirectToGame(categoryId) {
                 <TabsTrigger value="vip" class="w-full">VIP</TabsTrigger>
             </TabsList>
             <TabsContent value="basic">
-                <GameCategoryCard @click="redirectToGame(item.id)" :name="item.name" :amount="item.amount" v-for="(item, index) in basicCategories" :key="index" />
+                <GameCategoryCard @click="redirectToGame(item.id, item.amount)" :name="item.name" :amount="item.amount" v-for="(item, index) in basicCategories" :key="index" />
             </TabsContent>
             <TabsContent value="vip">
-                <GameCategoryCard @click="redirectToGame(item.id)"  :name="item.name" :amount="item.amount" v-for="(item, index) in vipCategories" :key="index" />
+                <GameCategoryCard @click="redirectToGame(item.id, item.amount)"  :name="item.name" :amount="item.amount" v-for="(item, index) in vipCategories" :key="index" />
             </TabsContent>
         </Tabs>
     </AuthenticatedLayout>

@@ -1,7 +1,10 @@
 <script setup>
 
 import {CircleDollarSign, SignalLow} from "lucide-vue-next";
-defineProps({
+import {usePage} from "@inertiajs/vue3";
+import {Button} from "@/Components/shadcn/ui/button/index.js";
+import {computed} from "vue";
+const props = defineProps({
     amount:{
         type: Number,
         required: true
@@ -15,10 +18,16 @@ defineProps({
         default: 0
     }
 });
+
+const balance = usePage().props.auth.user?.player?.balance;
+
+const isBalanceEnough = computed(() => balance >= props.amount);
 </script>
 
 <template>
-    <div  class="flex justify-between items-center bg-white p-4 mb-2 rounded-md">
+    <div class="bg-white rounded-md flex flex-col space-y-4 mb-2" :class="isBalanceEnough ? 'bg-white opacity-100 p-4' : 'px-4 py-2'">
+
+    <div  class="flex justify-between items-center" >
         <div class="flex items-center space-x-5">
             <CircleDollarSign />
             <div>
@@ -32,6 +41,12 @@ defineProps({
                  {{ players }} Players
              </span>
         </div>
+    </div>
+        <div v-if="!isBalanceEnough" class="flex justify-between items-center">
+            <div class="text-xs text-red-600">Not Enough Balance</div>
+        <Button  class="bg-blue-600 text-white font-semibold text-xs rounded-md px-2 py-1 w-5/12" size="xs">Deposit</Button>
+        </div>
+
     </div>
 </template>
 
