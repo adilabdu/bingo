@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cartela;
 use App\Models\GameCategory;
+use App\Services\GameService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -33,5 +34,21 @@ class GameController extends Controller
     public function playGame()
     {
         return Inertia::render('Game/Play');
+    }
+
+    public function joinGame(Request $request)
+    {
+        $request->validate([
+            'game_category_id' => 'required|exists:game_categories,id',
+            'cartela_id' => 'required|exists:cartelas,id',
+        ]);
+
+        $game = GameService::startGame($request->cartela_id, $request->game_category_id);
+
+        return Inertia::render('Game/Initiate/Join',[
+            'gameCategory' => GameCategory::findOrFail($request->game_category_id),
+            'cartela' => Cartela::findOrFail($request->cartela_id),
+            'game' => $game
+        ]);
     }
 }
