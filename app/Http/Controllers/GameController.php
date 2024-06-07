@@ -6,7 +6,6 @@ use App\Models\Cartela;
 use App\Models\GameCategory;
 use App\Services\GameService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,9 +23,7 @@ class GameController extends Controller
         return Inertia::render('Game/Initiate/Cartela',[
             'gameCategory' => GameCategory::findOrFail($categoryId),
             'cartela' => Inertia::lazy(function () use ($cartelaName) {
-                $l = Cartela::where('name', $cartelaName)->first();
-                Log::info($l);
-                return $l;
+                return Cartela::where('name', $cartelaName)->first();
             })
         ]);
     }
