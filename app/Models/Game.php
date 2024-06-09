@@ -35,4 +35,7 @@ class Game extends Model
         return $this->hasManyThrough(Cartela::class, GamePlayer::class);
     }
 
+    protected $casts = [
+        'scheduled_at' => 'datetime',
+    ];
 }
