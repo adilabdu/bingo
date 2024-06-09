@@ -17,5 +17,22 @@ class Game extends Model
         'game_category_id',
         'status',
         'scheduled_at',
+        'winner_net_amount'
     ];
+
+    public function gameCategory()
+    {
+        return $this->belongsTo(GameCategory::class);
+    }
+
+    public function players()
+    {
+        return $this->hasMany(GamePlayer::class);
+    }
+
+    public function cartelas()
+    {
+        return $this->hasManyThrough(Cartela::class, GamePlayer::class);
+    }
+
 }

@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { ref, onMounted, onUnmounted, computed } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 import moment from 'moment';
 
 const { game } = usePage().props;
@@ -32,6 +32,13 @@ onMounted(() => {
 onUnmounted(() => {
     clearInterval(intervalId);  // Clear the interval when the component unmounts
 });
+
+Echo.private('start-game')
+    .listen(`.start-game.${game.id}`, (e) => {
+        router.get('/game/play',{
+            'game_id': game.id,
+        });
+    });
 </script>
 
 

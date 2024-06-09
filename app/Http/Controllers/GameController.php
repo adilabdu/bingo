@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cartela;
+use App\Models\Game;
 use App\Models\GameCategory;
-use App\Services\GameService;
+use App\Models\GamePlayer;
+use App\Services\JoinGameService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -28,9 +30,30 @@ class GameController extends Controller
         ]);
     }
 
-    public function playGame()
+    public function playGame(Request $request)
     {
-        return Inertia::render('Game/Play');
+        $request->validate([
+            'game_id' => 'required|exists:games,id',
+        ]);
+
+        // Check if game is active
+        $game = Game::find($request->game_id)->load('gameCategory');
+
+        if ($game->status !== Game::STATUS_ACTIVE) {
+            return redirect()->route('game.initiate');
+        }
+
+        $playerGame = GamePlayer::where('game_id', $game->id)
+            ->where('player_id', auth()->user()->load('player')->player->id)
+            ->first();
+
+        $playerCartela = Cartela::find($playerGame->cartela_id);
+
+        return Inertia::render('Game/Play', [
+            'game' => $game,
+            'playerCartela' => $playerCartela,
+            'totalPlayers' => $game->players->count(),
+        ]);
     }
 
     public function joinGame(Request $request)
@@ -40,7 +63,7 @@ class GameController extends Controller
             'cartela_id' => 'required|exists:cartelas,id',
         ]);
 
-        $game = GameService::startGame($request->cartela_id, $request->game_category_id);
+        $game = JoinGameService::startGame($request->cartela_id, $request->game_category_id);
 
         return Inertia::render('Game/Initiate/Join',[
             'gameCategory' => GameCategory::findOrFail($request->game_category_id),
