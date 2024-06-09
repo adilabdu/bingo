@@ -12,6 +12,10 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    const TYPE_ADMIN = 'admin';
+
+    const TYPE_PLAYER = 'player';
+
     protected $fillable = [
         'name',
         'email',
@@ -34,5 +38,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function admin(): HasOne
+    {
+        return $this->hasOne(Admin::class);
     }
 }
