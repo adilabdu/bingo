@@ -5,14 +5,14 @@ module.exports = {
   darkMode: ["class"],
   safelist: ["dark"],
   prefix: "",
-  
+
   content: [
     "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
     "./storage/framework/views/*.php",
     "./resources/views/**/*.blade.php",
     "./resources/js/**/*.{js,jsx,vue}",
   ],
-  
+
   theme: {
     container: {
       center: true,
@@ -56,6 +56,18 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+          brand: {
+              "50": "#f8f9fa",
+              "100": "#f1f3f5",
+              "150": "#e3e7ef",
+              "200": "#d4d7dc",
+              "250": "#c0c4ca",
+              "300": "#a5a7ab",
+              "350": "#888b8e",
+              "400": "#FF014F",
+              "450": "#535459",
+              "500": "#393a3b",
+          }
       },
       borderRadius: {
       	xl: "calc(var(--radius) + 4px)",
