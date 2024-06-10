@@ -32,7 +32,7 @@ const bingoNumbers = [
         @update:open="setDrawerOpen"
     >
         <DrawerTrigger>
-            <Button class="bg-gradient-to-l from-emerald-500 to-green-500 text-white text-xl font-semibold uppercase w-full">
+            <Button class="bg-gradient-to-l from-blue-600 to-sky-600 text-white text-xl font-semibold uppercase w-full">
                 Bingo
             </Button>
         </DrawerTrigger>

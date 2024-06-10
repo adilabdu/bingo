@@ -17,7 +17,10 @@ class Game extends Model
         'game_category_id',
         'status',
         'scheduled_at',
-        'winner_net_amount'
+        'winner_net_amount',
+        'draw_numbers',
+        'winner_numbers'
+
     ];
 
     public function gameCategory()
@@ -37,5 +40,7 @@ class Game extends Model
 
     protected $casts = [
         'scheduled_at' => 'datetime',
+        'draw_numbers' => 'array',
+        'winner_numbers' => 'array',
     ];
 }

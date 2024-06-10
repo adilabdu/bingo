@@ -7,7 +7,7 @@ use App\Models\Game;
 use App\Models\GamePlayer;
 use Carbon\Carbon;
 
-class GameService
+class JoinGameService
 {
     public static function startGame($cartelaId, $gameCategoryId)
     {
@@ -32,7 +32,7 @@ class GameService
         return Game::create([
             'game_category_id' => $gameCategoryId,
             'status' => Game::STATUS_PENDING,
-            'scheduled_at' => Carbon::now()->addSeconds(env('GAME_WAITING_TIME'))
+            'scheduled_at' => Carbon::now()->addSeconds((int)env('GAME_WAITING_TIME'))
         ]);
     }
 
