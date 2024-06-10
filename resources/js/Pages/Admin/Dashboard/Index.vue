@@ -2,7 +2,12 @@
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import InfoCard from "@/Views/Admin/Dashboard/InfoCard.vue";
 import ListSection from "@/Views/Admin/Dashboard/ListSection.vue";
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
+import {usePage} from "@inertiajs/vue3";
+
+const authUser = computed(() => usePage().props.authUser);
+
+const totalPlayers = computed(() => usePage().props.totalPlayers);
 
 const upcomingGames = ref([
     { id: 1, name: 'Game 1', startTime: '12:00 PM', players: 5 },
@@ -28,7 +33,6 @@ const serverStatus = ref("Online");
 const newMessages = ref(5);
 
 const totalGames = ref(250);
-const totalPlayers = ref(1020);
 const totalRevenue = ref("$15,300");
 
 </script>

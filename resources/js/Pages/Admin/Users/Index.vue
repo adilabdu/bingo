@@ -7,6 +7,7 @@ import { Button } from '@/Components/shadcn/ui/button/index.js';
 import { Input } from '@/Components/shadcn/ui/input/index.js';
 import { Select } from '@/Components/shadcn/ui/select/index.js';
 import Modal from '@/Components/AdminModal.vue';
+import {router} from "@inertiajs/vue3";
 
 const users = ref([
     { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
@@ -58,7 +59,7 @@ const saveUser = () => {
                             :class="{ 'bg-blue-500 text-white': selectedUser.role === role }"
                     >{{ role }}</option>
                 </Select>
-                <Button class="bg-blue-500 text-white py-2 px-4 rounded-lg" @click="openModal(null)">
+                <Button class="bg-blue-500 text-white py-2 px-4 rounded-lg" @click="router.visit('/register')">
                     Add New User
                 </Button>
             </div>
