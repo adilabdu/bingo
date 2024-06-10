@@ -19,8 +19,24 @@ class AdminController extends Controller
         ]);
     }
 
-    public function users(): Response
+    public function users(Request $request): Response
     {
-        return Inertia::render('Admin/Users/Index');
+        $query = $request->input('search');
+
+        $usersQuery = User::query();
+
+        if ($query) {
+            $usersQuery->where(function ($queryBuilder) use ($query) {
+                $queryBuilder->where('name', 'like', '%'.$query.'%')
+                    ->orWhere('email', 'like', '%'.$query.'%');
+            });
+        }
+
+        $users = $usersQuery->paginate(10);
+
+        return Inertia::render('Admin/Users/Index', [
+            'users' => $users,
+        ]);
     }
+
 }
