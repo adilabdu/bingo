@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import {computed, ref} from 'vue';
 
 const props = defineProps({
     numbers: {
@@ -8,11 +8,37 @@ const props = defineProps({
             B: [], I: [], N: [], G: [], O: []
         })
     },
+    currentDrawnNumber: {
+        type: [Number, String],
+        default: null
+    },
+    drawnNumbers: {
+        type: Array,
+        default: () => []
+    },
     cardSize: {
         type: String,
         default: 'w-16'
     }
 });
+
+const clickedNumbers = ref(new Set());
+
+const handleClick = (number) => {
+    if (props.drawnNumbers.includes(number) && !clickedNumbers.value.has(number)) {
+        clickedNumbers.value.add(number);
+    }
+};
+
+const getClassForNumber = (num) => {
+    if (num === props.currentDrawnNumber) {
+        return 'animate-pulse bg-blue-200';
+    } else if (clickedNumbers.value.has(num)) {
+        return 'bg-blue-600 text-white';
+    } else {
+        return 'bg-white';
+    }
+};
 
 const columnLabels = ['B', 'I', 'N', 'G', 'O'];
 
@@ -31,12 +57,12 @@ const formattedBingoData = computed(() => {
 
 <template>
     <div class="flex justify-between py-3 rounded-md max-w-sm w-full">
-        <div v-for="(column, index) in formattedBingoData" :key="index" class=" text-center">
-            <h3 class="bg-gray-800 font-semibold text-white rounded py-2">{{ columnLabels[index] }}</h3>
+        <div v-for="(column, index) in formattedBingoData" :key="index" class="text-center">
+            <h3 class="bg-gray-800 font-semibold text-white rounded py-2 min-w-10">{{ columnLabels[index] }}</h3>
             <ul>
                 <li v-for="(num, ind) in column" :key="ind" :class="cardSize">
                     <div v-if="columnLabels[index] === 'N' && ind === 2" class="bg-blue-600 font-semibold text-white rounded my-2.5 py-3 px-2">FREE</div>
-                    <div v-else class="bg-white w-full rounded font-medium text-lg my-2 py-3 px-2">
+                    <div v-else :class="getClassForNumber(num)" class="w-full rounded font-medium text-lg my-2 py-3 px-2 cursor-pointer" @click="handleClick(num)">
                         {{ num }}
                     </div>
                 </li>
@@ -44,8 +70,3 @@ const formattedBingoData = computed(() => {
         </div>
     </div>
 </template>
-
-
-<style scoped>
-
-</style>
