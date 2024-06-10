@@ -11,3 +11,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('start-game', function ($user) {
     return Auth::check();
 });
+
+Broadcast::channel('draw-game', function () {
+    return Auth::check();
+});
