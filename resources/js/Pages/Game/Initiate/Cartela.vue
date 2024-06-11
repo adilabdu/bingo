@@ -10,16 +10,6 @@ import {router, usePage} from "@inertiajs/vue3";
 import {debounce} from "lodash";
 import Loading from "@/Components/Loading.vue";
 
-const numberOfCards = ref(1);
-
-const updateNumberOfCards = (action) => {
-    if (action === 'increment' && numberOfCards.value < 3) {
-        numberOfCards.value++;
-    } else if (action === 'decrement' && numberOfCards.value > 1) {
-        numberOfCards.value--;
-    }
-}
-
 const gameCategory = usePage().props.gameCategory;
 // Todo: Add query params from url on refresh
 const cartelaName = ref('');
@@ -48,29 +38,6 @@ const getCartela = debounce(() => {
             <div class="font-bold text-3xl"> {{gameCategory.amount}} Br</div>
             <div class="font-light text-sm">{{gameCategory.name}} X {{gameCategory.category}}</div>
         </div>
-        <Header>
-            <template #default>
-                <div class="font-semibold text-xl pb-1">Customize your Cartela</div>
-                <div class="text-xs font-light">Cartela is a set of playing cards. You can play with up to 3 cards!</div>
-            </template>
-        </Header>
-
-        <div class="flex flex-col space-y-2 py-3">
-            <InputLabel value="Please select number of cartela's"/>
-            <div class="flex justify-between">
-                <div  @click="updateNumberOfCards('decrement')"
-                      class="bg-gray-800  text-white font-semibold font w-12 text-center flex items-center justify-center rounded-md">
-                    -
-                </div>
-                <Input type="text" class=" w-8/12" v-model="numberOfCards"/>
-                <div
-                    @click="updateNumberOfCards('increment')"
-                    class="bg-gray-800 text-white font-semibold font w-12 text-center flex items-center justify-center rounded-md">
-                    +
-                </div>
-            </div>
-        </div>
-
 
         <div class="flex flex-col space-y-2 py-3">
             <InputLabel value="Enter your lucky cartela number"/>
