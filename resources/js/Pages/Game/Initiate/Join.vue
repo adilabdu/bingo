@@ -5,6 +5,8 @@ import {router, usePage} from "@inertiajs/vue3";
 import moment from 'moment';
 
 const { game } = usePage().props;
+const gameCategory = usePage().props.gameCategory;
+const cartela = usePage().props.cartela;
 
 const currentTime = ref(moment());
 const scheduledTime = ref(moment(game.scheduled_at));
@@ -52,6 +54,20 @@ Echo.private('start-game')
                 </div>
                 <div v-else class="text-lg font-light text-center">
                     The game is starting...
+                </div>
+                <div class="py-3 rounded-lg flex justify-between items-center divide-white divide-x text-white bg-gradient-to-br from-blue-600 to-sky-600 w-full">
+                        <span class="w-6/12 text-center flex flex-col items-center space-y-2">
+                            <span class="font-bold text-3xl">#{{ cartela?.name }}</span>
+                            <span class="text-sm">
+                                Cartela No
+                            </span>
+                        </span>
+                    <span class="w-6/12 text-center flex flex-col items-center">
+                            <span class="font-bold text-3xl">
+                            {{gameCategory.amount}} <span class="font-light text-xl">Br</span>
+                            </span>
+                            <span class="font-light text-sm">Category</span>
+                        </span>
                 </div>
             </div>
         </div>
