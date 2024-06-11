@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('phone_number')->unique()->nullable();
             $table->string('type');
             $table->string('password');
+            $table->boolean('is_blocked')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
