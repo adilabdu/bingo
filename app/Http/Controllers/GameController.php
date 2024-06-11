@@ -21,11 +21,14 @@ class GameController extends Controller
         ]);
     }
 
-    public function selectCartela($categoryId, $cartelaName): Response
+    public function selectCartela($categoryId, $cartelaName = null): Response
     {
         return Inertia::render('Game/Initiate/Cartela',[
             'gameCategory' => GameCategory::findOrFail($categoryId),
             'cartela' => Inertia::lazy(function () use ($cartelaName) {
+                if (!$cartelaName)
+                    return null;
+
                 return Cartela::where('name', $cartelaName)->first();
             })
         ]);
