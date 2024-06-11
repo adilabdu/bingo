@@ -4,6 +4,7 @@ import BingoBoard from "@/Views/Game/BingoBoard.vue";
 import CompleteGameDrawer from "@/Views/Game/CompleteGameDrawer.vue";
 import { computed, onMounted, ref, onUnmounted } from "vue";
 import {router, usePage} from "@inertiajs/vue3";
+import {Button} from "@/Components/shadcn/ui/button/index.js";
 
 const pageProps = usePage().props;
 const cartela = computed(() => pageProps.playerCartela);
@@ -16,9 +17,8 @@ let index = 0;
 let pollInterval = null;
 const batchIndex = computed(() => usePage().props.nextBatchIndex);
 const fetchGameUpdates = () => {
-    if (batchIndex.value < 8)
+    if (batchIndex.value > 8)
         return;
-    tele
     router.get(`/game/play/`, {
         'game_id': game.value.id,
         'batch_index':  batchIndex.value,
@@ -49,6 +49,24 @@ const revealNumbers = () => {
     }
 };
 
+const canCallBingo = ref(false);
+const selectedNumbers = ref([]);
+const enableBingoButton = (numbers) => {
+    canCallBingo.value = true;
+    selectedNumbers.value = numbers;
+}
+
+const callBingo = () => {
+    router.post(`/game/play/bingo/${cartela.value.id}/${game.value.id}`, {
+        draw_numbers_cut_off_index: index,
+        selected_numbers: selectedNumbers.value
+    }, {
+        preserveState: true,
+        onProgress: () => {},
+        onSuccess: () => {},
+    })
+}
+
 onMounted(() => {
     pollInterval = setInterval(fetchGameUpdates, 15000);
     if (drawNumbers.value.length > 0 && index === 0) {
@@ -68,6 +86,9 @@ onUnmounted(() => {
 
         <div class="flex w-full items-center space-x-2">
             <span class="bg-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-2xl">{{index}}</span>
+            <Button @click="callBingo" :disabled="!canCallBingo" class="disabled:opacity-25 bg-gradient-to-l from-blue-600 to-sky-600 text-white text-xl font-semibold uppercase w-full">
+                Bingo
+            </Button>
         </div>
         <div class="flex justify-between space-x-4 rounded-lg w-full h-full items-center">
             <div class="w-3/12 text-center py-3 text-white font-bold text-5xl rounded-lg bg-gradient-to-l from-blue-600 to-sky-600">
@@ -80,7 +101,7 @@ onUnmounted(() => {
             </div>
         </div>
 
-        <BingoBoard :numbers="cartela?.numbers" :currentDrawnNumber="currentNumber" :drawnNumbers="drawNumbers" />
+        <BingoBoard @bingo="enableBingoButton" :numbers="cartela?.numbers" :currentDrawnNumber="currentNumber" :drawnNumbers="drawNumbers" />
 
 
         <div class="flex justify-between divide-x divide-black bg-white p-3 rounded-lg">
@@ -93,8 +114,6 @@ onUnmounted(() => {
                 <div class="text-xl font-semibold">#{{cartela?.name}}</div>
             </div>
         </div>
-
-        <CompleteGameDrawer />
     </AuthenticatedLayout>
 </template>
 
