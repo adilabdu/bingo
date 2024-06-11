@@ -27,7 +27,6 @@ class DrawGameService
             // Update the drawn numbers on the game
             $game->update([
                 'draw_numbers' => $drawnNumbers,
-                'status' => Game::STATUS_COMPLETED
             ]);
         }
     }
