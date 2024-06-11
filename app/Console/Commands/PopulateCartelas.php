@@ -44,8 +44,8 @@ class PopulateCartelas extends Command
             $numbers = [];
             foreach ($rangeMap as $letter => $range) {
                 // 'N' has one less number to account for the free space in traditional bingo
-                $count = $letter === 'N' ? 4 : 5;
-                $numbers[$letter] = $this->generateUniqueNumbers($range, $count, $cartelas);
+                $count = 5;
+                $numbers[$letter] = $this->generateUniqueNumbers($range, $count, $cartelas, $letter);
             }
 
             $cartelas[] = $numbers;
@@ -60,15 +60,21 @@ class PopulateCartelas extends Command
         $this->info('Cartelas generated successfully.');
     }
 
-    private function generateUniqueNumbers($range, $count, $existingCartelas)
+    private function generateUniqueNumbers($range, $count, $existingCartelas, $letter)
     {
         $numbers = [];
+        $iteration = 0;
 
         while (count($numbers) < $count) {
             $number = rand($range[0], $range[1]);
-            if (!in_array($number, $numbers)) {
+
+            if ($letter === 'N' && $iteration === 2) {
+                $numbers[2] = 'FREE';
+            } else if (!in_array($number, $numbers)) {
                 $numbers[] = $number;
             }
+
+            $iteration++;
         }
 
         return $numbers;
