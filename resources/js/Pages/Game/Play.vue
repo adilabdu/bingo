@@ -16,9 +16,8 @@ let index = 0;
 let pollInterval = null;
 const batchIndex = computed(() => usePage().props.nextBatchIndex);
 const fetchGameUpdates = () => {
-    if (batchIndex.value < 8)
+    if (batchIndex.value > 8)
         return;
-    tele
     router.get(`/game/play/`, {
         'game_id': game.value.id,
         'batch_index':  batchIndex.value,
