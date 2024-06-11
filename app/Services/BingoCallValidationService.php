@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Cartela;
 use App\Models\Game;
 use App\Traits\ValidatesWinningNumbers;
+use Illuminate\Support\Facades\Log;
 
 class BingoCallValidationService
 {
@@ -17,6 +18,8 @@ class BingoCallValidationService
         // 3. If the possible winning numbers are in the drawn numbers, continue
         // 4. Check the possible winning numbers make a Bingo
         // 5. If the possible winning numbers make a Bingo, return true
+
+        Log::info('possibleWinningNumbers: ' . json_encode($possibleWinningNumbers));
 
         return
             self::validateNumbersAgainstDrawNumbers($possibleWinningNumbers, $game->draw_numbers, $cutOff) &&
@@ -42,9 +45,10 @@ class BingoCallValidationService
     {
         // 1. Slice the drawn numbers to the length of cutOff
         // 2. Compare the sliced drawn numbers with the possible winning numbers
-        // 3. If the sliced drawn numbers are equal to the possible winning numbers, return true
+        // 3. If all the possible winning numbers existing within the sliced numbers, return true
 
         $slicedDrawnNumbers = array_slice($drawnNumbers, 0, $cutOff);
+        $slicedDrawnNumbers[] = 'FREE'; // Add 'FREE' to the sliced numbers
         return empty(array_diff($possibleWinningNumbers, $slicedDrawnNumbers));
     }
 }
