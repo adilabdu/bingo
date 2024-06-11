@@ -9,20 +9,13 @@ import {
 import {computed, ref} from "vue";
 import {Button} from "@/Components/shadcn/ui/button/index.js";
 import BingoBoard from "@/Views/Game/BingoBoard.vue";
-import {usePage} from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 
 const isDrawerOpen = ref(false);
 
 function setDrawerOpen(val) {
     isDrawerOpen.value = val;
 }
-const bingoNumbers = [
-    {B: [12, 11, 23, 34, 45]},
-    {I: [45, 88, 43, 12, 54]},
-    {N: [33, 65, 23, 12]},
-    {G: [45, 88, 43, 12, 54]},
-    {O: [33, 65, 23, 78, 12]}
-];
 
 const cartela = computed(() => {
     return usePage().props?.cartela || [];
@@ -31,6 +24,17 @@ const cartela = computed(() => {
 const cartelaNumbers = computed(() => {
     return usePage().props?.cartela?.numbers || [];
 });
+
+const gameCategory = ref(usePage().props.gameCategory);
+function startBingo() {
+    router.get('/game/join', {
+        "game_category_id": gameCategory.value.id,
+        "cartela_id": cartela.value.id
+    },{
+        preserveState: true,
+        replace: true,
+    });
+}
 </script>
 
 <template>
@@ -65,7 +69,7 @@ const cartelaNumbers = computed(() => {
                     <BingoBoard v-if="cartelaNumbers" :numbers="cartelaNumbers" card-size="w-14" />
                 </div>
 
-                <Button class="bg-blue-600 text-white font-semibold w-full">
+                <Button @click="startBingo" class="bg-blue-600 text-white font-semibold w-full">
                     Start Bingo
                 </Button>
             </DrawerContent>
