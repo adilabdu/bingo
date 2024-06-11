@@ -1,5 +1,6 @@
 <script setup>
-import {computed, ref} from 'vue';
+import {computed, ref, watch} from 'vue';
+import {useIsBoardWinner} from "@/Composables/useIsBoardWinner";
 
 const props = defineProps({
     numbers: {
@@ -21,6 +22,8 @@ const props = defineProps({
         default: 'w-16'
     }
 });
+
+const emits = defineEmits(['bingo'])
 
 const clickedNumbers = ref(new Set());
 
@@ -53,6 +56,14 @@ const formattedBingoData = computed(() => {
     });
 });
 
+watch(() => Array.from(clickedNumbers.value), () => {
+    console.log('watching... ')
+    if (Array.from(clickedNumbers.value).length > 3) {
+        if (useIsBoardWinner(Array.from(clickedNumbers.value), formattedBingoData.value)) {
+            emits('bingo', Array.from(clickedNumbers.value));
+        }
+    }
+})
 </script>
 
 <template>

@@ -8,7 +8,9 @@ use App\Models\GameCategory;
 use App\Models\GamePlayer;
 use App\Services\JoinGameService;
 use App\Services\StartGameService;
+use App\Services\BingoCallValidationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -73,5 +75,27 @@ class GameController extends Controller
             'cartela' => Cartela::findOrFail($request->cartela_id),
             'game' => $game
         ]);
+    }
+
+    public function callBingo(Request $request, Cartela $cartela, Game $game): void
+    {
+        $request->validate([
+            'draw_numbers_cut_off_index' => 'required|integer|min:4',
+            'selected_numbers' => 'required|array',
+        ]);
+
+        $isBingoCallValid = BingoCallValidationService::validate(
+            $game, $cartela,
+            $request->input('selected_numbers'),
+            $request->integer('draw_numbers_cut_off_index')
+        );
+
+        if (! $isBingoCallValid) {
+            // TODO: Abort with appropriate status code
+            Log::info('Invalid Bingo call made');
+        }
+
+        // TODO: Implement the logic to handle a valid Bingo call
+        Log::info('Valid Bingo call made');
     }
 }
