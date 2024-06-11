@@ -25,7 +25,7 @@ const props = defineProps({
 
 const emits = defineEmits(['bingo'])
 
-const clickedNumbers = ref(new Set());
+const clickedNumbers = ref(new Set(['FREE']));
 
 const handleClick = (number) => {
     if (props.drawnNumbers.includes(number) && !clickedNumbers.value.has(number)) {

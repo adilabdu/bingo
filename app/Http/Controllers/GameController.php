@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CallBingoRequest;
 use App\Models\Cartela;
 use App\Models\Game;
 use App\Models\GameCategory;
@@ -80,13 +81,8 @@ class GameController extends Controller
         ]);
     }
 
-    public function callBingo(Request $request, Cartela $cartela, Game $game): void
+    public function callBingo(CallBingoRequest $request, Cartela $cartela, Game $game): void
     {
-        $request->validate([
-            'draw_numbers_cut_off_index' => 'required|integer|min:4',
-            'selected_numbers' => 'required|array',
-        ]);
-
         $isBingoCallValid = BingoCallValidationService::validate(
             $game, $cartela,
             $request->input('selected_numbers'),
