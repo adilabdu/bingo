@@ -1,8 +1,6 @@
 <script setup>
 import {computed, ref} from 'vue';
-import {Link, router, usePage} from "@inertiajs/vue3";
-import DropdownLink from "@/Components/DropdownLink.vue";
-import {Button} from "@/Components/shadcn/ui/button/index.js";
+import {router, usePage} from "@inertiajs/vue3";
 
 // Determine the active route based on the current URL
 const currentPath = window.location.pathname;
@@ -58,10 +56,10 @@ const logout = () => {
                             </a>
                         </li>
                         <li>
-                            <a :href="'/admin/game'"
+                            <a :href="'/admin/games'"
                                :class="{
                    'relative text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out': true,
-                   'active': isActiveRoute('/admin/game')
+                   'active': isActiveRoute('/admin/games')
                  }">
                                 Game
                             </a>
