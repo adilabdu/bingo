@@ -13,11 +13,47 @@ class AdminController extends Controller
 {
     public function index(): Response
     {
+        $totalGames = Game::count();
+
         $totalPlayers = User::where('type', 'player')->count();
+
+        // Fetch pending games data
+        $pendingGames = Game::where('status', 'pending')->get();
+
+        // Fetch players on active game status
+        $activePlayers = Game::where('status', 'active')
+            ->with('players.player.user')
+            ->get()
+            ->pluck('players')
+            ->flatten()
+            ->pluck('player')
+            ->flatten()
+            ->pluck('user')
+            ->unique()
+            ->count();
+
+        // Fetch recent winners
+        $recentWinners = Game::where('status', 'completed')
+            ->whereNotNull('winner_player_id')
+            ->with(['players.player.user'])
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get()
+            ->map(function($game) {
+                $winnerPlayer = $game->players->firstWhere('player_id', $game->winner_player_id);
+                return [
+                    'game' => $game,
+                    'winner' => $winnerPlayer ? $winnerPlayer->player->user : null,
+                ];
+            });
 
         return Inertia::render('Admin/Dashboard/Index', [
             'authUser' => auth()->user(),
             'totalPlayers' => $totalPlayers,
+            'pendingGames' => $pendingGames,
+            'recentWinners' => $recentWinners,
+            'totalGames' => $totalGames,
+            'activePlayers' => $activePlayers,
         ]);
     }
 

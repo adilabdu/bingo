@@ -8,31 +8,14 @@ import {usePage} from "@inertiajs/vue3";
 const authUser = computed(() => usePage().props.authUser);
 
 const totalPlayers = computed(() => usePage().props.totalPlayers);
-
-const upcomingGames = ref([
-    { id: 1, name: 'Game 1', startTime: '12:00 PM', players: 5 },
-    { id: 2, name: 'Game 2', startTime: '2:00 PM', players: 8 },
-    { id: 3, name: 'Game 3', startTime: '4:00 PM', players: 10 },
-]);
-
-const recentWinners = ref([
-    { username: 'User1', gameName: 'Game 1', winningPattern: 'Pattern A' },
-    { username: 'User2', gameName: 'Game 2', winningPattern: 'Pattern B' },
-    { username: 'User3', gameName: 'Game 3', winningPattern: 'Pattern C' },
-]);
-
-const activePlayers = ref(120);
-
-const notifications = ref([
-    { id: 1, message: 'Server maintenance at 3 PM', time: '10 minutes ago' },
-    { id: 2, message: 'New user registered', time: '1 hour ago' },
-    { id: 3, message: 'Game 2 has started', time: '2 hours ago' },
-]);
+const upcomingGames = computed(() => usePage().props.pendingGames);
+const recentWinners = computed(() => usePage().props.recentWinners);
+const totalGames = computed(() => usePage().props.totalGames);
+const activePlayers = computed(() => usePage().props.activePlayers);
 
 const serverStatus = ref("Online");
 const newMessages = ref(5);
 
-const totalGames = ref(250);
 const totalRevenue = ref("$15,300");
 
 </script>
@@ -71,22 +54,6 @@ const totalRevenue = ref("$15,300");
                         :items="recentWinners"
                         iconPath="M12 4a8 8 0 100 16 8 8 0 000-16zm4 9H8v-2h8v2z"
                         iconColor="text-green-500"
-                    />
-
-                    <!-- Notifications -->
-                    <ListSection
-                        title="Notifications"
-                        :items="notifications"
-                        iconPath="M12 4a8 8 0 100 16 8 8 0 000-16zm4 9H8v-2h8v2z"
-                        iconColor="text-yellow-500"
-                    />
-
-                    <!-- Recent Activities -->
-                    <ListSection
-                        title="Recent Activities"
-                        :items="notifications"
-                        iconPath="M12 4a8 8 0 100 16 8 8 0 000-16zm4 9H8v-2h8v2z"
-                        iconColor="text-purple-500"
                     />
                 </div>
 

@@ -1,5 +1,6 @@
 <script setup>
 import { defineProps } from 'vue';
+import moment from "moment";
 
 const props = defineProps({
     title: {
@@ -30,12 +31,14 @@ const props = defineProps({
             </svg>
         </div>
         <ul class="space-y-4">
-            <li v-for="item in items" :key="item.id || item.username || item.message" class="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+            <li v-for="item in items" :key="item.id" class="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
                 <div>
-                    <p class="text-xl font-semibold text-gray-700">{{ item.title || item.name || item.username }}</p>
-                    <p class="text-gray-500">{{ item.subtitle || item.startTime || item.gameName || item.message }}</p>
+                    <p class="text-xl font-semibold text-gray-700">Game {{ item.id || item.game.id }}</p>
+                    <p class="text-gray-500">{{
+                            moment(item.scheduled_at).format('MMMM Do YYYY, h:mm:ss a')
+                        }}</p>
                 </div>
-                <p class="text-gray-500">{{ item.extraInfo || item.players || item.winningPattern || item.time }}</p>
+                <p class="text-gray-500">{{ item.status || item.winner.name || item.winningPattern || item.time }}</p>
             </li>
         </ul>
     </div>
