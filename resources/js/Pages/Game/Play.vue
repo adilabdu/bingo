@@ -1,7 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import BingoBoard from "@/Views/Game/BingoBoard.vue";
-import CompleteGameDrawer from "@/Views/Game/CompleteGameDrawer.vue";
 import { computed, onMounted, ref, onUnmounted } from "vue";
 import {router, usePage} from "@inertiajs/vue3";
 import {Button} from "@/Components/shadcn/ui/button/index.js";
@@ -77,16 +76,21 @@ onMounted(() => {
 onUnmounted(() => {
     clearInterval(pollInterval);
 });
+
+Echo.private('start-game')
+    .listen(`.start-game.${game.id}`, (e) => {
+        router.get('/game/play',{
+            'game_id': game.id,
+        });
+    });
+
 </script>
-
-
 
 <template>
     <AuthenticatedLayout>
-
-        <div class="flex w-full items-center space-x-2">
+        <div class="flex w-full justify-evenly items-center space-x-2">
             <span class="bg-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-2xl">{{index}}</span>
-            <Button @click="callBingo" :disabled="!canCallBingo" class="disabled:opacity-25 bg-gradient-to-l from-blue-600 to-sky-600 text-white text-xl font-semibold uppercase w-full">
+            <Button @click="callBingo" :disabled="!canCallBingo" class="disabled:opacity-25 bg-gradient-to-l from-blue-600 to-sky-600 text-white text-xl font-semibold uppercase w-8/12">
                 Bingo
             </Button>
         </div>
@@ -101,7 +105,7 @@ onUnmounted(() => {
             </div>
         </div>
 
-        <BingoBoard @bingo="enableBingoButton" :numbers="cartela?.numbers" :currentDrawnNumber="currentNumber" :drawnNumbers="drawNumbers" />
+        <BingoBoard @bingo="enableBingoButton" :numbers="cartela?.numbers" :currentDrawnNumber="currentNumber" :drawnNumbers="drawNumbers" :game-id="game.id" />
 
 
         <div class="flex justify-between divide-x divide-black bg-white p-3 rounded-lg">

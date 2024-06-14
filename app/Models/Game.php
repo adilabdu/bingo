@@ -19,7 +19,8 @@ class Game extends Model
         'scheduled_at',
         'winner_net_amount',
         'draw_numbers',
-        'winner_numbers'
+        'winning_numbers',
+        'winner_player_id'
 
     ];
 
@@ -41,6 +42,6 @@ class Game extends Model
     protected $casts = [
         'scheduled_at' => 'datetime',
         'draw_numbers' => 'array',
-        'winner_numbers' => 'array',
+        'winning_numbers' => 'array',
     ];
 }

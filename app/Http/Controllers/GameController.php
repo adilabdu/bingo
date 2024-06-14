@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\GameResultEvent;
 use App\Http\Requests\CallBingoRequest;
 use App\Models\Cartela;
 use App\Models\Game;
@@ -10,6 +11,7 @@ use App\Models\GamePlayer;
 use App\Services\JoinGameService;
 use App\Services\StartGameService;
 use App\Services\BingoCallValidationService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -37,13 +39,17 @@ class GameController extends Controller
         ]);
     }
 
-    public function playGame(Request $request): Response
+    public function playGame(Request $request): RedirectResponse | Response
     {
         $request->validate([
             'game_id' => 'required|exists:games,id',
         ]);
 
         $game = Game::find($request->game_id)->load(['gameCategory', 'players']);
+
+//        if ($game->status !== Game::STATUS_PENDING) {
+//            return redirect()->route('game.initiate');
+//        }
 
         // Validate player participation in the game
         $playerGame = GamePlayer::where('game_id', $game->id)
@@ -81,7 +87,7 @@ class GameController extends Controller
         ]);
     }
 
-    public function callBingo(CallBingoRequest $request, Cartela $cartela, Game $game): void
+    public function callBingo(CallBingoRequest $request, Cartela $cartela, Game $game)
     {
         $isBingoCallValid = BingoCallValidationService::validate(
             $game, $cartela,
@@ -89,12 +95,19 @@ class GameController extends Controller
             $request->integer('draw_numbers_cut_off_index')
         );
 
-        if (! $isBingoCallValid) {
-            // TODO: Abort with appropriate status code
-            Log::info('Invalid Bingo call made');
+
+        if (!$isBingoCallValid) {
+//            return redirect()->route('game.initiate');
         }
 
-        // TODO: Implement the logic to handle a valid Bingo call
-        Log::info('Valid Bingo call made');
+
+        // Update the game status to completed
+        $game->update([
+            'status' => Game::STATUS_COMPLETED,
+            'winning_numbers' => $request->input('selected_numbers'),
+            'winner_player_id' => auth()->user()->player->id,
+        ]);
+
+        event(new GameResultEvent($game, auth()->user(), $request->input('selected_numbers'), $cartela));
     }
 }

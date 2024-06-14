@@ -48,7 +48,7 @@ const handleClick = (number) => {
 
 const getClassForNumber = (num) => {
     if (props.winnerNumbers.includes(num)) {
-        return 'bg-blue-500 text-white cursor-not-allowed'; // Added cursor-not-allowed for visual feedback
+        return 'bg-blue-600 text-white cursor-not-allowed'; // Added cursor-not-allowed for visual feedback
     } else if (num === props.currentDrawnNumber) {
         return 'animate-pulse bg-blue-200';
     } else if (clickedNumbers.value.has(num)) {
