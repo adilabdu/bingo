@@ -42,7 +42,7 @@ const gameMessage = ref('');
 Echo.private('start-game')
     .listen(`.start-game.${game.id}`, (e) => {
         if (e.isGameValidToStart){
-          return router.get('/game/play',{
+           return router.get('/game/play',{
                 'game_id': game.id,
             });
         }
@@ -58,7 +58,7 @@ function routeToRepeatGame() {
     console.log('Repeating game');
     router.get('/game/join',{
         'game_category_id': gameCategory.id,
-        'cartela_id': cartela.id,
+        'cartela_id': cartela.name,
     });
 }
 </script>

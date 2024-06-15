@@ -78,9 +78,9 @@ class GameController extends Controller
             return redirect()->route('game.initiate');
         }
 
-        if ($game->status !== Game::STATUS_PENDING) {
-            return redirect()->route('game.initiate');
-        }
+//        if ($game->status !== Game::STATUS_PENDING || $game->status !== Game::STATUS_ACTIVE ){
+//            return redirect()->route('game.initiate');
+//        }
 
         // Validate player participation in the game
         $playerGame = GamePlayer::where('game_id', $game->id)
@@ -102,12 +102,33 @@ class GameController extends Controller
         ]);
     }
 
-    public function joinGame(Request $request): Response
+    public function joinGame(Request $request): Response | RedirectResponse
     {
         $request->validate([
             'game_category_id' => 'required|exists:game_categories,id',
             'cartela_id' => 'required|exists:cartelas,id',
         ]);
+
+        $player = auth()->user()->load('player')->player;
+
+        $gameCategory = GameCategory::findOrFail($request->game_category_id);
+        if ($player->balance < $gameCategory->amount) {
+            return redirect()->route('game.initiate');
+        }
+
+        // Check if the cartela is already in use
+        $cartelaInUse = GamePlayer::where('cartela_id', $request->cartela_id)
+            ->whereHas('game', function ($query) {
+                $query->whereIn('status', [Game::STATUS_ACTIVE, Game::STATUS_PENDING]);
+            })
+            ->first();
+
+        if ($cartelaInUse) {
+             // Todo: Handle Error
+            return redirect()->back()->withErrors([
+                'cartela_id' => 'Cartela is already in use'
+            ]);
+        }
 
         $game = JoinGameService::startGame($request->cartela_id, $request->game_category_id);
 
@@ -128,6 +149,7 @@ class GameController extends Controller
 
 
         if (!$isBingoCallValid) {
+            // Todo: Handle Error
 //            return redirect()->route('game.initiate');
         }
 
