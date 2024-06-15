@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +30,25 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        // Determine if the login field is an email or phone number
+        $login = $request->input('login');
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
+
+        // Check if the user is blocked
+        $user = User::where($field, $login)->first();
+
+        if ($user && $user->is_blocked) {
+            return back()->withErrors(['login' => 'Your account has been blocked.']);
+        }
+
+        // Attempt to authenticate the user
+        $credentials = [$field => $login, 'password' => $request->input('password')];
+
+        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+            return back()->withErrors([
+                'login' => trans('auth.failed'),
+            ]);
+        }
 
         $request->session()->regenerate();
 
