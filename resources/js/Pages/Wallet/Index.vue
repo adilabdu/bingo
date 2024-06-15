@@ -20,6 +20,11 @@ defineProps({
     transactions: {
         type: Object,
         required: true,
+    },
+    flash: {
+        type: Object,
+        required: false,
+        default: () => ({})
     }
 })
 </script>
@@ -28,7 +33,7 @@ defineProps({
     <AuthenticatedLayout>
         <WalletPageHeader />
         <YourBalance :balance="balance" />
-        <TransferMoney />
+        <TransferMoney :flash="flash" />
         <TransactionTable :transactions="transactions" />
     </AuthenticatedLayout>
 </template>
