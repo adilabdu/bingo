@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -19,6 +19,12 @@ class WalletController extends Controller
 
         return Inertia::render('Wallet/Index', [
             'balance' => $player->balance,
+            'transactions' => Transaction::with('to:id,phone_number', 'from:id,phone_number')
+                ->where('from', $user->id)
+                ->orWhere('to', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->paginate(5)
+                ->withQueryString(),
         ]);
     }
 
@@ -50,6 +56,13 @@ class WalletController extends Controller
 
         $recipientPlayer->save();
         $player->save();
+
+        Transaction::create([
+            'type' => Transaction::TRANSFER,
+            'amount' => $request->integer('amount'),
+            'from' => $user->id,
+            'to' => $recipient->id,
+        ]);
 
         DB::commit();
 

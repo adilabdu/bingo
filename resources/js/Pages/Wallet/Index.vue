@@ -1,18 +1,22 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Header from "@/Components/Header.vue";
-import {formatToPrice} from "../../lib/utils.js";
+import {formatToPrice} from "@/lib/utils.js";
 import {useForm, usePage} from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
-import {computed, ref} from "vue";
+import TransactionTable from "@/Views/Wallet/TransactionTable.vue";
 
 defineProps({
     balance: {
         type: Number,
         required: true
+    },
+    transactions: {
+        type: Object,
+        required: true,
     }
 })
 
@@ -87,6 +91,8 @@ function submit() {
                 </div>
             </form>
         </div>
+
+        <TransactionTable :transactions="transactions" />
 
     </AuthenticatedLayout>
 
