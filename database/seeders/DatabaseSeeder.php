@@ -19,9 +19,24 @@ class DatabaseSeeder extends Seeder
         Artisan::call('app:populate-cartelas');
         Artisan::call('app:populate-game-categories');
 
-        User::factory()->create([
+        $user = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'phone_number' => '0912345678',
+        ]);
+
+        $user->player()->create([
+            'balance' => 1000,
+        ]);
+
+        $user = User::factory()->create([
+            'name' => 'Test User 2',
+            'email' => 'test2@example.com',
+            'phone_number' => '0911223344',
+        ]);
+
+        $user->player()->create([
+            'balance' => 0,
         ]);
     }
 }
