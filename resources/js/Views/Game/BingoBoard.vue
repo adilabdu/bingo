@@ -34,7 +34,7 @@ const handleClick = (number) => {
 };
 
 const getClassForNumber = (num) => {
-    if (num === props.currentDrawnNumber) {
+    if (num === props.currentDrawnNumber && !clickedNumbers.value.has(num)) {
         return 'animate-pulse bg-blue-200';
     } else if (clickedNumbers.value.has(num)) {
         return 'bg-blue-600 text-white';
