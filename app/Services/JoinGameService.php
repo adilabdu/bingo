@@ -21,7 +21,9 @@ class JoinGameService
             $game = self::createGame($gameCategoryId);
         }
 
-        self::joinGame($game->id, $player->id, $cartelaId);
+        $game->load('gameCategory');
+
+        self::joinGame($game, $player->id, $cartelaId);
 
         return $game;
     }
@@ -36,9 +38,9 @@ class JoinGameService
         ]);
     }
 
-    private static function joinGame($gameId, $playerId, $cartelaId): void
+    private static function joinGame($game, $playerId, $cartelaId): void
     {
-        $gamePlayer = GamePlayer::where('game_id', $gameId)
+        $gamePlayer = GamePlayer::where('game_id', $game->id)
             ->where('player_id', $playerId)
             ->first();
 
@@ -47,9 +49,18 @@ class JoinGameService
         }
 
         GamePlayer::create([
-            'game_id' => $gameId,
+            'game_id' => $game->id,
             'player_id' => $playerId,
             'cartela_id' => $cartelaId
+        ]);
+
+        self::settlePlayerBalance($game);
+    }
+
+    private static function settlePlayerBalance($game): void
+    {
+        auth()->user()->player->update([
+            'balance' => auth()->user()->player->balance - $game->gameCategory->amount
         ]);
     }
 }

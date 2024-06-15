@@ -9,6 +9,7 @@ use App\Models\Game;
 use App\Models\GameCategory;
 use App\Models\GamePlayer;
 use App\Services\JoinGameService;
+use App\Services\SettleGameService;
 use App\Services\StartGameService;
 use App\Services\BingoCallValidationService;
 use Illuminate\Http\RedirectResponse;
@@ -46,6 +47,10 @@ class GameController extends Controller
         ]);
 
         $game = Game::find($request->game_id)->load(['gameCategory', 'players']);
+
+        if (!$game) {
+            return redirect()->route('game.initiate');
+        }
 
 //        if ($game->status !== Game::STATUS_PENDING) {
 //            return redirect()->route('game.initiate');
@@ -100,13 +105,13 @@ class GameController extends Controller
 //            return redirect()->route('game.initiate');
         }
 
-
-        // Update the game status to completed
         $game->update([
             'status' => Game::STATUS_COMPLETED,
             'winning_numbers' => $request->input('selected_numbers'),
             'winner_player_id' => auth()->user()->player->id,
         ]);
+
+        SettleGameService::settleWinnerBalance($game);
 
         event(new GameResultEvent($game, auth()->user(), $request->input('selected_numbers'), $cartela));
     }
