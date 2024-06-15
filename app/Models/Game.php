@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Game extends Model
 {
@@ -19,28 +21,23 @@ class Game extends Model
         'scheduled_at',
         'winner_net_amount',
         'draw_numbers',
-        'winner_numbers'
-
+        'winning_numbers',
+        'winner_player_id'
     ];
 
-    public function gameCategory()
+    public function gameCategory(): BelongsTo
     {
         return $this->belongsTo(GameCategory::class);
     }
 
-    public function players()
+    public function players(): HasMany
     {
         return $this->hasMany(GamePlayer::class);
-    }
-
-    public function cartelas()
-    {
-        return $this->hasManyThrough(Cartela::class, GamePlayer::class);
     }
 
     protected $casts = [
         'scheduled_at' => 'datetime',
         'draw_numbers' => 'array',
-        'winner_numbers' => 'array',
+        'winning_numbers' => 'array',
     ];
 }
