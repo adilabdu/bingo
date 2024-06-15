@@ -20,10 +20,20 @@ use Inertia\Response;
 
 class GameController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
+        $gameCategories = GameCategory::with(['games' => function ($query) {
+            $query->where('status', Game::STATUS_PENDING);
+        }])->get();
+
+        $gameCategories->each(function ($gameCategory) {
+            $gameCategory->games->each(function ($game) {
+                $game->players_count = $game->players()->count();
+            });
+        });
+
         return Inertia::render('Game/Initiate/Index', [
-            'gameCategories' => GameCategory::all()
+            'gameCategories' => $gameCategories
         ]);
     }
 
