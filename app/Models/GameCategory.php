@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class GameCategory extends Model
 {
@@ -12,6 +13,11 @@ class GameCategory extends Model
     protected $fillable = [
         'name',
         'amount',
-        'category',
+        'category'
     ];
+
+    public function games(): HasMany
+    {
+        return $this->hasMany(Game::class);
+    }
 }

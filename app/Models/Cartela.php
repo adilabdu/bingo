@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cartela extends Model
 {
@@ -15,6 +16,11 @@ class Cartela extends Model
     ];
 
     protected $casts = [
-        'numbers' => 'array'
+        'numbers' => 'array',
     ];
+
+    public function gamePlayers(): HasMany
+    {
+        return $this->hasMany(GamePlayer::class);
+    }
 }

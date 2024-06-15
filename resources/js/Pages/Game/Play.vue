@@ -43,7 +43,7 @@ const revealNumbers = () => {
         recentNumbers.value = drawNumbers.value.slice(Math.max(0, index - 7), index + 1).reverse();
         index++;
         if (index < drawNumbers.value.length) {
-            setTimeout(revealNumbers, 2000); // Continue revealing if there are numbers left
+            setTimeout(revealNumbers, 20); // Continue revealing if there are numbers left
         }
     }
 };
@@ -67,22 +67,18 @@ const callBingo = () => {
 }
 
 onMounted(() => {
-    pollInterval = setInterval(fetchGameUpdates, 15000);
+    if (game.value.status === 'completed') {
+        router.get('/game/initiate');
+    }
+    pollInterval = setInterval(fetchGameUpdates, 150);
     if (drawNumbers.value.length > 0 && index === 0) {
-        setTimeout(revealNumbers, 1000);
+        setTimeout(revealNumbers, 10);
     }
 });
 
 onUnmounted(() => {
     clearInterval(pollInterval);
 });
-
-Echo.private('start-game')
-    .listen(`.start-game.${game.id}`, (e) => {
-        router.get('/game/play',{
-            'game_id': game.id,
-        });
-    });
 
 </script>
 

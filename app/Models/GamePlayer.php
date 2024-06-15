@@ -20,4 +20,14 @@ class GamePlayer extends Model
     {
         return $this->belongsTo(Player::class);
     }
+
+    public function game(): BelongsTo
+    {
+        return $this->belongsTo(Game::class);
+    }
+
+    public function cartela(): BelongsTo
+    {
+        return $this->belongsTo(Cartela::class);
+    }
 }
