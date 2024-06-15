@@ -40,8 +40,15 @@ function setDrawerOpen(val) {
     isDrawerOpen.value = val;
 }
 
-function routeToGame() {
+function routeToGameMenu() {
     router.visit('/game/initiate');
+}
+
+function routeToRepeatGame() {
+    router.get('/game/join',{
+        'game_category_id': props.game.game_category_id,
+        'cartela_id': props.cartela.id,
+    });
 }
 </script>
 
@@ -50,7 +57,6 @@ function routeToGame() {
         :open="isDrawerOpen"
         should-scale-background
         @update:open="setDrawerOpen"
-        @open="routeToGame"
         :dismissible="false"
     >
         <DrawerTrigger>
@@ -78,7 +84,7 @@ function routeToGame() {
                     </div>
                 </div>
 
-                <div class="flex justify-between divide-white divide-x text-white bg-gradient-to-br from-blue-600 to-sky-600 p-3 rounded-lg">
+                <div class="flex justify-between divide-white divide-x text-white bg-gray-800 p-3 rounded-lg">
                     <div class="flex flex-col items-center w-6/12 space-y-2">
                         <div class="text-xs font-light">Winner</div>
                         <div class="text-xl px-2 font-medium capitalize">{{ winner.name }}</div>
@@ -93,8 +99,11 @@ function routeToGame() {
                     <BingoBoard :winner-numbers="game.winning_numbers" :numbers="cartela.numbers" card-size="w-14" />
                 </div>
 
-                <Button class="bg-gradient-to-l from-emerald-500 to-green-500 text-white text-xl font-semibold uppercase w-full">
+                <Button @click="routeToRepeatGame" class="bg-gray-800 text-white text-lg font-medium uppercase w-full">
                     Play Again
+                </Button>
+                <Button @click="routeToGameMenu" class="bg-gradient-to-l from-blue-600 to-sky-600 text-white text-lg font-medium capitalize w-full">
+                    Go To Game Menu
                 </Button>
             </DrawerContent>
         </DrawerPortal>
