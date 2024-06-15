@@ -4,6 +4,7 @@ import BingoBoard from "@/Views/Game/BingoBoard.vue";
 import { computed, onMounted, ref, onUnmounted } from "vue";
 import {router, usePage} from "@inertiajs/vue3";
 import {Button} from "@/Components/shadcn/ui/button/index.js";
+import Loading from "@/Components/Loading.vue";
 
 const pageProps = usePage().props;
 const cartela = computed(() => pageProps.playerCartela);
@@ -11,6 +12,7 @@ const game = computed(() => pageProps.game);
 const drawNumbers = ref(pageProps.drawnNumbers ?? []);
 const currentNumber = ref(null);
 const recentNumbers = ref([]);
+const isLoading = ref(false);
 
 let index = 0;
 let pollInterval = null;
@@ -43,7 +45,7 @@ const revealNumbers = () => {
         recentNumbers.value = drawNumbers.value.slice(Math.max(0, index - 7), index + 1).reverse();
         index++;
         if (index < drawNumbers.value.length) {
-            setTimeout(revealNumbers, 20); // Continue revealing if there are numbers left
+            setTimeout(revealNumbers, 2000);
         }
     }
 };
@@ -56,6 +58,7 @@ const enableBingoButton = (numbers) => {
 }
 
 const callBingo = () => {
+    isLoading.value = true;
     router.post(`/game/play/bingo/${cartela.value.id}/${game.value.id}`, {
         draw_numbers_cut_off_index: index,
         selected_numbers: selectedNumbers.value
@@ -70,9 +73,9 @@ onMounted(() => {
     if (game.value.status === 'completed') {
         router.get('/game/initiate');
     }
-    pollInterval = setInterval(fetchGameUpdates, 150);
+    pollInterval = setInterval(fetchGameUpdates, 15000);
     if (drawNumbers.value.length > 0 && index === 0) {
-        setTimeout(revealNumbers, 10);
+        setTimeout(revealNumbers, 1000);
     }
 });
 
@@ -80,6 +83,9 @@ onUnmounted(() => {
     clearInterval(pollInterval);
 });
 
+function handleFinish() {
+  isLoading.value = false;
+}
 </script>
 
 <template>
@@ -101,7 +107,7 @@ onUnmounted(() => {
             </div>
         </div>
 
-        <BingoBoard @bingo="enableBingoButton" :numbers="cartela?.numbers" :currentDrawnNumber="currentNumber" :drawnNumbers="drawNumbers" :game-id="game.id" />
+        <BingoBoard @finish="handleFinish()" @bingo="enableBingoButton" :numbers="cartela?.numbers" :currentDrawnNumber="currentNumber" :drawnNumbers="drawNumbers" :game-id="game.id" />
 
 
         <div class="flex justify-between divide-x divide-black bg-white p-3 rounded-lg">
@@ -115,6 +121,7 @@ onUnmounted(() => {
             </div>
         </div>
     </AuthenticatedLayout>
+    <Loading v-if="isLoading" is-full-screen />
 </template>
 
 <style scoped>

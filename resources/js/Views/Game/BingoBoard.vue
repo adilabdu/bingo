@@ -33,7 +33,7 @@ const props = defineProps({
     }
 });
 
-const emits = defineEmits(['bingo'])
+const emits = defineEmits(['bingo', 'finish'])
 
 const clickedNumbers = ref(new Set(['FREE']));
 
@@ -93,6 +93,7 @@ Echo.private('game-result')
         winnerNumbers.value = e.winner_numbers;
 
       isWinner.value = e.winner.id === user.value.id;
+      emits('finish', isWinner.value)
     });
 </script>
 
