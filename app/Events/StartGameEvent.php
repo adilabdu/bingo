@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Game;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -15,13 +16,16 @@ class StartGameEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $game;
+    public Game $game;
+
+    public bool $isGameValidToStart = false;
     /**
      * Create a new event instance.
      */
-    public function __construct($game)
+    public function __construct($game, $isGameValidToStart)
     {
         $this->game = $game;
+        $this->isGameValidToStart = $isGameValidToStart;
     }
 
     /**
