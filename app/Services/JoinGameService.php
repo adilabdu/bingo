@@ -17,6 +17,17 @@ class JoinGameService
 
         $player = auth()->user()->load('player');
 
+        // Check if the player has an active game
+        $activeGame = GamePlayer::where('player_id', $player->id)
+            ->whereHas('game', function ($query) {
+                $query->whereIn('status', [Game::STATUS_ACTIVE,Game::STATUS_PENDING]);
+            })
+            ->first();
+
+        if ($activeGame) {
+            return $activeGame->game;
+        }
+
         if (!$game) {
             $game = self::createGame($gameCategoryId);
         }

@@ -20,7 +20,7 @@ use Inertia\Response;
 
 class GameController extends Controller
 {
-    public function index(): Response
+    public function index(): Response | RedirectResponse
     {
         $gameCategories = GameCategory::with(['games' => function ($query) {
             $query->where('status', Game::STATUS_PENDING);
@@ -31,6 +31,22 @@ class GameController extends Controller
                 $game->players_count = $game->players()->count();
             });
         });
+
+        $player = auth()->user()->load('player');
+
+        // Check if the player has an active game
+        $activeGame = GamePlayer::where('player_id', $player->id)
+            ->whereHas('game', function ($query) {
+                $query->whereIn('status', [Game::STATUS_ACTIVE,Game::STATUS_PENDING]);
+            })
+            ->first();
+
+        if ($activeGame) {
+            return redirect()->route('game.join', [
+                'game_category_id' => $activeGame->game->game_category_id,
+                'cartela_id' => $activeGame->cartela_id
+            ]);
+        }
 
         return Inertia::render('Game/Initiate/Index', [
             'gameCategories' => $gameCategories
