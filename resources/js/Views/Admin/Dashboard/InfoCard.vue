@@ -28,11 +28,11 @@ const props = defineProps({
 <template>
     <div class="bg-white shadow rounded-lg p-6 flex-1">
         <div v-if="icon" class="mb-2">
-            <svg :class="`w-12 h-12 ${iconColor}`" fill="currentColor" viewBox="0 0 24 24">
+            <svg :class="`w-8 h-8 ${iconColor}`" fill="currentColor" viewBox="0 0 24 24">
                 <path :d="iconPath"></path>
             </svg>
         </div>
-        <h2 class="text-2xl font-bold text-gray-900">{{ title }}</h2>
+        <h2 class="text-md font-semibold text-gray-900">{{ title }}</h2>
         <p class="text-gray-500">{{ value }}</p>
     </div>
 </template>

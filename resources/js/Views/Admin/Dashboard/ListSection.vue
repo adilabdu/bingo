@@ -25,7 +25,7 @@ const props = defineProps({
 <template>
     <div class="bg-white shadow rounded-lg p-6">
         <div class="flex items-center justify-between mb-4">
-            <h2 class="text-2xl font-semibold text-gray-800">{{ title }}</h2>
+            <h2 class="text-lg font-semibold text-gray-800">{{ title }}</h2>
             <svg :class="`w-6 h-6 ${iconColor}`" fill="currentColor" viewBox="0 0 24 24">
                 <path :d="iconPath"></path>
             </svg>

@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\Player;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Activitylog\Models\Activity;
 
 class AdminController extends Controller
 {
@@ -114,6 +115,26 @@ class AdminController extends Controller
         return Inertia::render('Admin/Games/Single', [
             'game' => $game,
             'winners' => $winners,
+        ]);
+    }
+
+    public function player($userId): Response
+    {
+        $player = User::find($userId);
+
+        $recentActivities = Activity::where('causer_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
+
+        $gamesPlayed = Game::whereHas('players.player', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->count();
+
+        return Inertia::render('Admin/Users/Player', [
+            'player' => $player,
+            'recentActivities' => $recentActivities,
+            'gamesPlayed' => $gamesPlayed,
         ]);
     }
 }

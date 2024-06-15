@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import Modal from '@/Components/AdminModal.vue';
 import { router, usePage } from "@inertiajs/vue3";
 import { debounce } from "lodash";
+import { Link } from "@inertiajs/vue3";
 
 // Initialize paginated users with usePage props
 const pageData = usePage().props;
@@ -108,14 +109,14 @@ onMounted(() => {
             </div>
 
             <!-- Search and Filters -->
-            <div class="flex justify-between items-center mb-4">
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
                 <Input
                     v-model="query"
                     placeholder="Search users..."
-                    class="w-1/3"
+                    class="w-full sm:w-1/3 mb-4 sm:mb-0"
                 />
 
-                <div class="relative w-1/4">
+                <div class="relative w-full sm:w-1/4 mb-4 sm:mb-0">
                     <Select v-model="selectedRole">
                         <SelectTrigger class="w-full">
                             <SelectValue
@@ -141,35 +142,45 @@ onMounted(() => {
             </div>
 
             <!-- Users Table -->
-            <Table class="min-w-full bg-white shadow rounded-lg">
-                <TableBody class="bg-gray-300 font-semibold">
-                    <TableRow>
-                        <TableCell class="p-4">Name</TableCell>
-                        <TableCell class="p-4">Email/Phone</TableCell>
-                        <TableCell class="p-4">Role</TableCell>
-                        <TableCell class="p-4">Actions</TableCell>
-                    </TableRow>
-                </TableBody>
-                <TableBody>
-                    <TableRow v-for="user in filteredUsers" :key="user.id" class="border-b">
-                        <TableCell class="p-4">{{ user.name }}</TableCell>
-                        <TableCell class="p-4">
-                            <span v-if="user.type === 'admin'">{{ user.email }}</span>
-                            <span v-else-if="user.type === 'player'">{{ user.phone_number }}</span>
-                        </TableCell>
-                        <TableCell class="p-4">{{ user.type.charAt(0).toUpperCase() + user.type.slice(1) }}</TableCell>
-                        <TableCell class="p-4">
-                            <Button
-                                :class="user.is_blocked ? 'bg-green-300' : 'bg-red-300'"
-                                class="text-black py-1 px-2 rounded-lg w-full"
-                                @click="toggleBlockUser(user)"
-                            >
-                                {{ user.is_blocked ? 'Unblock' : 'Block' }}
-                            </Button>
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
+            <div class="overflow-x-auto">
+                <Table class="min-w-full bg-white shadow rounded-lg">
+                    <TableBody class="bg-gray-300 font-semibold">
+                        <TableRow>
+                            <TableCell class="p-4">Name</TableCell>
+                            <TableCell class="p-4">Email/Phone</TableCell>
+                            <TableCell class="p-4">Role</TableCell>
+                            <TableCell class="p-4">Actions</TableCell>
+                        </TableRow>
+                    </TableBody>
+                    <TableBody>
+                        <TableRow v-for="user in filteredUsers" :key="user.id" class="border-b">
+                            <TableCell class="p-4">
+                                <Link v-if="user.type === 'player'" :href="route('users.player', user.id)" class="hover:underline">
+                                    {{ user.name }}
+                                </Link>
+                                <span v-else>{{ user.name }}</span>
+                            </TableCell>
+                            <TableCell class="p-4">
+                                <span v-if="user.type === 'admin'">{{ user.email }}</span>
+                                <span v-else-if="user.type === 'player'">{{ user.phone_number || user.email }}</span>
+                            </TableCell>
+                            <TableCell class="p-4">{{ user.type.charAt(0).toUpperCase() + user.type.slice(1) }}</TableCell>
+                            <TableCell class="p-4">
+                                <Button
+                                    :class="user.is_blocked ? 'bg-green-300' : 'bg-red-300'"
+                                    class="text-black py-1 px-2 rounded-lg w-full"
+                                    @click="toggleBlockUser(user)"
+                                >
+                                    {{ user.is_blocked ? 'Unblock' : 'Block' }}
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow v-if="filteredUsers.length === 0">
+                            <TableCell class="p-4 text-center" colspan="4">No users found.</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
 
             <!-- Pagination -->
             <div class="flex justify-between items-center mt-4">
@@ -218,9 +229,6 @@ onMounted(() => {
         </div>
     </AdminLayout>
 </template>
-
-<style scoped>
-</style>
 
 <style scoped>
 </style>

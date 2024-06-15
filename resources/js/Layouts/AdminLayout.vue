@@ -1,6 +1,6 @@
 <script setup>
-import {computed, ref} from 'vue';
-import {router, usePage} from "@inertiajs/vue3";
+import { computed, ref } from 'vue';
+import { router, usePage } from "@inertiajs/vue3";
 
 // Determine the active route based on the current URL
 const currentPath = window.location.pathname;
@@ -19,11 +19,7 @@ const toggleDropdown = (state) => {
 };
 
 const logout = () => {
-    router.post(
-        "/logout",
-        {},
-        {}
-    );
+    router.post("/logout", {}, {});
 };
 </script>
 
@@ -31,7 +27,7 @@ const logout = () => {
     <div class="min-h-screen flex flex-col bg-gray-100">
         <!-- Header -->
         <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                 <h1 class="text-3xl font-semibold text-gray-900">
                     Hello {{ user.name }},
                 </h1>
@@ -61,16 +57,7 @@ const logout = () => {
                    'relative text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out': true,
                    'active': isActiveRoute('/admin/games')
                  }">
-                                Game
-                            </a>
-                        </li>
-                        <li>
-                            <a :href="'/admin/winners'"
-                               :class="{
-                   'relative text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out': true,
-                   'active': isActiveRoute('/admin/winners')
-                 }">
-                                Winners
+                                Games
                             </a>
                         </li>
                     </ul>
@@ -95,7 +82,7 @@ const logout = () => {
 
         <!-- Main Content -->
         <main class="flex-grow">
-            <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <div class="container mx-auto py-6 sm:px-6 lg:px-8">
                 <!-- Dynamic Content -->
                 <slot></slot>
             </div>
@@ -103,7 +90,7 @@ const logout = () => {
 
         <!-- Footer -->
         <footer class="bg-white shadow mt-6">
-            <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+            <div class="container mx-auto py-4 px-4 sm:px-6 lg:px-8">
                 <p class="text-center text-sm text-gray-500">© 2024 rigel. All rights reserved.</p>
             </div>
         </footer>
