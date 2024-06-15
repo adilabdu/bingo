@@ -5,11 +5,11 @@ import {
     TableCell,
     TableRow,
 } from '@/Components/shadcn/ui/table'
-import {computed, ref} from "vue";
+import {computed} from "vue";
 import {formatToPrice, visit} from "@/lib/utils.js";
 import dayjs from "dayjs";
 import resolveTime from "dayjs/plugin/relativeTime"
-import {router, usePage} from "@inertiajs/vue3";
+import {usePage} from "@inertiajs/vue3";
 import {Plus, Minus} from "lucide-vue-next";
 
 dayjs.extend(resolveTime)
@@ -60,7 +60,7 @@ function goToPreviousPage() {
 
 <template>
 
-    <div class="pt-6 w-full h-fit bg-white rounded-md shadow-md">
+    <div class="max-w-md pt-6 w-full h-fit bg-white rounded-md shadow-md">
         <div class="font-semibold text-xl pb-1 px-6">Transactions</div>
         <div class="text-xs font-light pb-2 px-6">
             View your recent transaction records here
