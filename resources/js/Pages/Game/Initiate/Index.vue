@@ -41,10 +41,10 @@ function redirectToGame(categoryId, amount) {
                 <TabsTrigger value="vip" class="w-full">VIP</TabsTrigger>
             </TabsList>
             <TabsContent value="basic">
-                <GameCategoryCard @click="redirectToGame(item.id, item.amount)" :name="item.name" :amount="item.amount" v-for="(item, index) in basicCategories" :key="index" />
+                <GameCategoryCard @click="redirectToGame(item.id, item.amount)" :players="item?.games?.length" :name="item.name" :amount="item.amount" v-for="(item, index) in basicCategories" :key="index" />
             </TabsContent>
             <TabsContent value="vip">
-                <GameCategoryCard @click="redirectToGame(item.id, item.amount)"  :name="item.name" :amount="item.amount" v-for="(item, index) in vipCategories" :key="index" />
+                <GameCategoryCard @click="redirectToGame(item.id, item.amount)" :players="item?.games?.length"  :name="item.name" :amount="item.amount" v-for="(item, index) in vipCategories" :key="index" />
             </TabsContent>
         </Tabs>
     </AuthenticatedLayout>

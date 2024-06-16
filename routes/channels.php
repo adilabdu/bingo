@@ -15,3 +15,7 @@ Broadcast::channel('start-game', function ($user) {
 Broadcast::channel('draw-game', function () {
     return Auth::check();
 });
+
+Broadcast::channel('game-result', function () {
+    return Auth::check();
+});

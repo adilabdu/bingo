@@ -16,14 +16,14 @@ class GamePlayer extends Model
         'cartela_id'
     ];
 
-    public function game(): BelongsTo
-    {
-        return $this->belongsTo(Game::class);
-    }
-
     public function player(): BelongsTo
     {
         return $this->belongsTo(Player::class);
+    }
+
+    public function game(): BelongsTo
+    {
+        return $this->belongsTo(Game::class);
     }
 
     public function cartela(): BelongsTo

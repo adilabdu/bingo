@@ -1,6 +1,6 @@
 <script setup>
 
-import {CircleDollarSign, SignalLow} from "lucide-vue-next";
+import {CircleDollarSign, SignalLow, SignalMedium, SignalHigh} from "lucide-vue-next";
 import {usePage} from "@inertiajs/vue3";
 import {Button} from "@/Components/shadcn/ui/button/index.js";
 import {computed} from "vue";
@@ -36,10 +36,11 @@ const isBalanceEnough = computed(() => balance >= props.amount);
             </div>
         </div>
         <div class="flex items-end justify-center text-xs text-gray-700 font-medium rounded-sm text-center ">
-            <SignalLow class="!my-auto h-fit"/>
-            <span >
-                 {{ players }} Players
-             </span>
+            <SignalLow v-if="players < 3" class="!my-auto h-fit"/>
+            <SignalMedium v-else-if="players > 3 && players < 8" class="!my-auto h-fit"/>
+            <SignalHigh v-else-if="players > 7" class="!my-auto h-fit"/>
+
+            <span>{{ players }} Players</span>
         </div>
     </div>
         <div v-if="!isBalanceEnough" class="flex justify-between items-center">

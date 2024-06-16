@@ -26,7 +26,7 @@ class DrawGameService
 
             // Update the drawn numbers on the game
             $game->update([
-                'draw_numbers' => $drawnNumbers
+                'draw_numbers' => $drawnNumbers,
             ]);
         }
     }
