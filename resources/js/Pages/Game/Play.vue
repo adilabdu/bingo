@@ -90,17 +90,17 @@ function handleFinish() {
 
 <template>
     <AuthenticatedLayout>
-        <div class="flex w-full justify-evenly items-center space-x-2">
-            <span class="bg-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-2xl">{{index}}</span>
-            <Button @click="callBingo" :disabled="!canCallBingo" class="disabled:opacity-25 bg-gradient-to-l from-blue-600 to-sky-600 text-white text-xl font-semibold uppercase w-8/12">
+        <div class="flex w-full items-center space-x-2">
+            <span class="bg-white rounded-full min-w-12 min-h-12 flex items-center justify-center font-bold text-2xl">{{index}}</span>
+            <Button @click="callBingo" :disabled="!canCallBingo" class="disabled:opacity-25 bg-gradient-to-l h-12 from-blue-600 to-sky-600 text-white text-xl font-semibold uppercase w-full">
                 Bingo
             </Button>
         </div>
         <div class="flex justify-between space-x-4 rounded-lg w-full h-full items-center">
-            <div class="w-3/12 text-center py-3 text-white font-bold text-5xl rounded-lg bg-gradient-to-l from-blue-600 to-sky-600">
+            <div class="w-[82px] h-[75px] grid place-items-center text-center py-3 text-white font-bold text-5xl rounded-lg bg-gradient-to-l from-blue-600 to-sky-600">
                 {{ currentNumber }}
             </div>
-            <div class="w-9/12 flex flex-wrap">
+            <div class="w-9/12 grid grid-cols-4 grid-rows-2 place-items-center min-h-[104px]">
                 <div v-for="number in recentNumbers" :key="number" class="w-12 py-2 font-semibold text-center rounded-lg border-2 border-black bg-white m-1">
                     {{ number }}
                 </div>
@@ -108,7 +108,6 @@ function handleFinish() {
         </div>
 
         <BingoBoard @finish="handleFinish()" @bingo="enableBingoButton" :numbers="cartela?.numbers" :currentDrawnNumber="currentNumber" :drawnNumbers="drawNumbers" :game-id="game.id" />
-
 
         <div class="flex justify-between divide-x divide-black bg-white p-3 rounded-lg">
             <div class="flex flex-col items-center w-6/12 space-y-2">
