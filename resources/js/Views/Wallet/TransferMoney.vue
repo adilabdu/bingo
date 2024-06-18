@@ -4,6 +4,8 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import {useForm} from "@inertiajs/vue3";
+import Loading from "@/Components/Loading.vue";
+import {ref} from "vue";
 
 const props = defineProps({
     flash: {
@@ -18,18 +20,23 @@ const form = useForm({
     amount: '',
 })
 
+const isLoading = ref(false);
 function submit() {
+    isLoading.value = true
     form.post('/wallet/transfer', {
         preserveState: true,
         onSuccess: () => {
             form.reset()
+        },
+        onFinish: () => {
+            isLoading.value = false
         }
     })
 }
 </script>
 
 <template>
-
+    <Loading v-if="isLoading" is-full-screen/>
     <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
         <div class="font-semibold text-xl pb-1">Transfer Money</div>
         <div class="text-xs font-light pb-2">You can transfer money to another player using their phone number.</div>
