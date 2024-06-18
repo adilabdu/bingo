@@ -67,13 +67,13 @@ function routeToRepeatGame() {
         <DrawerPortal>
             <DrawerOverlay class="z-50 fixed bg-black/40 inset-0" />
             <DrawerContent
-                class="bg-gray-100 flex flex-col space-y-6 pt-10 rounded-t-xl !min-h-full h-[calc(100%-(env(safe-area-inset-top)+51px+1rem))] fixed bottom-0 left-0 right-0 z-[60] px-5 overflow-y-auto"
+                class="bg-gray-100 flex flex-col space-y-6 rounded-t-xl !min-h-full h-[calc(100%-(env(safe-area-inset-top)+51px+1rem))] fixed bottom-0 left-0 right-0 z-[60]"
             >
-
+                <div class="overflow-y-auto flex flex-col space-y-8 w-full px-5 py-6">
                 <div v-if="isWinner" class="bg-gradient-to-l from-green-500 to-emerald-500 p-3 rounded-xl shadow-md text-white flex items-center justify-center space-x-2 text-center font-semibold text-2xl">
 
                     <div class="text-2xl uppercase font-bold">
-                        You Won <span class="font-semibold text-4xl">{{game.winner_net_amount}} </span> Br!
+                        You Won <span class="font-bold text-4xl">{{game.winner_net_amount}} </span> Br!
                     </div>
                 </div>
 
@@ -105,6 +105,7 @@ function routeToRepeatGame() {
                 <Button @click="routeToGameMenu" class="bg-gradient-to-l from-blue-600 to-sky-600 text-white text-lg font-medium capitalize w-full">
                     Go To Game Menu
                 </Button>
+                </div>
             </DrawerContent>
         </DrawerPortal>
     </DrawerRoot>
