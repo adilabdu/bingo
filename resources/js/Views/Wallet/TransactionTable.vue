@@ -65,7 +65,10 @@ function goToPreviousPage() {
         <div class="text-xs font-light pb-2 px-6">
             View your recent transaction records here
         </div>
-        <Table>
+        <div class="text-center font-light py-5 text-xs" v-if="!data.length">
+            No Transactions yet!
+        </div>
+        <Table >
             <TableBody>
                 <TableRow :class="{ 'bg-slate-100': r % 2 }" v-for="(record, r) in data" :key="r">
                     <TableCell class="pr-2">
