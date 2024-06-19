@@ -1,13 +1,19 @@
 <script setup>
-import { ref } from 'vue';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import {provide, ref} from 'vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import Notification from "@/Components/Notification.vue";
 
 const showingNavigationDropdown = ref(false);
+const notificationData = ref(null);
+
+const showNotification = (data) => {
+    notificationData.value = data;
+};
+
+provide("showNotification", showNotification);
+provide("notificationData", notificationData);
 </script>
 
 <template>
@@ -17,7 +23,7 @@ const showingNavigationDropdown = ref(false);
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex w-full justify-between h-16">
-                        <div class="flex ">
+                        <div class="flex">
 
                             <!-- Navigation Links -->
                             <div class="sm:space-x-8 sm:-my-px sm:ms-10 flex min-w-full justify-center space-x-1 font-poppins font-semibold text-lg w-full items-center">
@@ -139,7 +145,8 @@ const showingNavigationDropdown = ref(false);
             </header>
 
             <!-- Page Content -->
-            <main class="px-4 sm:px-0 sm:container py-3 flex flex-col space-y-6 w-full">
+            <main class="px-4 sm:px-0 sm:container pb-3 flex flex-col space-y-6 w-full">
+                <Notification class="min-w-full" />
                 <slot />
             </main>
         </div>
