@@ -89,7 +89,6 @@ function handleFinish() {
 </script>
 
 <template>
-    <AuthenticatedLayout>
         <div class="flex w-full items-center space-x-2">
             <span class="bg-white rounded-full min-w-12 min-h-12 flex items-center justify-center font-bold text-2xl">{{index}}</span>
             <Button @click="callBingo" :disabled="!canCallBingo" class="disabled:opacity-25 bg-gradient-to-l h-12 from-blue-600 to-sky-600 text-white text-xl font-semibold uppercase w-full">
@@ -119,7 +118,6 @@ function handleFinish() {
                 <div class="text-xl font-semibold">#{{cartela?.name}}</div>
             </div>
         </div>
-    </AuthenticatedLayout>
     <Loading v-if="isLoading" is-full-screen />
 </template>
 

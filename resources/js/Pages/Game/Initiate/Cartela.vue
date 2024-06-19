@@ -33,7 +33,6 @@ const getCartela = debounce(() => {
 </script>
 
 <template>
-    <AuthenticatedLayout>
         <div class="flex flex-col space-y-2 bg-gray-800 text-white rounded-lg p-3 capitalize">
             <div class="font-bold text-3xl"> {{gameCategory.amount}} Br</div>
             <div class="font-light text-sm">{{gameCategory.name}} X {{gameCategory.category}}</div>
@@ -52,7 +51,6 @@ const getCartela = debounce(() => {
         </div>
 
         <ConfirmCartelaDrawer :is-trigger-disabled="!cartelaName || !cartela" />
-    </AuthenticatedLayout>
 </template>
 
 <style scoped>

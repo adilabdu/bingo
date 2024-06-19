@@ -1,9 +1,7 @@
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Header from "@/Components/Header.vue";
-import { Gift, CircleDollarSign } from "lucide-vue-next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/shadcn/ui/tabs/index.js';
-import { computed } from "vue";
+import {computed} from "vue";
 import {router, usePage} from "@inertiajs/vue3";
 import GameCategoryCard from "@/Views/Game/GameCategoryCard.vue";
 
@@ -23,11 +21,6 @@ function redirectToGame(categoryId, amount) {
 
 
 <template>
-    <AuthenticatedLayout>
-        <div class="flex space-x-2 mb-2 min-w-full bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500  p-3 rounded-md text-white">
-            <Gift class="text-white" />
-            <div class="font-medium text-sm">Unlock Your Wins: Bingo Awaits!</div>
-        </div>
         <Header>
             <template #default>
                 <div class="font-semibold text-xl pb-1">Choose Bet Category</div>
@@ -47,8 +40,7 @@ function redirectToGame(categoryId, amount) {
                 <GameCategoryCard @click="redirectToGame(item.id, item.amount)" :players="item?.games?.length"  :name="item.name" :amount="item.amount" v-for="(item, index) in vipCategories" :key="index" />
             </TabsContent>
         </Tabs>
-    </AuthenticatedLayout>
-</template>
+    </template>
 
 
 <style scoped>

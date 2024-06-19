@@ -30,12 +30,10 @@ defineProps({
 </script>
 
 <template>
-    <AuthenticatedLayout>
         <WalletPageHeader />
         <YourBalance :balance="balance" />
         <TransferMoney :flash="flash" />
         <TransactionTable :transactions="transactions" />
-    </AuthenticatedLayout>
 </template>
 
 <style scoped>

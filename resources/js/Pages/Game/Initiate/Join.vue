@@ -43,7 +43,8 @@ Echo.private('start-game')
     .listen(`.start-game.${game.id}`, (e) => {
         if (e.isGameValidToStart){
            return router.get('/game/play',{
-                'game_id': game.id,
+               'game_id': game.id,
+               'is_valid_request': true,
             });
         }
         isGameValidToStart.value = false;
@@ -55,7 +56,6 @@ function routeToGameMenu() {
 }
 
 function routeToRepeatGame() {
-    console.log('Repeating game');
     router.get('/game/join',{
         'game_category_id': gameCategory.id,
         'cartela_id': cartela.name,
@@ -65,7 +65,6 @@ function routeToRepeatGame() {
 
 
 <template>
-    <AuthenticatedLayout>
         <div class="flex flex-col divide-y space-y-14 h-screen">
             <div class="flex flex-col items-center justify-center font-bold text-[7rem] px-4 space-y-4 h-2/3">
                 <span v-if="isGameValidToStart">{{ remainingSeconds }}<span class="uppercase font-light text-xl">sec</span></span>
@@ -103,7 +102,6 @@ function routeToRepeatGame() {
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
 </template>
 
 
