@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,10 +20,16 @@ class WalletController extends Controller
 
         return Inertia::render('Wallet/Index', [
             'balance' => $player->balance,
+            'transactions' => Transaction::with('to:id,phone_number', 'from:id,phone_number')
+                ->where('from', $user->id)
+                ->orWhere('to', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->paginate(5)
+                ->withQueryString(),
         ]);
     }
 
-    public function transfer(Request $request)
+    public function transfer(Request $request): RedirectResponse
     {
         $request->validate([
             'amount' => 'required|integer|min:1',
@@ -42,7 +49,8 @@ class WalletController extends Controller
         $recipientPlayer = $recipient->load('player')->player;
 
         if ($recipientPlayer->id === $player->id) {
-            return redirect()->back()->with('error', 'Cannot sent funds to yourself');
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Cannot sent funds to yourself.');
         }
 
         $recipientPlayer->balance += $request->integer('amount');
@@ -50,6 +58,13 @@ class WalletController extends Controller
 
         $recipientPlayer->save();
         $player->save();
+
+        Transaction::create([
+            'type' => Transaction::TRANSFER,
+            'amount' => $request->integer('amount'),
+            'from' => $user->id,
+            'to' => $recipient->id,
+        ]);
 
         DB::commit();
 

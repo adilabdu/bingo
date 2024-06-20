@@ -13,7 +13,16 @@ class StartGameService
             ->first();
 
         if ($game) {
-            StartGameEvent::dispatch($game);
+            $game->load(['players', 'gameCategory']);
+
+            if ($game->players()->count() < 2) {
+                StartGameEvent::dispatch($game, false);
+                SettleGameService::returnPlayerBalance($game);
+                $game->update(['status' => Game::STATUS_CANCELLED]);
+                return;
+            }
+
+            StartGameEvent::dispatch($game, true);
 
             $totalPlayers = $game->players()->count();
 

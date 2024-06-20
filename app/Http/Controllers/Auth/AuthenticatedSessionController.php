@@ -44,16 +44,22 @@ class AuthenticatedSessionController extends Controller
         // Attempt to authenticate the user
         $credentials = [$field => $login, 'password' => $request->input('password')];
 
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
             return back()->withErrors([
                 'login' => trans('auth.failed'),
             ]);
         }
 
         $request->session()->regenerate();
+        $userType = Auth::user()->type;
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return match ($userType) {
+            User::TYPE_ADMIN => redirect()->intended('/admin/dashboard'),
+            User::TYPE_PLAYER => redirect()->intended('/game/initiate'),
+            default => redirect()->intended('/'),
+        };
     }
+
 
     /**
      * Destroy an authenticated session.

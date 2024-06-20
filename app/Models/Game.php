@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Game extends Model
 {
@@ -14,6 +15,7 @@ class Game extends Model
     const STATUS_PENDING = 'pending';
     const STATUS_ACTIVE = 'active';
     const STATUS_COMPLETED = 'completed';
+    const STATUS_CANCELLED = 'cancelled';
 
     protected $fillable = [
         'game_category_id',
@@ -23,6 +25,7 @@ class Game extends Model
         'draw_numbers',
         'winning_numbers',
         'winner_player_id'
+
     ];
 
     public function gameCategory(): BelongsTo
@@ -33,6 +36,11 @@ class Game extends Model
     public function players(): HasMany
     {
         return $this->hasMany(GamePlayer::class);
+    }
+
+    public function cartelas(): HasManyThrough
+    {
+        return $this->hasManyThrough(Cartela::class, GamePlayer::class);
     }
 
     protected $casts = [

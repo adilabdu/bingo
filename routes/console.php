@@ -11,4 +11,4 @@ Artisan::command('inspire', function () {
 
 Schedule::call(function () {
     StartGameService::checkGame();
- })->everyFiveSeconds();
+ })->everySecond();

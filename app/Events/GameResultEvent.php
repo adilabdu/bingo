@@ -2,7 +2,9 @@
 
 namespace App\Events;
 
+use App\Models\Cartela;
 use App\Models\Game;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,20 +14,27 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class StartGameEvent implements ShouldBroadcast
+class GameResultEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public Game $game;
 
-    public bool $isGameValidToStart = false;
+    public User $winner;
+
+    public array $winningNumbers;
+
+    public Cartela $cartela;
+
     /**
      * Create a new event instance.
      */
-    public function __construct($game, $isGameValidToStart)
+    public function __construct($game, $winner, $winningNumbers, $cartela)
     {
         $this->game = $game;
-        $this->isGameValidToStart = $isGameValidToStart;
+        $this->winner = $winner;
+        $this->winningNumbers = $winningNumbers;
+        $this->cartela = $cartela;
     }
 
     /**
@@ -35,11 +44,11 @@ class StartGameEvent implements ShouldBroadcast
      */
     public function broadcastOn(): PrivateChannel
     {
-        return new PrivateChannel('start-game');
+        return new PrivateChannel('game-result');
     }
 
     public function broadcastAs(): string
     {
-        return 'start-game.' . $this->game->id;
+        return 'game-result.' .$this->game->id;
     }
 }
