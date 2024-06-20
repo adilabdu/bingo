@@ -15,6 +15,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/Components/shadcn/ui/select/index.js';
+import GuestLayout from "@/Layouts/GuestLayout.vue";
 
 const form = useForm({
     name: '',
@@ -33,7 +34,7 @@ const submit = () => {
 </script>
 
 <template>
-    <AdminLayout>
+    <GuestLayout>
         <Head title="Register" />
 
         <form @submit.prevent="submit" class="w-10/12 flex flex-col space-y-5 mx-auto p-6 bg-white shadow-lg rounded-lg">
@@ -136,7 +137,7 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
-    </AdminLayout>
+    </GuestLayout>
 </template>
 
 <style scoped>
