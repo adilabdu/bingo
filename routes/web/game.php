@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\GameController;
 
-Route::middleware('auth')->prefix('game')->group(function () {
+Route::middleware(['auth', 'checkUserType:player'])->prefix('game')->group(function () {
     Route::get('/initiate', [GameController::class, 'index'])->name('game.initiate');
     Route::get('/initiate/{categoryId}/{cartelaName?}', [GameController::class, 'selectCartela'])->name('game.cartela');
     Route::get('/play', [GameController::class, 'playGame'])->name('game.play');
