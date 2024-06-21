@@ -6,6 +6,7 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import GuestLayout from "@/Layouts/GuestLayout.vue";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -23,7 +24,8 @@ function getLayout(name) {
     switch (true) {
         case name.startsWith("Admin/"):
             return AdminLayout;
-
+        case name.startsWith(name === "Welcome"):
+            return GuestLayout;
         default:
             return AuthenticatedLayout;
     }
