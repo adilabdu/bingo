@@ -33,7 +33,9 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => $request->type === 'admin' ? 'required|string|lowercase|email|max:255|unique:users,email' : 'nullable',
-            'phone_number' => $request->type === 'player' ? 'required|regex:/(9)[0-9]{8}/|max:10|min:9|unique:users,phone_number' : 'nullable',
+            'phone_number' => $request->type === 'player'
+                ? 'required|regex:/^\+2519[0-9]{8}$/|max:13|unique:users,phone_number'
+                : 'nullable',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'type' => 'required|string|in:admin,player',
         ]);
@@ -52,6 +54,8 @@ class RegisteredUserController extends Controller
         };
         event(new Registered($user));
 
-        return redirect()->route('register')->with('success', 'User registered successfully.');
+        auth()->login($user);
+
+        return redirect()->route('game.initiate')->with('success', 'User registered successfully.');
     }
 }
