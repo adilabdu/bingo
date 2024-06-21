@@ -10,6 +10,7 @@ import {computed, ref} from "vue";
 import {Button} from "@/Components/shadcn/ui/button/index.js";
 import BingoBoard from "@/Views/Game/BingoBoard.vue";
 import {router, usePage} from "@inertiajs/vue3";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const isDrawerOpen = ref(false);
 const emit = defineEmits(["start-bingo"]);
@@ -60,9 +61,9 @@ function startBingo() {
     >
         <DrawerTrigger>
             <!--   Todo: Check disabled reactivity         -->
-            <Button :disabled="isTriggerDisabled" class="bg-blue-600 text-white font-semibold w-full">
+            <PrimaryButton :disabled="isTriggerDisabled">
                 {{ triggerButtonText }}
-            </Button>
+            </PrimaryButton>
         </DrawerTrigger>
         <DrawerPortal>
             <DrawerOverlay class="z-50 fixed bg-black/40 inset-0" />
@@ -79,8 +80,8 @@ function startBingo() {
                         Confirm Your Cartela
                     </div>
 
-                    <div>
-                        <div class="py-3 rounded-lg flex justify-between items-center divide-white divide-x text-white bg-gradient-to-br from-blue-600 to-sky-600">
+                    <div class="flex flex-col space-y-4">
+                        <div class="py-3 rounded-lg flex justify-between items-center divide-white divide-x text-white bg-brand-primary">
                         <span class="w-6/12 text-center flex flex-col items-center space-y-2">
                             <span class="font-bold text-3xl">#{{ cartela?.name }}</span>
                             <span class="text-sm">
@@ -97,9 +98,9 @@ function startBingo() {
                         <BingoBoard v-if="cartelaNumbers" :numbers="cartelaNumbers" card-size="w-14" />
                     </div>
 
-                    <Button @click="startBingo" class="bg-blue-600 text-white font-semibold w-full">
+                    <PrimaryButton @click="startBingo" class="bg-blue-600 text-white font-semibold w-full">
                         Start Bingo
-                    </Button>
+                    </PrimaryButton>
                 </div>
             </DrawerContent>
         </DrawerPortal>

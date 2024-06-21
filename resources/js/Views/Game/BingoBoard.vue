@@ -49,10 +49,10 @@ const handleClick = (number) => {
 };
 
 const getClassForNumber = (num) => {
-    if (num === props.currentDrawnNumber && !clickedNumbers.has(num)) {
-        return 'animate-pulse bg-blue-200';
-    } else if (clickedNumbers.has(num)) {
-        return 'bg-blue-600 text-white';
+    if (num === props.currentDrawnNumber && !clickedNumbers.value.has(num)) {
+        return 'animate-pulse bg-brand-tertiary text-white';
+    } else if (clickedNumbers.value.has(num)) {
+        return 'bg-brand-secondary text-white';
     } else {
         return 'bg-white';
     }
@@ -100,11 +100,11 @@ Echo.private('game-result')
     <CompleteGameDrawer v-if="isWinner!== null" :game="game" :winner="winner" :cartela="cartela" :is-winner="isWinner" :is-drawer-open="true" />
     <div class="flex justify-between py-3 rounded-md max-w-sm w-full">
         <div v-for="(column, index) in formattedBingoData" :key="index" class="text-center">
-            <h3 class="bg-gray-800 font-semibold text-white rounded py-2 min-w-10">{{ columnLabels[index] }}</h3>
+            <h3 class="bg-brand-primary font-semibold text-white rounded py-2 mb-4 min-w-10">{{ columnLabels[index] }}</h3>
             <ul>
                 <li v-for="(num, ind) in column" :key="ind" :class="cardSize">
-                    <div v-if="columnLabels[index] === 'N' && ind === 2" class="bg-blue-600 font-semibold text-white rounded my-2.5 py-3 px-2">FREE</div>
-                    <div v-else :class="getClassForNumber(num)" class="w-full rounded font-medium text-lg my-2 py-3 px-2 cursor-pointer" @click="handleClick(num)">
+                    <div v-if="columnLabels[index] === 'N' && ind === 2" class="bg-brand-secondary font-semibold text-white rounded my-2.5 py-3 px-2">FREE</div>
+                    <div v-else :class="getClassForNumber(num)" class="rounded font-medium text-lg my-2 py-3 text-center px-2 cursor-pointer" @click="handleClick(num)">
                         {{ num }}
                     </div>
                 </li>

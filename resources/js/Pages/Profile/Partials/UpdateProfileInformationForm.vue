@@ -19,6 +19,7 @@ const user = usePage().props.auth.user;
 const form = useForm({
     name: user?.name,
     email: user?.email,
+    phone_number: Number(user?.phone_number.slice(4)),
 });
 </script>
 
@@ -50,20 +51,22 @@ const form = useForm({
             </div>
 
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="login" value="Phone Number" />
+                <div class="flex items-center font-semibold min-h-full">
+                    <div class="bg-brand-primary text-white px-3 py-3.5 h-full  rounded-l-lg min-h-full ">+251</div>
+                    <TextInput
+                        id="phone_number"
+                        type="text"
+                        class="block text-black w-full !bg-gray-50 !border-black !border !rounded-none !rounded-r-lg"
+                        v-model="form.phone_number"
+                        required
+                        autocomplete="username"
+                        disabled
+                    />
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+                    <InputError class="mt-2" :message="form.errors.phone_number" />
+                </div>
             </div>
-
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
                 <p class="text-sm mt-2 text-gray-800">
                     Your email address is unverified.
@@ -85,7 +88,7 @@ const form = useForm({
                 </div>
             </div>
 
-            <div class="flex items-center gap-4">
+            <div class="flex items-center justify-end gap-4">
                 <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
 
                 <Transition

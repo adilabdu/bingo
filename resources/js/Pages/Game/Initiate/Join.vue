@@ -1,14 +1,13 @@
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {ref, onMounted, onUnmounted, computed, watch} from "vue";
 import {router, usePage} from "@inertiajs/vue3";
 import moment from 'moment';
-import {Button} from "@/Components/shadcn/ui/button/index.js";
 import {Input} from "@/Components/shadcn/ui/input/index.js";
 import InputLabel from "@/Components/InputLabel.vue";
 import ConfirmCartelaDrawer from "@/Views/Game/ConfirmCartelaDrawer.vue";
 import {debounce} from "lodash";
 import Loading from "@/Components/Loading.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const game  = computed(() => usePage().props.game);
 const gameCategory = usePage().props.gameCategory;
@@ -20,7 +19,7 @@ const scheduledTime = computed(() => moment(game.value.scheduled_at));
 const remainingSeconds = computed(() => {
     if (!scheduledTime.value.isValid()) {
         // Todo: Handle error
-     }
+    }
     const duration = moment.duration(scheduledTime.value.diff(currentTime.value));
     return duration.asSeconds() > 0 ? Math.floor(duration.asSeconds()) : 0;
 });
@@ -45,7 +44,6 @@ const gameMessage = ref('');
 
 Echo.private('start-game')
     .listen(`.start-game.${game.value.id}`, (e) => {
-        console.log("Game is valid to start", e);
         if (e.isGameValidToStart){
             return router.get('/game/play',{
                 'game_id': game.value.id,
@@ -114,21 +112,19 @@ const getCartela = debounce(() => {
                     <InputLabel value="Enter Cartela Number" class="text-start"/>
                     <Input type="text" class="w-full !border !border-black" placeholder="Enter Cartela Number" v-model="cartelaName"/>
                     <div class="flex justify-between w-full">
-                        <div class="w-5/12">
+                        <div class="w-fit">
                             <ConfirmCartelaDrawer @start-bingo="isGameValidToStart = true" @click="getCartela" trigger-button-text="View Cartela" :is-trigger-disabled="!cartelaName || !cartela" />
                         </div>
 
-                        <Button @click="routeToRepeatGame"  class="bg-brand-300 text-black  capitalize w-5/12">
+                        <PrimaryButton @click="routeToRepeatGame"  class="bg-brand-secondary capitalize w-fit">
                             Play Again
-                        </Button>
+                        </PrimaryButton>
                     </div>
 
                 </div>
-                <Button @click="routeToGameMenu" class="bg-gray-800 text-white text-lg font-medium capitalize w-full">
-                    Go To Game Menu
-                </Button>
+                <PrimaryButton @click="routeToGameMenu" class="bg-brand-tertiary !text-black text-lg font-medium capitalize w-full">Go To Game Menu</PrimaryButton>
             </div>
-            <div v-if="isGameValidToStart" class="py-3 rounded-lg flex justify-between items-center divide-white divide-x text-white bg-gradient-to-br from-blue-600 to-sky-600 w-full">
+            <div v-if="isGameValidToStart" class="py-3 rounded-lg flex justify-between items-center divide-white divide-x text-white bg-brand-primary w-full">
                         <span class="w-6/12 text-center flex flex-col items-center space-y-2">
                             <span class="font-bold text-3xl">#{{ cartelaName }}</span>
                             <span class="text-sm">

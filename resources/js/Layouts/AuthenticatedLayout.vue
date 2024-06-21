@@ -145,7 +145,7 @@ provide("notificationData", notificationData);
             </header>
 
             <!-- Page Content -->
-            <main class="px-4 sm:px-0 sm:container pb-3 flex flex-col space-y-6 w-full">
+            <main class="px-4 sm:px-0 sm:container pb-5 flex flex-col space-y-6 w-full">
                 <Notification class="min-w-full" />
                 <slot />
             </main>

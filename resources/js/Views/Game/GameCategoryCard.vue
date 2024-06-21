@@ -4,6 +4,7 @@ import {CircleDollarSign, SignalLow, SignalMedium, SignalHigh} from "lucide-vue-
 import {usePage} from "@inertiajs/vue3";
 import {Button} from "@/Components/shadcn/ui/button/index.js";
 import {computed} from "vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 const props = defineProps({
     amount:{
         type: Number,
@@ -45,7 +46,7 @@ const isBalanceEnough = computed(() => balance >= props.amount);
     </div>
         <div v-if="!isBalanceEnough" class="flex justify-between items-center">
             <div class="text-xs text-red-600">Not Enough Balance</div>
-        <Button  class="bg-blue-600 text-white font-semibold text-xs rounded-md px-2 py-1 w-5/12" size="xs">Deposit</Button>
+        <PrimaryButton  class="w-5/12" size="xs">Deposit</PrimaryButton>
         </div>
 
     </div>

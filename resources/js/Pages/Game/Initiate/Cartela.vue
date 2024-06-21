@@ -32,7 +32,7 @@ const getCartela = debounce(() => {
 </script>
 
 <template>
-        <div class="flex flex-col space-y-2 bg-gray-800 text-white rounded-lg p-3 capitalize">
+        <div class="flex flex-col space-y-2 bg-brand-primary text-white rounded-lg p-3 capitalize">
             <div class="font-bold text-3xl"> {{gameCategory.amount}} Br</div>
             <div class="font-light text-sm">{{gameCategory.name}} X {{gameCategory.category}}</div>
         </div>
@@ -40,7 +40,7 @@ const getCartela = debounce(() => {
         <div class="flex flex-col space-y-3 py-3">
             <InputLabel value="Enter your lucky cartela number"/>
             <div class="flex">
-                <div class="bg-blue-600 text-white font-semibold w-14 text-center flex items-center justify-center rounded-l-md">
+                <div class="bg-brand-secondary text-white font-semibold w-14 text-center flex items-center justify-center rounded-l-md">
                     <Loading v-if="isLoading" type="spinner" class="p-2" color="primary"/>
                     <span v-else>#</span>
                 </div>
