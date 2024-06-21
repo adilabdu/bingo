@@ -60,7 +60,7 @@ function goToPreviousPage() {
 
 <template>
 
-    <div class="max-w-md pt-6 w-full h-fit bg-white rounded-md shadow-md">
+    <div v-if="data.length" class="max-w-md pt-6 w-full h-fit bg-white rounded-md shadow-md">
         <div class="font-semibold text-xl pb-1 px-6">Transactions</div>
         <div class="text-xs font-light pb-2 px-6">
             View your recent transaction records here
