@@ -53,7 +53,7 @@ class GameController extends Controller
         ]);
     }
 
-    public function selectCartela($categoryId, $cartelaName = null): Response
+    public function selectCartela(Request $request, $categoryId, $cartelaName = null): Response
     {
         return Inertia::render('Game/Initiate/Cartela',[
             'gameCategory' => GameCategory::findOrFail($categoryId),
