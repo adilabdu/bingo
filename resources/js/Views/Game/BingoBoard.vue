@@ -3,6 +3,7 @@ import {computed, ref, watch} from 'vue';
 import {useIsBoardWinner} from "@/Composables/useIsBoardWinner";
 import {usePage} from "@inertiajs/vue3";
 import CompleteGameDrawer from "@/Views/Game/CompleteGameDrawer.vue";
+import { useGameDataStore } from "@/Stores/useGameDataStore.ts";
 
 const props = defineProps({
     numbers: {
@@ -35,21 +36,22 @@ const props = defineProps({
 
 const emits = defineEmits(['bingo', 'finish'])
 
-const clickedNumbers = ref(new Set(['FREE']));
+const { addToClickedNumbers, clickedNumbers } = useGameDataStore();
 
 const handleClick = (number) => {
     // Prevent interaction if the number is part of the winnerNumbers
     if (props.winnerNumbers.includes(number)) return;
 
-    if (props.drawnNumbers.includes(number) && !clickedNumbers.value.has(number)) {
-        clickedNumbers.value.add(number);
+    if (props.drawnNumbers.includes(number) && !clickedNumbers.has(number)) {
+        clickedNumbers.add(number);
+        addToClickedNumbers(number);
     }
 };
 
 const getClassForNumber = (num) => {
-    if (num === props.currentDrawnNumber && !clickedNumbers.value.has(num)) {
+    if (num === props.currentDrawnNumber && !clickedNumbers.has(num)) {
         return 'animate-pulse bg-blue-200';
-    } else if (clickedNumbers.value.has(num)) {
+    } else if (clickedNumbers.has(num)) {
         return 'bg-blue-600 text-white';
     } else {
         return 'bg-white';
@@ -68,10 +70,10 @@ const formattedBingoData = computed(() => {
     });
 });
 
-watch(() => Array.from(clickedNumbers.value), () => {
-    if (Array.from(clickedNumbers.value).length > 3) {
-        if (useIsBoardWinner(Array.from(clickedNumbers.value), formattedBingoData.value)) {
-            emits('bingo', Array.from(clickedNumbers.value));
+watch(() => Array.from(clickedNumbers), () => {
+    if (Array.from(clickedNumbers).length > 3) {
+        if (useIsBoardWinner(Array.from(clickedNumbers), formattedBingoData.value)) {
+            emits('bingo', Array.from(clickedNumbers));
         }
     }
 })
@@ -89,7 +91,6 @@ Echo.private('game-result')
         winner.value = e.winner
         cartela.value = e.cartela
         winnerNumbers.value = e.winner_numbers;
-
       isWinner.value = e.winner.id === user.value.id;
       emits('finish', isWinner.value)
     });
