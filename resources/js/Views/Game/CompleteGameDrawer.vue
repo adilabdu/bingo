@@ -51,6 +51,10 @@ function routeToRepeatGame() {
         'cartela_id': props.cartela.id,
     });
 }
+
+function routeToChangeCartelaPage() {
+    router.visit(`/game/initiate/${props.game.game_category_id}`);
+}
 </script>
 
 <template>
@@ -76,6 +80,7 @@ function routeToRepeatGame() {
                         <div class="text-2xl uppercase font-bold">
                             You Won <span class="font-bold text-4xl">{{game.winner_net_amount}} </span> Br!
                         </div>
+                        <
                     </div>
 
                     <div v-else class="bg-gradient-to-l from-red-500 to-rose-500 p-3 rounded-xl shadow-md text-white flex items-center justify-center space-x-2 text-center font-semibold text-2xl">
@@ -101,7 +106,7 @@ function routeToRepeatGame() {
                     </div>
 
                     <div class="flex flex-col space-y-2">
-
+                        <PrimaryButton @click="routeToChangeCartelaPage" class="!bg-brand-tertiary !text-black">Play Again With Another Cartela</PrimaryButton>
                         <PrimaryButton @click="routeToRepeatGame">Play Again</PrimaryButton>
                     </div>
                     <PrimaryButton @click="routeToGameMenu" class="!bg-brand-secondary  text-white text-lg font-medium capitalize w-full">Go To Game Menu</PrimaryButton>
