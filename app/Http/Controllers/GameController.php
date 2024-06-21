@@ -37,7 +37,7 @@ class GameController extends Controller
         // Check if the player has an active game
         $activeGame = GamePlayer::where('player_id', $player->id)
             ->whereHas('game', function ($query) {
-                $query->whereIn('status', [Game::STATUS_ACTIVE,Game::STATUS_PENDING]);
+                $query->whereIn('status', [Game::STATUS_PENDING]);
             })
             ->first();
 
@@ -53,9 +53,11 @@ class GameController extends Controller
         ]);
     }
 
-    public function selectCartela($categoryId, $cartelaName = null): Response
+    public function selectCartela(Request $request, $categoryId, $cartelaName = null): Response
     {
-        return Inertia::render('Game/Initiate/Cartela',[
+        $page = $request->input('page', 'Game/Initiate/Cartela');
+
+        return Inertia::render($page,[
             'gameCategory' => GameCategory::findOrFail($categoryId),
             'cartela' => Inertia::lazy(function () use ($cartelaName) {
                 if (!$cartelaName)
@@ -125,9 +127,7 @@ class GameController extends Controller
 
         if ($cartelaInUse) {
              // Todo: Handle Error
-            return redirect()->back()->withErrors([
-                'cartela_id' => 'Cartela is already in use'
-            ]);
+            return redirect()->back()->withErrors(['cartela_id' => 'Cartela is already in use']);
         }
 
         $game = JoinGameService::startGame($request->cartela_id, $request->game_category_id);

@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
         $user = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'phone_number' => '0912345678',
+            'phone_number' => '+251912345678',
         ]);
 
         $user->player()->create([
