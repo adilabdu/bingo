@@ -23,6 +23,7 @@ const form = useForm({
 });
 
 const submit = () => {
+    form.login = `+251${form.login}`;
     form.post(route('login'), {
         onFinish: () => form.reset('password'),
     });
@@ -31,30 +32,36 @@ const submit = () => {
 
 <template>
     <div class="px-3">
-        <Head title="Log in" />
+        <div class="w-full flex justify-between items-center pb-10">
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
+            <div class="text-4xl w-full">
+                Sign in to your account
+            </div>
 
-        <div class="text-4xl pb-10">
-            Sign in to your account
+            <div class="flex w-3/12 justify-end">
+            <img class="w-full object-cover" src="../../../../public/assets/images/logo.png">
+            </div>
+
         </div>
         <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="login" value="Email or Phone Number" />
+            <div class="flex flex-col space-y-2">
+                <InputLabel for="login" value="Phone Number" />
+                <div class="flex items-center font-semibold min-h-full">
+                    <div class="bg-brand-150 text-white px-3 py-3.5 h-full  rounded-l-lg min-h-full ">+251</div>
 
-                <TextInput
-                    id="login"
-                    type="text"
-                    class="mt-1 block w-full !bg-gray-50 !border-gray-900 !border"
-                    v-model="form.login"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
+                    <TextInput
+                        id="login"
+                        type="number"
+                        class="block w-full !bg-gray-50 !border-black !border !rounded-none !rounded-r-lg"
+                        v-model="form.login"
+                        required
+                        autofocus
+                        autocomplete="number"
+                        placeholder="(09/07)12345678"
+                    />
 
-                <InputError class="mt-2" :message="form.errors.login" />
+                </div>
+                    <InputError class="mt-2" :message="form.errors.login" />
             </div>
 
             <div class="mt-4">
@@ -63,10 +70,11 @@ const submit = () => {
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full  !bg-gray-50 !border-gray-900 !border"
+                    class="mt-1 block w-full !bg-gray-50 !border-black !border"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
+                    placeholder="Password"
                 />
 
                 <InputError class="mt-2" :message="form.errors.password" />
@@ -89,7 +97,7 @@ const submit = () => {
             <div class="flex items-center text-center mt-4">
 
 
-                <PrimaryButton class="w-full flex justify-center" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton class="w-full flex justify-center !bg-brand-150" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Log in
                 </PrimaryButton>
             </div>
