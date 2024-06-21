@@ -1,23 +1,28 @@
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import BingoBoard from "@/Views/Game/BingoBoard.vue";
 import { computed, onMounted, ref, onUnmounted } from "vue";
-import {router, usePage} from "@inertiajs/vue3";
-import {Button} from "@/Components/shadcn/ui/button/index.js";
+import { router, usePage } from "@inertiajs/vue3";
+import { Button } from "@/Components/shadcn/ui/button/index.js";
 import Loading from "@/Components/Loading.vue";
+import { useGameDataStore } from "@/Stores/useGameDataStore.ts";
 
 const pageProps = usePage().props;
+const gameStore = useGameDataStore();
+
 const cartela = computed(() => pageProps.playerCartela);
 const game = computed(() => pageProps.game);
-const drawNumbers = ref(pageProps.drawnNumbers ?? []);
 const currentNumber = ref(null);
-const recentNumbers = ref([]);
+const revealingNumbers = ref(false);
+
 const isLoading = ref(false);
 
-let index = 0;
 let pollInterval = null;
 const batchIndex = computed(() => usePage().props.nextBatchIndex);
+
 const fetchGameUpdates = () => {
+
+    console.log('(fetchGameUpdates) fetching game updates... ')
+
     if (batchIndex.value > 8)
         return;
     router.get(`/game/play/`, {
@@ -27,12 +32,13 @@ const fetchGameUpdates = () => {
         preserveState: true,
         onSuccess: (page) => {
             // Add the new drawn numbers to the existing list
-            drawNumbers.value = [...drawNumbers.value, ...page.props.drawnNumbers];
-            if (index === 0 && drawNumbers.value.length > 0) {
+            // drawNumbers.value = [...drawNumbers.value, ...page.props.drawnNumbers];
+            gameStore.addToDrawNumbers(page.props.drawnNumbers);
+            if (!revealingNumbers.value || (gameStore.revealIndex === 0 && Array.from(gameStore.drawNumbers).length > 0)) {
                 revealNumbers();
             }
 
-            if (drawNumbers.value.length >= 75) {
+            if (Array.from(gameStore.drawNumbers).length >= 75) {
                 clearInterval(pollInterval);
             }
         }
@@ -40,11 +46,12 @@ const fetchGameUpdates = () => {
 };
 
 const revealNumbers = () => {
-    if (index < drawNumbers.value.length) {
-        currentNumber.value = drawNumbers.value[index];
-        recentNumbers.value = drawNumbers.value.slice(Math.max(0, index - 7), index + 1).reverse();
-        index++;
-        if (index < drawNumbers.value.length) {
+    revealingNumbers.value = true;
+    if (gameStore.revealIndex < Array.from(gameStore.drawNumbers).length) {
+        currentNumber.value = Array.from(gameStore.drawNumbers)[gameStore.revealIndex];
+        gameStore.setRecentNumbers(Array.from(gameStore.drawNumbers).slice(Math.max(0, gameStore.revealIndex - 7), gameStore.revealIndex + 1).reverse());
+        gameStore.incrementRevealIndex();
+        if (gameStore.revealIndex < Array.from(gameStore.drawNumbers).length) {
             setTimeout(revealNumbers, 2000);
         }
     }
@@ -52,20 +59,28 @@ const revealNumbers = () => {
 
 const canCallBingo = ref(false);
 const selectedNumbers = ref([]);
+
 const enableBingoButton = (numbers) => {
     canCallBingo.value = true;
     selectedNumbers.value = numbers;
 }
 
+function handleFinish() {
+    isLoading.value = false;
+    gameStore.clearGameData();
+}
+
 const callBingo = () => {
     isLoading.value = true;
     router.post(`/game/play/bingo/${cartela.value.id}/${game.value.id}`, {
-        draw_numbers_cut_off_index: index,
+        draw_numbers_cut_off_index: gameStore.revealIndex,
         selected_numbers: selectedNumbers.value
     }, {
         preserveState: true,
         onProgress: () => {},
-        onSuccess: () => {},
+        onSuccess: () => {
+            gameStore.clearGameData();
+        },
     })
 }
 
@@ -74,24 +89,20 @@ onMounted(() => {
         router.get('/game/initiate');
     }
     pollInterval = setInterval(fetchGameUpdates, 15000);
-    if (drawNumbers.value.length > 0 && index === 0) {
-        setTimeout(revealNumbers, 1000);
+    if (!revealingNumbers.value || (Array.from(gameStore.drawNumbers).length > 0 && gameStore.revealIndex === 0)) {
+        setTimeout(revealNumbers, 2000);
     }
 });
 
 onUnmounted(() => {
     clearInterval(pollInterval);
 });
-
-function handleFinish() {
-  isLoading.value = false;
-}
 </script>
 
 <template>
         <div class="flex w-full items-center justify-between space-x-2">
             <div class="w-3/12 flex items-center justify-center">
-            <span class="bg-white rounded-full min-w-12 min-h-12 flex items-center justify-center font-bold text-2xl">{{index}}</span>
+                <span class="bg-white rounded-full min-w-12 min-h-12 flex items-center justify-center font-bold text-2xl">{{gameStore.revealIndex}}</span>
             </div>
             <Button @click="callBingo" :disabled="!canCallBingo" class="disabled:opacity-25 bg-brand-primary text-white text-xl font-semibold uppercase w-9/12">
                 Bingo
@@ -102,13 +113,20 @@ function handleFinish() {
                 {{ currentNumber }}
             </div>
             <div class="w-9/12 grid grid-cols-4 grid-rows-2 place-items-center min-h-[104px]">
-                <div v-for="number in recentNumbers" :key="number" class="w-12 py-2 font-semibold text-center rounded-lg border-2 border-black bg-white m-1">
+                <div v-for="number in gameStore.recentNumbers" :key="number" class="w-12 py-2 font-semibold text-center rounded-lg border-2 border-black bg-white m-1">
                     {{ number }}
                 </div>
             </div>
         </div>
 
-        <BingoBoard @finish="handleFinish()" @bingo="enableBingoButton" :numbers="cartela?.numbers" :currentDrawnNumber="currentNumber" :drawnNumbers="drawNumbers" :game-id="game.id" />
+        <BingoBoard
+            @finish="handleFinish()"
+            @bingo="enableBingoButton"
+            :numbers="cartela?.numbers"
+            :currentDrawnNumber="currentNumber"
+            :drawnNumbers="Array.from(gameStore.drawNumbers)"
+            :game-id="game.id"
+        />
 
         <div class="flex justify-between divide-x divide-white bg-brand-primary text-white p-3 rounded-lg">
             <div class="flex flex-col items-center w-6/12 space-y-2">
