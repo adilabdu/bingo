@@ -12,11 +12,16 @@ import BingoBoard from "@/Views/Game/BingoBoard.vue";
 import {router, usePage} from "@inertiajs/vue3";
 
 const isDrawerOpen = ref(false);
+const emit = defineEmits(["start-bingo"]);
 defineProps({
     isTriggerDisabled: {
         type: Boolean,
         default: false,
-    }
+    },
+    triggerButtonText: {
+        type: String,
+        default: "Confirm & Play Bingo",
+    },
 });
 
 function setDrawerOpen(val) {
@@ -39,6 +44,10 @@ function startBingo() {
     },{
         preserveState: true,
         replace: true,
+        onFinish: () => {
+            emit('start-bingo')
+            setDrawerOpen(false);
+        }
     });
 }
 </script>
@@ -52,7 +61,7 @@ function startBingo() {
         <DrawerTrigger>
             <!--   Todo: Check disabled reactivity         -->
             <Button :disabled="isTriggerDisabled" class="bg-blue-600 text-white font-semibold w-full">
-                Confirm & Play Bingo
+                {{ triggerButtonText }}
             </Button>
         </DrawerTrigger>
         <DrawerPortal>
