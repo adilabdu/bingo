@@ -61,9 +61,9 @@ function startBingo() {
     >
         <DrawerTrigger>
             <!--   Todo: Check disabled reactivity         -->
-            <Button :disabled="isTriggerDisabled" class="bg-brand-primary text-white font-semibold w-full">
+            <PrimaryButton :disabled="isTriggerDisabled">
                 {{ triggerButtonText }}
-            </Button>
+            </PrimaryButton>
         </DrawerTrigger>
         <DrawerPortal>
             <DrawerOverlay class="z-50 fixed bg-black/40 inset-0" />

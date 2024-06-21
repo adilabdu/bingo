@@ -60,14 +60,13 @@ function submit() {
                 <div class="flex items-center font-semibold min-h-full">
                     <div class="bg-brand-primary text-white px-3 py-3.5 h-full  rounded-l-lg min-h-full ">+251</div>
                     <TextInput
-                    id="recipient"
-                    type="text" class="block w-full !bg-gray-50 !border-black !border !rounded-none !rounded-r-lg"
-
-                    v-model="form.recipient"
-                    required
-                    autofocus
-                />
-            </div>
+                        id="recipient"
+                        type="text" class="block w-full !bg-gray-50 !border-black !border !rounded-none !rounded-r-lg"
+                        v-model="form.recipient"
+                        required
+                        autofocus
+                    />
+                </div>
                 <InputError class="mt-2" :message="form.errors.recipient" />
             </div>
 
