@@ -15,7 +15,7 @@ class JoinGameService
             ->where('status', 'pending')
             ->first();
 
-        $player = auth()->user()->load('player');
+        $player = auth()->user()->load('player')->player;
 
         // Check if the player has an active game
         $activeGame = GamePlayer::where('player_id', $player->id)
