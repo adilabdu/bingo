@@ -33,7 +33,8 @@ class WalletController extends Controller
     {
         $request->validate([
             'amount' => 'required|integer|min:1',
-            'recipient' => 'required|exists:users,phone_number',
+            'recipient' => 'required|regex:/^\+2519[0-9]{8}$/|max:13|exists:users,phone_number'
+
         ]);
 
         $user = auth()->user();

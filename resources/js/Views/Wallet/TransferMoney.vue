@@ -22,7 +22,8 @@ const form = useForm({
 
 const isLoading = ref(false);
 function submit() {
-    isLoading.value = true
+    isLoading.value = true;
+    form.recipient = `+251${form.recipient}`;
     form.post('/wallet/transfer', {
         preserveState: true,
         onSuccess: () => {
@@ -56,16 +57,17 @@ function submit() {
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="recipient" value="Recipient Phone Number" />
-
-                <TextInput
+                <div class="flex items-center font-semibold min-h-full">
+                    <div class="bg-brand-primary text-white px-3 py-3.5 h-full  rounded-l-lg min-h-full ">+251</div>
+                    <TextInput
                     id="recipient"
-                    type="text"
-                    class="mt-1 block w-full border"
+                    type="text" class="block w-full !bg-gray-50 !border-black !border !rounded-none !rounded-r-lg"
+
                     v-model="form.recipient"
                     required
                     autofocus
                 />
-
+            </div>
                 <InputError class="mt-2" :message="form.errors.recipient" />
             </div>
 
