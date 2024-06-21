@@ -115,8 +115,6 @@ const submit = () => {
 
         </div>
         <div class="hidden lg:flex flex-col space-y-2 w-4/12 text-center rounded-lg justify-center items-center">
-
-
             <div class="flex w-full justify-center">
                 <img class="w-7/12 object-cover" src="../../../../public/assets/images/logo.png">
             </div>
@@ -127,7 +125,6 @@ const submit = () => {
             <div class="text-sm">
                 Embrace the fun of playing bingo online!
             </div>
-
         </div>
     </div>
 </template>
