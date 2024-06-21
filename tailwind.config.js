@@ -57,16 +57,9 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
           brand: {
-              "50": "#f8f9fa",
-              "100": "#f1f3f5",
-              "150": "#e3e7ef",
-              "200": "#d4d7dc",
-              "250": "#c0c4ca",
-              "300": "#a5a7ab",
-              "350": "#888b8e",
-              "400": "#FF014F",
-              "450": "#535459",
-              "500": "#393a3b",
+              "primary": "#123E22",
+              "secondary": "#1E9F32",
+              "tertiary": "#9BCF53",
           }
       },
       borderRadius: {
