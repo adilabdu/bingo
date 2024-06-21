@@ -17,7 +17,7 @@ class CreateAdmin extends Command
      *
      * @var string
      */
-    protected $signature = 'app:create-admin {name} {email}';
+    protected $signature = 'app:create-admin {name} {phone_number}';
 
     /**
      * The console command description.
@@ -41,7 +41,7 @@ class CreateAdmin extends Command
 
             $user = User::create([
                 'name' => $this->argument('name'),
-                'email' => $this->argument('email'),
+                'email' => $this->argument('phone_number'),
                 'password' => Hash::make('secret'),
                 'type' => User::TYPE_ADMIN,
             ]);
@@ -66,10 +66,10 @@ class CreateAdmin extends Command
     {
         $validator = Validator::make([
             'name' => $this->argument('name'),
-            'email' => $this->argument('email'),
+            'email' => $this->argument('phone_number'),
         ], [
             'name' => ['required'],
-            'email' => ['required', 'unique:users,email', 'email'],
+            'email' => ['required', 'regex:/^\+2519[0-9]{8}$/', 'max:13' , 'unique:users,phone_number'],
         ]);
 
         if ($validator->fails()) {
