@@ -38,11 +38,11 @@ class DatabaseSeeder extends Seeder
         $user = User::factory()->create([
             'name' => 'Test User 2',
             'email' => 'test2@example.com',
-            'phone_number' => '0911223344',
+            'phone_number' => '+251911223344',
         ]);
 
         $user->player()->create([
-            'balance' => 0,
+            'balance' => 250,
         ]);
     }
 }

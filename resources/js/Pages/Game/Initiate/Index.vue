@@ -4,10 +4,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/shadcn/ui
 import {computed} from "vue";
 import {router, usePage} from "@inertiajs/vue3";
 import GameCategoryCard from "@/Views/Game/GameCategoryCard.vue";
+import { useGameDataStore } from "@/Stores/useGameDataStore.ts";
 
 const props = usePage().props;
 const basicCategories = computed(() => props.gameCategories.filter(cat => cat.category === 'basic'));
 const vipCategories = computed(() => props.gameCategories.filter(cat => cat.category === 'vip'));
+
+const gameStore = useGameDataStore();
 
 const balance = usePage().props.auth.user?.player?.balance;
 function redirectToGame(categoryId, amount) {
@@ -15,6 +18,7 @@ function redirectToGame(categoryId, amount) {
         // Todo: Show a dialog to show the user that they don't have enough balance
         return;
     }
+    gameStore.clearGameData();
     router.visit(`/game/initiate/${categoryId}`)
 }
 </script>
