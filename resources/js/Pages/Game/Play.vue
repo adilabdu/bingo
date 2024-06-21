@@ -89,14 +89,16 @@ function handleFinish() {
 </script>
 
 <template>
-        <div class="flex w-full items-center space-x-2">
+        <div class="flex w-full items-center justify-between space-x-2">
+            <div class="w-3/12 flex items-center justify-center">
             <span class="bg-white rounded-full min-w-12 min-h-12 flex items-center justify-center font-bold text-2xl">{{index}}</span>
-            <Button @click="callBingo" :disabled="!canCallBingo" class="disabled:opacity-25 bg-gradient-to-l h-12 from-blue-600 to-sky-600 text-white text-xl font-semibold uppercase w-full">
+            </div>
+            <Button @click="callBingo" :disabled="!canCallBingo" class="disabled:opacity-25 bg-brand-primary text-white text-xl font-semibold uppercase w-9/12">
                 Bingo
             </Button>
         </div>
         <div class="flex justify-between space-x-4 rounded-lg w-full h-full items-center">
-            <div class="w-[82px] h-[75px] grid place-items-center text-center py-3 text-white font-bold text-5xl rounded-lg bg-gradient-to-l from-blue-600 to-sky-600">
+            <div class="w-[82px] h-[75px] grid place-items-center text-center py-3 text-white font-bold text-5xl rounded-lg bg-brand-secondary">
                 {{ currentNumber }}
             </div>
             <div class="w-9/12 grid grid-cols-4 grid-rows-2 place-items-center min-h-[104px]">
@@ -108,7 +110,7 @@ function handleFinish() {
 
         <BingoBoard @finish="handleFinish()" @bingo="enableBingoButton" :numbers="cartela?.numbers" :currentDrawnNumber="currentNumber" :drawnNumbers="drawNumbers" :game-id="game.id" />
 
-        <div class="flex justify-between divide-x divide-black bg-white p-3 rounded-lg">
+        <div class="flex justify-between divide-x divide-white bg-brand-primary text-white p-3 rounded-lg">
             <div class="flex flex-col items-center w-6/12 space-y-2">
                 <div class="text-xs font-light">Total Payout</div>
                 <div class="text-xl font-semibold">{{ game?.winner_net_amount }} Br</div>
