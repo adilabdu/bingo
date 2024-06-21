@@ -27,11 +27,11 @@ provide("notificationData", notificationData);
 
                             <!-- Navigation Links -->
                             <div class="sm:space-x-8 sm:-my-px sm:ms-10 flex min-w-full justify-center space-x-1 font-poppins font-semibold text-lg w-full items-center">
-                                    <span class="text-blue-600 text-2xl font-bold">
-                                        #01
+                                    <span class="text-brand-primary text-3xl font-bold">
+                                        Kiwi
                                     </span>
-                                <span>
-                                    Bingo
+                                <span class="text-brand-secondary pt-2">
+                                    bingo
                                 </span>
                             </div>
                         </div>
