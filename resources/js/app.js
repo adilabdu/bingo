@@ -24,7 +24,7 @@ function getLayout(name) {
     switch (true) {
         case name.startsWith("Admin/"):
             return AdminLayout;
-        case name.startsWith(name === "Welcome"):
+        case name.startsWith("Auth/") || name === "Welcome":
             return GuestLayout;
         default:
             return AuthenticatedLayout;
