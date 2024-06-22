@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('o_t_p_s', function (Blueprint $table) {
+        Schema::create('one_time_passwords', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->unique()->constrained();
             $table->integer('otp');

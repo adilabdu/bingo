@@ -10,6 +10,8 @@ class OTP extends Model
 {
     use HasFactory;
 
+    protected $table = 'one_time_passwords';
+
     protected $guarded = [
         'created_at',
         'updated_at'
