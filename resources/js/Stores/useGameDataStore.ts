@@ -55,6 +55,8 @@ export const useGameDataStore = defineStore('gameDataStore', () => {
         clickedNumbers.value = new Set(['FREE'])
         recentNumbers.value = []
         revealIndex.value = 0
+        drawNumbers.value = new Set([])
+        persistedGameData.value.drawNumbers = []
         persistedGameData.value.clickedNumbers = ['FREE']
         persistedGameData.value.recentNumbers = []
         persistedGameData.value.revealIndex = 0
