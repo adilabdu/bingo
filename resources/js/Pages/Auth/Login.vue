@@ -31,15 +31,11 @@ const submit = () => {
 </script>
 
 <template>
-    <div class="px-3 w-full flex justify-between">
-        <div class="w-full lg:w-7/12 max-w-sm">
+    <div class="px-3 w-full flex justify-evenly mx-auto pt-16">
+        <div class="w-full lg:w-7/12 max-w-sm md:max-w-md">
             <div class="flex justify-between items-center pb-10">
-                <div class="text-4xl lg:text-5xl w-full">
+                <div class="text-5xl lg:text-6xl font-medium w-full">
                     Sign in to your account
-                </div>
-
-                <div class="flex w-3/12 justify-end lg:hidden">
-                    <img class="w-full object-cover" src="../../../../public/assets/images/logo.png">
                 </div>
             </div>
             <form @submit.prevent="submit">
