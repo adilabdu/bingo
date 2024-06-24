@@ -49,9 +49,9 @@ const handleClick = (number) => {
 };
 
 const getClassForNumber = (num) => {
-    if (num === props.currentDrawnNumber && !clickedNumbers.value.has(num)) {
+    if (num === props.currentDrawnNumber && !clickedNumbers.has(num)) {
         return 'animate-pulse bg-brand-tertiary text-white';
-    } else if (clickedNumbers.value.has(num)) {
+    } else if (clickedNumbers.has(num)) {
         return 'bg-brand-secondary text-white';
     } else {
         return 'bg-white';
