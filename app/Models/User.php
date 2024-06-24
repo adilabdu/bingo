@@ -51,6 +51,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'phone_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -58,6 +59,11 @@ class User extends Authenticatable
     public function admin(): HasOne
     {
         return $this->hasOne(Admin::class);
+    }
+
+    public function otp(): HasOne
+    {
+        return $this->hasOne(OTP::class);
     }
 
     public function getActivitylogOptions(): LogOptions
