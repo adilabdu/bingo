@@ -24,7 +24,7 @@ const submit = () => {
 
 <template>
 
-    <div class="px-4 w-full flex justify-evenly pt-16">
+    <div class="px-4 w-full flex justify-evenly min-h-screen md:min-h-fit py-16 md:pt-0">
         <div class="w-full lg:w-7/12 max-w-sm md:max-w-md">
             <div class="text-5xl md:text-6xl font-medium pb-10">
                 Sign up and start winning!

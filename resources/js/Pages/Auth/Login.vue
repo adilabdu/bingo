@@ -31,7 +31,7 @@ const submit = () => {
 </script>
 
 <template>
-    <div class="px-3 w-full flex justify-evenly mx-auto pt-16">
+    <div class="px-3 w-full flex justify-evenly mx-auto min-h-screen md:min-h-fit py-16 md:pt-0 ">
         <div class="w-full lg:w-7/12 max-w-sm md:max-w-md">
             <div class="flex justify-between items-center pb-10">
                 <div class="text-5xl lg:text-6xl font-medium w-full">

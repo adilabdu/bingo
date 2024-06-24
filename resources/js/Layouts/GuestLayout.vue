@@ -7,7 +7,7 @@ import {router} from "@inertiajs/vue3";
 <template>
     <div class="min-h-screen flex flex-col items-center bg-white">
         <div
-            class="w-full sm:max-w-md lg:max-w-7xl overflow-hidden sm:rounded-lg"
+            class="w-full sm:max-w-md lg:max-w-7xl my-auto overflow-hidden sm:rounded-lg"
         >
             <slot />
         </div>
