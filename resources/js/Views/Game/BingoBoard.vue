@@ -31,6 +31,10 @@ const props = defineProps({
     winnerNumbers: {
         type: Array,
         default: () => []
+    },
+    cartela: {
+        type: Object,
+        default: () => ({})
     }
 });
 
@@ -89,7 +93,6 @@ Echo.private('game-result')
     .listen(`.game-result.${props.gameId}`, (e) => {
         game.value = e.game
         winner.value = e.winner
-        cartela.value = e.cartela
         winnerNumbers.value = e.winner_numbers;
       isWinner.value = e.winner.id === user.value.id;
       emits('finish', isWinner.value)
@@ -98,7 +101,7 @@ Echo.private('game-result')
 
 <template>
     <div class="flex flex-col items-center w-full">
-    <CompleteGameDrawer v-if="isWinner!== null" :game="game" :winner="winner" :cartela="cartela" :is-winner="isWinner" :is-drawer-open="true" />
+    <CompleteGameDrawer v-if="isWinner!== null" :game="game" :winner="winner" :is-winner="isWinner" :cartela="cartela" :is-drawer-open="true" />
     <div class="flex justify-between py-3 rounded-md max-w-sm w-full">
         <div v-for="(column, index) in formattedBingoData" :key="index" class="text-center">
             <h3 class="bg-brand-primary font-semibold text-white rounded py-2 mb-4 min-w-10">{{ columnLabels[index] }}</h3>
