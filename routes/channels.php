@@ -19,3 +19,7 @@ Broadcast::channel('draw-game', function () {
 Broadcast::channel('game-result', function () {
     return Auth::check();
 });
+
+Broadcast::channel('game-players', function () {
+    return Auth::check();
+});
