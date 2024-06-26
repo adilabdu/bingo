@@ -12,7 +12,7 @@ import Loading from "@/Components/Loading.vue";
 
 const gameCategory = usePage().props.gameCategory;
 // Todo: Add query params from url on refresh
-const cartelaName = ref('');
+const cartelaName = ref(null);
 const isLoading = ref(false);
 const cartela = computed(() => usePage().props.cartela);
 watch(cartelaName, () => {
@@ -32,8 +32,8 @@ const getCartela = debounce(() => {
 </script>
 
 <template>
-    <div class="flex justify-evenly items-center w-full py-8">
-        <div class="w-full flex flex-col md:space-y-8 md:w-5/12 px-3 md:bg-white md:py-6 rounded-lg">
+    <div class="flex justify-evenly items-center w-full">
+        <div class="w-full flex flex-col space-y-4 md:space-y-8 md:w-5/12 px-3 md:bg-white md:py-6 rounded-lg">
 
             <Header>
                 <template #default>
