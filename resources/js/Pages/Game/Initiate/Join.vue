@@ -12,27 +12,19 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 const game  = computed(() => usePage().props.game);
 const gameCategory = usePage().props.gameCategory;
 const cartela = computed(() => usePage().props.cartela);
+const remainingSeconds = ref(usePage().props.remainingSeconds);
 
-const currentTime = ref(moment());
-const scheduledTime = computed(() => moment(game.value.scheduled_at));
-
-const remainingSeconds = computed(() => {
-    if (!scheduledTime.value.isValid()) {
-        // Todo: Handle error
+const updateRemainingSeconds = () => {
+    if (remainingSeconds.value > 0) {
+        remainingSeconds.value--;
     }
-    const duration = moment.duration(scheduledTime.value.diff(currentTime.value));
-    return duration.asSeconds() > 0 ? Math.floor(duration.asSeconds()) : 0;
-});
-
-const updateCurrentTime = () => {
-    currentTime.value = moment();
 };
 
 let intervalId;
 
 onMounted(() => {
-    updateCurrentTime();  // Initialize the current time
-    intervalId = setInterval(updateCurrentTime, 1000);  // Update every second
+    updateRemainingSeconds();  // Initialize the current time
+    intervalId = setInterval(updateRemainingSeconds, 1000);  // Update every second
 });
 
 onUnmounted(() => {

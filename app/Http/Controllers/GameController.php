@@ -132,10 +132,13 @@ class GameController extends Controller
 
         $game = JoinGameService::startGame($request->cartela_id, $request->game_category_id);
 
+        $remainingSeconds = floor(now()->diffInSeconds($game->scheduled_at, true));
+
         return Inertia::render('Game/Initiate/Join',[
             'gameCategory' => GameCategory::findOrFail($request->game_category_id),
             'cartela' => Cartela::findOrFail($request->cartela_id),
-            'game' => $game
+            'game' => $game,
+            'remainingSeconds' => $remainingSeconds,
         ]);
     }
 
