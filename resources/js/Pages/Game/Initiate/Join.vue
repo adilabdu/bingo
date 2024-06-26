@@ -77,6 +77,12 @@ const getCartela = debounce(() => {
         }
     });
 }, 500);
+
+const totalPlayers = ref(usePage().props.totalPlayers);
+Echo.private('game-players')
+    .listen(`.game-players.${game.value.id}`, (e) => {
+        totalPlayers.value = e.totalPlayers;
+    });
 </script>
 
 
@@ -84,6 +90,7 @@ const getCartela = debounce(() => {
     <Loading v-if="isLoading" is-full-screen/>
     <div class="flex flex-col divide-y space-y-14 h-screen">
         <div class="flex flex-col items-center justify-center font-bold text-[7rem] px-4 space-y-4 h-2/3">
+        <div class="flex flex-col items-center justify-center font-bold text-[7rem] px-4 pt-2 space-y-6 h-2/3 w-full">
             <span v-if="isGameValidToStart">{{ remainingSeconds }}<span class="uppercase font-light text-xl">sec</span></span>
             <div v-if="remainingSeconds > 0 && isGameValidToStart" class="text-lg font-light text-center">
                 Waiting for other players to join, the game will start when the timer ends.
