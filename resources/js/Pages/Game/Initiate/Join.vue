@@ -55,12 +55,8 @@ const cartelaName = ref(cartela.value.name);
 function routeToRepeatGame() {
     router.get('/game/join',{
         'game_category_id': gameCategory.id,
-        'cartela_id': cartelaName.value,
-    },{
-        onError: (error) => {
-            console.error(error);
-        }
-    });
+        'cartela_id': cartela.value.id,
+    },);
 }
 
 const isLoading = ref(false);
