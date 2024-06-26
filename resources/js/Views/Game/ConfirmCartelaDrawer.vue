@@ -60,8 +60,7 @@ function startBingo() {
         @update:open="setDrawerOpen"
     >
         <DrawerTrigger>
-            <!--   Todo: Check disabled reactivity         -->
-            <PrimaryButton :disabled="isTriggerDisabled">
+            <PrimaryButton :disabled="isTriggerDisabled" class="min-w-full" :class="isTriggerDisabled ? 'opacity-50' : 'opacity-100'">
                 {{ triggerButtonText }}
             </PrimaryButton>
         </DrawerTrigger>
@@ -70,7 +69,7 @@ function startBingo() {
             <DrawerContent
                 class="bg-gray-100 flex flex-col rounded-t-xl !h-full max-h-[calc(100%-(env(safe-area-inset-top)+51px+1rem))] fixed bottom-0 left-0 right-0 z-[60]"
             >
-                <div class="overflow-y-auto flex flex-col space-y-5 w-full px-5 py-6">
+                <div class="overflow-y-auto flex flex-col space-y-5 w-full px-5 py-6 sm:max-w-md !mx-auto">
 
                     <div
                         class=" mx-auto w-14 h-1.5 flex-shrink-0 rounded-full bg-gray-300"

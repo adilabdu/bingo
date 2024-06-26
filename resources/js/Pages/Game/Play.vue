@@ -20,9 +20,6 @@ let pollInterval = null;
 const batchIndex = computed(() => usePage().props.nextBatchIndex);
 
 const fetchGameUpdates = () => {
-
-    console.log('(fetchGameUpdates) fetching game updates... ')
-
     if (batchIndex.value > 8)
         return;
     router.get(`/game/play/`, {
@@ -100,6 +97,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+    <div class="sm:max-w-lg w-full flex flex-col items-center mx-auto space-y-4">
         <div class="flex w-full items-center justify-between space-x-2">
             <div class="w-3/12 flex items-center justify-center">
                 <span class="bg-white rounded-full min-w-12 min-h-12 flex items-center justify-center font-bold text-2xl">{{gameStore.revealIndex}}</span>
@@ -128,7 +126,7 @@ onUnmounted(() => {
             :game-id="game.id"
         />
 
-        <div class="flex justify-between divide-x divide-white bg-brand-primary text-white p-3 rounded-lg">
+        <div class=" w-full flex justify-between divide-x divide-white bg-brand-primary text-white p-3 rounded-lg">
             <div class="flex flex-col items-center w-6/12 space-y-2">
                 <div class="text-xs font-light">Total Payout</div>
                 <div class="text-xl font-semibold">{{ game?.winner_net_amount }} Br</div>
@@ -139,6 +137,7 @@ onUnmounted(() => {
             </div>
         </div>
     <Loading v-if="isLoading" is-full-screen />
+    </div>
 </template>
 
 <style scoped>

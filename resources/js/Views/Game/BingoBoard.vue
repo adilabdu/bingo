@@ -97,6 +97,7 @@ Echo.private('game-result')
 </script>
 
 <template>
+    <div class="flex flex-col items-center w-full">
     <CompleteGameDrawer v-if="isWinner!== null" :game="game" :winner="winner" :cartela="cartela" :is-winner="isWinner" :is-drawer-open="true" />
     <div class="flex justify-between py-3 rounded-md max-w-sm w-full">
         <div v-for="(column, index) in formattedBingoData" :key="index" class="text-center">
@@ -110,5 +111,6 @@ Echo.private('game-result')
                 </li>
             </ul>
         </div>
+    </div>
     </div>
 </template>
