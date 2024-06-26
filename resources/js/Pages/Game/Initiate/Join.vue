@@ -8,6 +8,7 @@ import ConfirmCartelaDrawer from "@/Views/Game/ConfirmCartelaDrawer.vue";
 import {debounce} from "lodash";
 import Loading from "@/Components/Loading.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import {Frown} from "lucide-vue-next";
 
 const game  = computed(() => usePage().props.game);
 const gameCategory = usePage().props.gameCategory;
@@ -39,10 +40,9 @@ Echo.private('start-game')
         if (e.isGameValidToStart){
             return router.get('/game/play',{
                 'game_id': game.value.id,
-                'is_valid_request': true,
+                'batch_index': 0,
             });
         }
-        console.log("Game is not valid to start", e);
         isGameValidToStart.value = false;
         gameMessage.value = "No other players joined the game. The game will be cancelled. Please join another game.";
     });
@@ -88,9 +88,11 @@ Echo.private('game-players')
 
 <template>
     <Loading v-if="isLoading" is-full-screen/>
-    <div class="flex flex-col divide-y space-y-14 h-screen">
-        <div class="flex flex-col items-center justify-center font-bold text-[7rem] px-4 space-y-4 h-2/3">
+    <div class="flex flex-col divide-y space-y-14 h-screen w-full md:max-w-md  mx-auto">
         <div class="flex flex-col items-center justify-center font-bold text-[7rem] px-4 pt-2 space-y-6 h-2/3 w-full">
+            <span v-if="remainingSeconds > 0 " class="bg-brand-secondary text-white text-lg flex items-center justify-center font-medium rounded-lg px-4 py-1 space-x-3">
+                <span class="text-5xl font-bold">{{ totalPlayers }}</span> <span>PLAYERS JOINED</span>
+            </span>
             <span v-if="isGameValidToStart">{{ remainingSeconds }}<span class="uppercase font-light text-xl">sec</span></span>
             <div v-if="remainingSeconds > 0 && isGameValidToStart" class="text-lg font-light text-center">
                 Waiting for other players to join, the game will start when the timer ends.
@@ -99,11 +101,10 @@ Echo.private('game-players')
                 The game is starting...
             </div>
 
-            <div v-else-if="!isGameValidToStart" class="text-xl font-normal text-center flex flex-col space-y-10">
-                    <span>
-                        {{ gameMessage}}
-                    </span>
-                <div class="flex flex-col space-y-4 border-2 border-black rounded-lg p-4">
+            <div v-else-if="!isGameValidToStart" class="text-xl font-normal text-center flex flex-col space-y-10 py-5">
+                <Frown class="text-black mx-auto" size="70"/>
+                <span class="font-medium">{{ gameMessage}}</span>
+                <div class="flex flex-col space-y-4 p-4 border rounded-lg border-brand-primary">
                     <InputLabel value="Enter Cartela Number" class="text-start"/>
                     <Input type="text" class="w-full !border !border-black" placeholder="Enter Cartela Number" v-model="cartelaName"/>
                     <div class="flex justify-between w-full">
@@ -117,9 +118,8 @@ Echo.private('game-players')
                     </div>
 
                 </div>
-                <PrimaryButton @click="routeToGameMenu" class="bg-brand-tertiary !text-black text-lg font-medium capitalize w-full">Go To Game Menu</PrimaryButton>
-            </div>
-            <div v-if="isGameValidToStart" class="py-3 rounded-lg flex justify-between items-center divide-white divide-x text-white bg-brand-primary w-full">
+             </div>
+            <div class="py-3 rounded-lg flex justify-between items-center divide-white divide-x text-white bg-brand-primary w-full">
                         <span class="w-6/12 text-center flex flex-col items-center space-y-2">
                             <span class="font-bold text-3xl">#{{ cartelaName }}</span>
                             <span class="text-sm">
@@ -133,6 +133,8 @@ Echo.private('game-players')
                             <span class="font-light text-sm">Category</span>
                         </span>
             </div>
+
+            <PrimaryButton v-if="remainingSeconds > 0 && isGameValidToStart" @click="routeToGameMenu" class="bg-brand-tertiary !text-black text-lg font-medium capitalize w-full">Go To Game Menu</PrimaryButton>
         </div>
     </div>
 </template>
