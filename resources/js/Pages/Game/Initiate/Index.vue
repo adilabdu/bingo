@@ -25,7 +25,7 @@ function redirectToGame(categoryId, amount) {
 
 
 <template>
-    <div class="flex justify-evenly w-full py-8">
+    <div class="flex justify-evenly w-full sm:py-8">
 
         <div class="flex flex-col space-y-3 w-full md:w-5/12 px-3">
             <Header>

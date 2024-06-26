@@ -134,7 +134,7 @@ Echo.private('game-players')
                         </span>
             </div>
 
-            <PrimaryButton v-if="remainingSeconds > 0 && isGameValidToStart" @click="routeToGameMenu" class="bg-brand-tertiary !text-black text-lg font-medium capitalize w-full">Go To Game Menu</PrimaryButton>
+            <PrimaryButton v-if="!isGameValidToStart" @click="routeToGameMenu" class="bg-brand-tertiary !text-black text-lg font-medium capitalize w-full">Go To Game Menu</PrimaryButton>
         </div>
     </div>
 </template>

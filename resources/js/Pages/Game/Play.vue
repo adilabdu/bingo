@@ -85,7 +85,7 @@ onMounted(() => {
     if (game.value.status === 'completed') {
         router.get('/game/initiate');
     }
-    pollInterval = setInterval(fetchGameUpdates, 15000);
+    pollInterval = setInterval(fetchGameUpdates, 1500);
     if (!revealingNumbers.value || (Array.from(gameStore.drawNumbers).length > 0 && gameStore.revealIndex === 0)) {
         setTimeout(revealNumbers, 2000);
     }
@@ -124,6 +124,7 @@ onUnmounted(() => {
             :currentDrawnNumber="currentNumber"
             :drawnNumbers="Array.from(gameStore.drawNumbers)"
             :game-id="game.id"
+            :cartela="cartela"
         />
 
         <div class=" w-full flex justify-between divide-x divide-white bg-brand-primary text-white p-3 rounded-lg">
