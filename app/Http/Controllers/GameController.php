@@ -32,20 +32,14 @@ class GameController extends Controller
             });
         });
 
-        $player = auth()->user()->load('player');
+        $pendingGameRedirect = $this->checkPendingGame();
+        if ($pendingGameRedirect) {
+            return $pendingGameRedirect;
+        }
 
-        // Check if the player has an active game
-        $activeGame = GamePlayer::where('player_id', $player->id)
-            ->whereHas('game', function ($query) {
-                $query->whereIn('status', [Game::STATUS_PENDING]);
-            })
-            ->first();
-
-        if ($activeGame) {
-            return redirect()->route('game.join', [
-                'game_category_id' => $activeGame->game->game_category_id,
-                'cartela_id' => $activeGame->cartela_id
-            ]);
+        $activeGameRedirect = $this->checkActiveGame();
+        if ($activeGameRedirect) {
+            return $activeGameRedirect;
         }
 
         return Inertia::render('Game/Initiate/Index', [
@@ -53,9 +47,19 @@ class GameController extends Controller
         ]);
     }
 
-    public function selectCartela(Request $request, $categoryId, $cartelaName = null): Response
+    public function selectCartela(Request $request, $categoryId, $cartelaName = null): Response | RedirectResponse
     {
         $page = $request->input('page', 'Game/Initiate/Cartela');
+
+        $pendingGameRedirect = $this->checkPendingGame();
+        if ($pendingGameRedirect) {
+            return $pendingGameRedirect;
+        }
+
+        $activeGameRedirect = $this->checkActiveGame();
+        if ($activeGameRedirect) {
+            return $activeGameRedirect;
+        }
 
         return Inertia::render($page,[
             'gameCategory' => GameCategory::findOrFail($categoryId),
@@ -80,9 +84,7 @@ class GameController extends Controller
             return redirect()->route('game.initiate');
         }
 
-//        if ($game->status !== Game::STATUS_PENDING || $game->status !== Game::STATUS_ACTIVE ){
-//            return redirect()->route('game.initiate');
-//        }
+        $this->checkPendingGame();
 
         // Validate player participation in the game
         $playerGame = GamePlayer::where('game_id', $game->id)
@@ -114,6 +116,12 @@ class GameController extends Controller
         $player = auth()->user()->load('player')->player;
 
         $gameCategory = GameCategory::findOrFail($request->game_category_id);
+
+        $activeGameRedirect = $this->checkActiveGame();
+        if ($activeGameRedirect) {
+            return $activeGameRedirect;
+        }
+
         if ($player->balance < $gameCategory->amount) {
             return redirect()->route('game.initiate');
         }
@@ -169,4 +177,45 @@ class GameController extends Controller
 
         SettleGameService::settleWinnerBalance($game);
     }
+
+    private function checkActiveGame(): ?RedirectResponse
+    {
+        $player = auth()->user()->load('player');
+
+        $activeGame = GamePlayer::where('player_id', $player->player->id)
+            ->whereHas('game', function ($query) {
+                $query->whereIn('status', [Game::STATUS_ACTIVE]);
+            })->first();
+
+        if ($activeGame) {
+            Log::info($activeGame->game_id);
+            return redirect()->route('game.play', [
+                'game_id' => $activeGame->game_id,
+            ]);
+        }
+
+        return null;
+    }
+
+    private function checkPendingGame(): ?RedirectResponse
+    {
+        $player = auth()->user()->load('player');
+
+        $pendingGame = GamePlayer::where('player_id', $player->id)
+            ->whereHas('game', function ($query) {
+                $query->whereIn('status', [Game::STATUS_PENDING]);
+            })->first();
+
+
+        if ($pendingGame) {
+            return redirect()->route('game.join', [
+                'game_category_id' => $pendingGame->game->game_category_id,
+                'cartela_id' => $pendingGame->cartela_id
+            ]);
+        }
+
+        return null;
+    }
 }
+
+
