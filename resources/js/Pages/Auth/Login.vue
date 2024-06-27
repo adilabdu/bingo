@@ -24,9 +24,7 @@ const form = useForm({
 
 const submit = () => {
     form.login = `+251${form.login}`;
-    form.post(route('login'), {
-        onError: () => form.reset('password'),
-    });
+    form.post(route('login'));
 };
 </script>
 

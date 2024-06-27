@@ -58,7 +58,10 @@ const getCartela = debounce(() => {
                 </div>
                 <div class="text-xs font-light">You can select from # 1 - 3000</div>
             </div>
-            <ConfirmCartelaDrawer :is-trigger-disabled="!cartelaName || !cartela" />
+           <div class="flex flex-col space-y-4">
+            <div class="p-3 rounded-lg text-center font-medium bg-red-500 text-white" v-if="!cartelaName || !cartela?.numbers">Cartela Not Available, Please Change Cartela Number!</div>
+            <ConfirmCartelaDrawer :is-trigger-disabled="!cartelaName || !cartela?.numbers" />
+           </div>
         </div>
         <div class="hidden lg:flex flex-col space-y-2 w-4/12 text-center rounded-lg justify-center items-center">
             <div class="flex w-full justify-center">
