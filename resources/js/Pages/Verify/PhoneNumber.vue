@@ -23,19 +23,17 @@ function handleSubmit(e) {
 
 <template>
 
-    <Header class="max-w-md">
+    <Header class="max-w-md mx-auto py-4">
         <template #default>
-            <div class="font-semibold text-xl pb-1">Verify your Phone</div>
-            <div class="text-xs font-light">
+            <div class="font-semibold text-xl md:text-5xl pb-1 sm:pb-3">Verify your Phone</div>
+            <div class="text-xs md:text-sm font-light text-center">
                 You need to verify your phone number to continue.
                 Please enter the verification code that was sent to your phone number.
             </div>
         </template>
     </Header>
 
-    <p>{{ expires_in }}</p>
-
-    <div class="w-full flex justify-center">
+    <div class="w-full flex justify-center md:pt-4">
         <PinInput
             id="pin-input"
             v-model="value"
