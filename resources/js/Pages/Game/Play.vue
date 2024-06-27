@@ -1,63 +1,32 @@
 <script setup>
 import BingoBoard from "@/Views/Game/BingoBoard.vue";
-import { computed, onMounted, ref, onUnmounted } from "vue";
+import {computed, onMounted, ref, onUnmounted, watch} from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { Button } from "@/Components/shadcn/ui/button/index.js";
 import Loading from "@/Components/Loading.vue";
 import { useGameDataStore } from "@/Stores/useGameDataStore.ts";
 
+const props = defineProps({
+    drawnNumbers: {
+        type: Array
+    }
+})
+
 const pageProps = usePage().props;
 const gameStore = useGameDataStore();
 
+let pollRevealNumbers = null;
+
 const cartela = computed(() => pageProps.playerCartela);
 const game = computed(() => pageProps.game);
-const currentNumber = ref(null);
-const revealingNumbers = ref(false);
-
-const isLoading = ref(false);
-
-let pollInterval = null;
 const batchIndex = computed(() => usePage().props.nextBatchIndex);
 
-const fetchGameUpdates = () => {
-    if (batchIndex.value > 8)
-        return;
-    router.get(`/game/play/`, {
-        'game_id': game.value.id,
-        'batch_index':  batchIndex.value,
-    }, {
-        preserveState: true,
-        onSuccess: (page) => {
-            // Add the new drawn numbers to the existing list
-            // drawNumbers.value = [...drawNumbers.value, ...page.props.drawnNumbers];
-            gameStore.addToDrawNumbers(page.props.drawnNumbers);
-            if (!revealingNumbers.value || (gameStore.revealIndex === 0 && Array.from(gameStore.drawNumbers).length > 0)) {
-                revealNumbers();
-            }
-
-            if (Array.from(gameStore.drawNumbers).length >= 75) {
-                clearInterval(pollInterval);
-            }
-        }
-    });
-};
-
-const revealNumbers = () => {
-    revealingNumbers.value = true;
-    if (gameStore.revealIndex < Array.from(gameStore.drawNumbers).length) {
-        currentNumber.value = Array.from(gameStore.drawNumbers)[gameStore.revealIndex];
-        gameStore.setRecentNumbers(Array.from(gameStore.drawNumbers).slice(Math.max(0, gameStore.revealIndex - 7), gameStore.revealIndex + 1).reverse());
-        gameStore.incrementRevealIndex();
-        if (gameStore.revealIndex < Array.from(gameStore.drawNumbers).length) {
-            setTimeout(revealNumbers, 2000);
-        }
-    }
-};
-
+const currentNumber = ref(null);
+const isLoading = ref(false);
 const canCallBingo = ref(false);
 const selectedNumbers = ref([]);
 
-const enableBingoButton = (numbers) => {
+function enableBingoButton(numbers) {
     canCallBingo.value = true;
     selectedNumbers.value = numbers;
 }
@@ -67,33 +36,66 @@ function handleFinish() {
     gameStore.clearGameData();
 }
 
-const callBingo = () => {
+function callBingo() {
     isLoading.value = true;
     router.post(`/game/play/bingo/${cartela.value.id}/${game.value.id}`, {
         draw_numbers_cut_off_index: gameStore.revealIndex,
         selected_numbers: selectedNumbers.value
     }, {
         preserveState: true,
-        onProgress: () => {},
-        onSuccess: () => {
+        onSuccess() {
             gameStore.clearGameData();
         },
     })
 }
 
+async function fetchGameUpdates() {
+    new Promise((resolve, reject) => {
+        router.get('/game/play', {
+            game_id: game.value.id,
+            batch_index: batchIndex.value
+        }, {
+            preserveState: true,
+            onSuccess() {
+                gameStore.addToDrawNumbers(props.drawnNumbers)
+                resolve()
+            },
+            onError(error) {
+                reject(error)
+            }
+        })
+    })
+}
+
+function revealNumbers() {
+    currentNumber.value = Array.from(gameStore.drawNumbers)[gameStore.revealIndex];
+
+    gameStore.addToRecentNumbers(currentNumber.value)
+    gameStore.incrementRevealIndex();
+}
+
+watch(() => gameStore.revealIndex, () => {
+    if (gameStore.revealIndex > 74) {
+        clearInterval(pollRevealNumbers);
+    } else if (
+        gameStore.revealIndex === (Array.from(gameStore.drawNumbers).length - 1)
+    ) {
+        fetchGameUpdates()
+    }
+})
+
 onMounted(() => {
     if (game.value.status === 'completed') {
         router.get('/game/initiate');
     }
-    pollInterval = setInterval(fetchGameUpdates, 15000);
-    if (!revealingNumbers.value || (Array.from(gameStore.drawNumbers).length > 0 && gameStore.revealIndex === 0)) {
-        setTimeout(revealNumbers, 2000);
-    }
+
+    gameStore.addToDrawNumbers(props.drawnNumbers);
+    pollRevealNumbers = setInterval(revealNumbers, 2000);
 });
 
 onUnmounted(() => {
-    clearInterval(pollInterval);
-});
+    clearInterval(pollRevealNumbers);
+})
 </script>
 
 <template>
