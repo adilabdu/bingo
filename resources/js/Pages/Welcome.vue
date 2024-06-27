@@ -40,13 +40,13 @@ const benefits = [
 <template>
     <div class="flex flex-col w-full min-h-screen">
         <div class="flex space-x-2 justify-between w-11/12 md:w-full items-center mx-auto py-5">
-            <div class="flex space-x-2 text-2xl md:text-4xl font-bold justify-center items-center">
-                <img class="w-12 md:w-20 object-contain" src="../../../public/assets/images/logo.png">
+            <div class="flex space-x-1 text-xl md:text-4xl font-bold justify-center items-center">
+                <img class="w-8 md:w-20 object-contain" src="../../../public/assets/images/logo.png">
                 <span class="text-brand-primary">Kiwi</span> <span class="text-brand-secondary">Bingo</span>
             </div>
-            <div class="flex space-x-6">
-                <PrimaryButton @click="router.visit('/register')" class="!bg-brand-primary">Register</PrimaryButton>
-                <PrimaryButton @click="router.visit('/login')"  class="!bg-brand-secondary hidden md:inline-block">Login</PrimaryButton>
+            <div class="flex space-x-2 md:space-x-6">
+                <PrimaryButton @click="router.visit('/register')" class="!bg-brand-primary md:inline-block">Register</PrimaryButton>
+                <PrimaryButton @click="router.visit('/login')"  class="!bg-brand-secondary">Login</PrimaryButton>
             </div>
         </div>
     <div class="w-full flex flex-col lg:flex-row md:space-y-7 px-5 items-center font-poppins md:justify-between">
@@ -70,6 +70,11 @@ const benefits = [
         </div>
 
         <div class="flex flex-col space-y-10 sm:space-y-16 py-5 min-h-full h-full items-center md:w-4/12">
+            <div class="bg-brand-secondary text-white w-full rounded-lg p-3 text-center flex justify-center space-x-4">
+                <GiftIcon/>
+                <span>Register and get free 20Br</span>
+            </div>
+
             <div class="w-full flex flex-wrap space-x-2 pb-5 justify-evenly">
                 <img class="w-16 md:w-24 object-contain my-2" :src="cbe">
                 <img class="w-16 md:w-24 object-contain my-2" :src="telebirr">
@@ -78,11 +83,6 @@ const benefits = [
                 <img class="w-12 object-contain my-2" :src="dashen">
                 <img class="w-16 md:w-24 object-contain my-2" :src="zemen">
                 <img class="w-16 md:w-24 object-contain my-2" :src="coop">
-            </div>
-
-            <div class="bg-brand-secondary text-white w-full rounded-lg p-3 text-center flex justify-center space-x-4">
-                <GiftIcon/>
-                <span>Register and get free 20Br</span>
             </div>
 
             <div class="w-full flex flex-wrap space-x-2 justify-evenly">
