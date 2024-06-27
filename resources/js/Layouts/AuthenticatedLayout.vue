@@ -27,7 +27,9 @@ provide("notificationData", notificationData);
 
                             <!-- Navigation Links -->
                             <div class="sm:-my-px sm:ms-10 flex min-w-full space-x-1 font-poppins font-semibold text-lg w-full md:w-3/12 items-center">
-                                    <span class="text-brand-primary text-3xl font-bold">
+                                <img class="w-10 object-cover" src="../../../public/assets/images/logo.png">
+
+                                <span class="text-brand-primary text-3xl font-bold">
                                         Kiwi
                                     </span>
                                 <span class="text-brand-secondary pt-2">

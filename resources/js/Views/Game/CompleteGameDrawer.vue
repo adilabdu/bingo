@@ -34,6 +34,10 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    winnerCartela:{
+        type:Object,
+        required: true
+    }
 })
 const isDrawerOpen = ref(props.isDrawerOpen);
 
@@ -96,12 +100,12 @@ function routeToChangeCartelaPage() {
                         </div>
                         <div class="flex flex-col items-center w-6/12 space-y-2">
                             <div class="text-xs font-light">Cartel Number</div>
-                            <span class="font-medium text-xl px-2"># {{ cartela.name }}</span>
+                            <span class="font-medium text-xl px-2"># {{ winnerCartela.name }}</span>
                         </div>
                     </div>
                     <div class="flex flex-col space-y-2">
                         <div class="text-center font-bold text-4xl">Winner Board</div>
-                        <BingoBoard :winner-numbers="game.winning_numbers" :numbers="cartela.numbers" card-size="w-14" />
+                        <BingoBoard :winner-numbers="game.winning_numbers" :numbers="winnerCartela.numbers" card-size="w-14" />
                     </div>
 
                     <div class="flex flex-col space-y-5">
