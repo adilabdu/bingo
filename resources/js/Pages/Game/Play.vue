@@ -85,7 +85,7 @@ onMounted(() => {
     if (game.value.status === 'completed') {
         router.get('/game/initiate');
     }
-    pollInterval = setInterval(fetchGameUpdates, 1500);
+    pollInterval = setInterval(fetchGameUpdates, 15000);
     if (!revealingNumbers.value || (Array.from(gameStore.drawNumbers).length > 0 && gameStore.revealIndex === 0)) {
         setTimeout(revealNumbers, 2000);
     }
