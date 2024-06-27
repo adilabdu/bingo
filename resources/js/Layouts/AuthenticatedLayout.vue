@@ -14,6 +14,10 @@ const showNotification = (data) => {
 
 provide("showNotification", showNotification);
 provide("notificationData", notificationData);
+
+function closeNavigationDropDown(){
+    showingNavigationDropdown.value = false;
+}
 </script>
 
 <template>
@@ -137,10 +141,10 @@ provide("notificationData", notificationData);
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('game.initiate')"> Play </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('wallet.index')"> Wallet </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
+                            <ResponsiveNavLink @click="closeNavigationDropDown" :href="route('game.initiate')"> Play </ResponsiveNavLink>
+                            <ResponsiveNavLink @click="closeNavigationDropDown" :href="route('profile.edit')"> Profile </ResponsiveNavLink>
+                            <ResponsiveNavLink @click="closeNavigationDropDown" :href="route('wallet.index')"> Wallet </ResponsiveNavLink>
+                            <ResponsiveNavLink @click="closeNavigationDropDown" :href="route('logout')" method="post" as="button">
                                 Log Out
                             </ResponsiveNavLink>
                         </div>
