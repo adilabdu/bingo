@@ -1,5 +1,5 @@
 <script setup>
-import {Banknote, GiftIcon, PhoneCallIcon, LockKeyholeIcon, Percent} from "lucide-vue-next";
+import {Banknote, GiftIcon, PhoneCallIcon, LockKeyholeIcon, Percent, SendIcon, InstagramIcon, Twitter, FacebookIcon} from "lucide-vue-next";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import boa from "../../../public/assets/images/banks/boa.webp";
 import awash from "../../../public/assets/images/banks/awash_bank.webp";
@@ -69,7 +69,7 @@ const benefits = [
 
         </div>
 
-        <div class="flex flex-col space-y-10 py-5 min-h-full h-full items-center md:w-4/12">
+        <div class="flex flex-col space-y-10 sm:space-y-16 py-5 min-h-full h-full items-center md:w-4/12">
             <div class="w-full flex flex-wrap space-x-2 pb-5 justify-evenly">
                 <img class="w-16 md:w-24 object-contain my-2" :src="cbe">
                 <img class="w-16 md:w-24 object-contain my-2" :src="telebirr">
@@ -84,6 +84,23 @@ const benefits = [
                 <GiftIcon/>
                 <span>Register and get free 20Br</span>
             </div>
+
+            <div class="w-full flex flex-wrap space-x-2 justify-evenly">
+                <SendIcon/>
+                <InstagramIcon/>
+                <FacebookIcon/>
+                <Twitter/>
+            </div>
+
+            <div class="flex justify-evenly w-full">
+               <div class="flex space-x-2 items-center w-5/12">
+                   <PhoneCallIcon class="w-4 md:w-8"/>
+                <a href="" class="hover:underline underline-offset-4">+251943104396</a>
+               </div>
+                <div class="flex space-x-2 justify-center w-5/12">
+                    <PhoneCallIcon class="w-4 md:w-8"/>
+                    <a href="" class="hover:underline underline-offset-4">+251943104396</a>
+                </div> </div>
         </div>
     </div>
 
