@@ -94,11 +94,11 @@ function routeToChangeCartelaPage() {
                     </div>
 
                     <div class="flex justify-between divide-white divide-x text-white bg-brand-primary p-3 rounded-lg">
-                        <div class="flex flex-col items-center w-6/12 space-y-2">
+                        <div class="flex flex-col items-center w-6/12 space-y-2 text-center">
                             <div class="text-xs font-light">Winner</div>
                             <div class="text-xl px-2 font-medium capitalize">{{ winner.name }}</div>
                         </div>
-                        <div class="flex flex-col items-center w-6/12 space-y-2">
+                        <div class="flex flex-col items-center w-6/12 space-y-2 text-center">
                             <div class="text-xs font-light">Cartel Number</div>
                             <span class="font-medium text-xl px-2"># {{ winnerCartela.name }}</span>
                         </div>

@@ -63,11 +63,20 @@ class GameController extends Controller
 
         return Inertia::render($page,[
             'gameCategory' => GameCategory::findOrFail($categoryId),
-            'cartela' => Inertia::lazy(function () use ($cartelaName) {
+            'cartela' => Inertia::lazy(function () use ($cartelaName, $categoryId) {
                 if (!$cartelaName)
                     return null;
-
-                return Cartela::where('name', $cartelaName)->first();
+                $cartela =  Cartela::where('name', $cartelaName)->first();
+                // Check if the cartela is already in use
+                $cartelaInUse = GamePlayer::where('cartela_id', $cartela->id)
+                    ->whereHas('game', function ($query) use ($categoryId) {
+                        $query->where('game_category_id', $categoryId)
+                        ->whereIn('status', [Game::STATUS_ACTIVE, Game::STATUS_PENDING]);
+                    })
+                    ->first();
+                if ($cartelaInUse)
+                    return null;
+                return $cartela;
             })
         ]);
     }
