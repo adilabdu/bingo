@@ -34,7 +34,7 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => $request->type === 'admin' ? 'required|string|lowercase|email|max:255|unique:users,email' : 'nullable',
             'phone_number' => $request->type === 'player'
-                ? 'required|regex:/^\+2519[0-9]{8}$/|max:13|unique:users,phone_number'
+                ? 'required|regex:/^\+251[79][0-9]{8}$/|max:13|unique:users,phone_number'
                 : 'nullable',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'type' => 'required|string|in:admin,player',
