@@ -37,7 +37,7 @@ class JoinGameService
 
         self::joinGame($game, $player->id, $cartelaId);
 
-        $totalPlayers = $game->players()->count() - 1;
+        $totalPlayers = $game->players()->count();
         GamePlayersEvent::dispatch($totalPlayers, $game);
 
         return $game;

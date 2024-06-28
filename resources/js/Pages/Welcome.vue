@@ -8,7 +8,6 @@ import dashen from "../../../public/assets/images/banks/dashen.webp";
 import zemen from "../../../public/assets/images/banks/zemen.webp";
 import telebirr from "../../../public/assets/images/banks/telebirr.webp";
 import coop from "../../../public/assets/images/banks/coop.webp";
-import {Button} from "@/Components/shadcn/ui/button/index.js";
 import {router} from "@inertiajs/vue3";
 
 const benefits = [
@@ -49,60 +48,59 @@ const benefits = [
                 <PrimaryButton @click="router.visit('/login')"  class="!bg-brand-secondary">Login</PrimaryButton>
             </div>
         </div>
-    <div class="w-full flex flex-col lg:flex-row md:space-y-7 px-5 items-center font-poppins md:justify-between">
-        <div class="flex flex-col space-y-4 md:space-y-10 py-5 md:w-6/12">
-            <div class="text-5xl md:text-6xl font-semibold text-center md:text-start leading-tight md:leading-snug py-4 md:py-5">
-                Join the fun <br/> Play Bingo, Win Big!
-            </div>
+        <div class="w-full flex flex-col lg:flex-row md:space-y-7 px-5 items-center font-poppins md:justify-between">
+            <div class="flex flex-col space-y-4 md:space-y-10 py-5 md:w-6/12">
+                <div class="text-5xl md:text-6xl font-semibold text-center md:text-start leading-tight md:leading-snug py-4 md:py-5">
+                    Join the fun! <br/> Play Bingo, Win Big!
+                </div>
 
-            <div class="flex flex-col px-3 w-full justify-center items-center divide-y divide-gray-200">
-                <div class="flex justify-evenly w-full items-center py-4 md:py-6" v-for="item in benefits">
-                    <div class="w-2/12">
-                        <component :is="item.icon" />
-                    </div>
-                    <div class="w-10/12 flex flex-col space-y-2">
-                        <span class="font-semibold">{{ item.title }}</span>
-                        <span class="font-light text-sm">{{ item.sub_title }}</span>
+                <div class="flex flex-col px-3 w-full justify-center items-center divide-y divide-gray-200">
+                    <div class="flex justify-evenly w-full items-center py-4 md:py-6" v-for="item in benefits">
+                        <div class="w-2/12">
+                            <component :is="item.icon" />
+                        </div>
+                        <div class="w-10/12 flex flex-col space-y-2">
+                            <span class="font-semibold">{{ item.title }}</span>
+                            <span class="font-light text-sm">{{ item.sub_title }}</span>
+                        </div>
                     </div>
                 </div>
+
             </div>
 
+            <div class="flex flex-col space-y-10 sm:space-y-16 py-5 min-h-full h-full items-center md:w-4/12">
+                <div @click="router.visit('/register')" class="bg-brand-secondary text-white w-full rounded-lg p-3 text-center flex justify-center space-x-4">
+                    <GiftIcon/>
+                    <span>Register and get free 20Br</span>
+                </div>
+
+                <div class="w-full flex flex-wrap space-x-2 pb-5 justify-evenly">
+                    <img class="w-16 md:w-24 object-contain my-2" :src="cbe">
+                    <img class="w-16 md:w-24 object-contain my-2" :src="telebirr">
+                    <img class="w-16 md:w-24 object-contain my-2" :src="boa">
+                    <img class="w-16 md:w-24 object-contain my-2" :src="awash">
+                    <img class="w-12 object-contain my-2" :src="dashen">
+                    <img class="w-16 md:w-24 object-contain my-2" :src="zemen">
+                    <img class="w-16 md:w-24 object-contain my-2" :src="coop">
+                </div>
+
+                <div class="w-full flex flex-wrap space-x-2 justify-evenly">
+                    <SendIcon/>
+                    <InstagramIcon/>
+                    <FacebookIcon/>
+                    <Twitter/>
+                </div>
+
+                <div class="flex justify-evenly w-full">
+                    <div class="flex space-x-2 items-center w-5/12">
+                        <PhoneCallIcon class="w-4 md:w-8"/>
+                        <a href="" class="hover:underline underline-offset-4">+251943104396</a>
+                    </div>
+                    <div class="flex space-x-2 justify-center w-5/12">
+                        <PhoneCallIcon class="w-4 md:w-8"/>
+                        <a href="" class="hover:underline underline-offset-4">+251943104396</a>
+                    </div> </div>
+            </div>
         </div>
-
-        <div class="flex flex-col space-y-10 sm:space-y-16 py-5 min-h-full h-full items-center md:w-4/12">
-            <div class="bg-brand-secondary text-white w-full rounded-lg p-3 text-center flex justify-center space-x-4">
-                <GiftIcon/>
-                <span>Register and get free 20Br</span>
-            </div>
-
-            <div class="w-full flex flex-wrap space-x-2 pb-5 justify-evenly">
-                <img class="w-16 md:w-24 object-contain my-2" :src="cbe">
-                <img class="w-16 md:w-24 object-contain my-2" :src="telebirr">
-                <img class="w-16 md:w-24 object-contain my-2" :src="boa">
-                <img class="w-16 md:w-24 object-contain my-2" :src="awash">
-                <img class="w-12 object-contain my-2" :src="dashen">
-                <img class="w-16 md:w-24 object-contain my-2" :src="zemen">
-                <img class="w-16 md:w-24 object-contain my-2" :src="coop">
-            </div>
-
-            <div class="w-full flex flex-wrap space-x-2 justify-evenly">
-                <SendIcon/>
-                <InstagramIcon/>
-                <FacebookIcon/>
-                <Twitter/>
-            </div>
-
-            <div class="flex justify-evenly w-full">
-               <div class="flex space-x-2 items-center w-5/12">
-                   <PhoneCallIcon class="w-4 md:w-8"/>
-                <a href="" class="hover:underline underline-offset-4">+251943104396</a>
-               </div>
-                <div class="flex space-x-2 justify-center w-5/12">
-                    <PhoneCallIcon class="w-4 md:w-8"/>
-                    <a href="" class="hover:underline underline-offset-4">+251943104396</a>
-                </div> </div>
-        </div>
-    </div>
-
     </div>
 </template>

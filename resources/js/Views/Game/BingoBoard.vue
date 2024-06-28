@@ -31,7 +31,11 @@ const props = defineProps({
     cartela: {
         type: Object,
         default: () => ({})
-    }
+    },
+    winnerNumbers: {
+        type: Array,
+        default: () => []
+    },
 });
 
 const emits = defineEmits(['bingo', 'finish']);
@@ -39,7 +43,7 @@ const emits = defineEmits(['bingo', 'finish']);
 const gameStore = useGameDataStore();
 
 const handleClick = (number) => {
-    if (winnerNumbers.includes(number)) return;
+    if (props.winnerNumbers.includes(number)) return;
     if (
         props.drawnNumbers.includes(number) &&
         props.drawnNumbers.indexOf(number) <= gameStore.revealIndex &&
@@ -73,7 +77,6 @@ watch(() => Array.from(gameStore.clickedNumbers), () => {
 const user = ref(usePage().props.auth.user);
 const game = ref(null);
 const winner = ref(null);
-let winnerNumbers = [];
 const isWinner = ref(null);
 const winnerCartela = ref([]);
 
@@ -81,7 +84,6 @@ Echo.private('game-result')
     .listen(`.game-result.${props.gameId}`, (e) => {
         game.value = e.game;
         winner.value = e.winner;
-        winnerNumbers.value = e.winningNumbers; // Correctly update the ref array
         winnerCartela.value = e.cartela;
         isWinner.value = e.winner.id === user.value.id;
         emits('finish', isWinner.value);
@@ -93,8 +95,8 @@ const getClassForNumber = (num) => {
         return 'animate-pulse bg-brand-tertiary text-white';
     } else if (gameStore.clickedNumbers.has(num)) {
         return 'bg-brand-secondary text-white';
-    } else if (winnerNumbers.includes(num)) {
-        return 'bg-black text-white';
+    }else if (props.winnerNumbers.includes(num)) {
+        return 'bg-brand-secondary text-white cursor-not-allowed';
     } else {
         return 'bg-white';
     }

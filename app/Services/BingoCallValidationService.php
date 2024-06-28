@@ -19,8 +19,6 @@ class BingoCallValidationService
         // 4. Check the possible winning numbers make a Bingo
         // 5. If the possible winning numbers make a Bingo, return true
 
-        Log::info('possibleWinningNumbers: ' . json_encode($possibleWinningNumbers));
-
         return
             self::validateNumbersAgainstDrawNumbers($possibleWinningNumbers, $game->draw_numbers, $cutOff) &&
             self::validateNumbersAgainstCartela($possibleWinningNumbers, $cartela);
