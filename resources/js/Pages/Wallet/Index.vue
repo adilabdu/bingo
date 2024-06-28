@@ -38,9 +38,9 @@ defineProps({
 <template>
     <WalletPageHeader />
     <YourBalance :balance="balance" />
-    <Withdraw :banks="banks" :flash="flash" />
     <Deposit />
     <TransferMoney :flash="flash" />
+    <Withdraw :banks="banks" :flash="flash" />
     <TransactionTable :transactions="transactions" />
 </template>
 

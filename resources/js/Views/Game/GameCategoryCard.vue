@@ -45,7 +45,7 @@ const isBalanceEnough = computed(() => balance >= props.amount);
     </div>
         <div v-if="!isBalanceEnough" class="flex justify-between items-center">
             <div class="text-xs text-red-600">Not Enough Balance</div>
-        <Button  class="bg-blue-600 text-white font-semibold text-xs rounded-md px-2 py-1 w-5/12" size="xs">Deposit</Button>
+        <Button class="bg-blue-600 text-white font-semibold text-xs rounded-md px-2 py-1 w-5/12" size="xs">Deposit</Button>
         </div>
 
     </div>
