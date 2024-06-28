@@ -65,7 +65,7 @@ class GameController extends Controller
             'gameCategory' => GameCategory::findOrFail($categoryId),
             'cartela' => Inertia::lazy(function () use ($cartelaName, $categoryId) {
                 if (!$cartelaName)
-                    return ['error' => 'Cartela name is required.'];
+                    return null;
 
                 $cartela =  Cartela::where('name', $cartelaName)->first();
                 // Check if the cartela is already in use
@@ -77,6 +77,8 @@ class GameController extends Controller
                     ->first();
                 if ($cartelaInUse)
                     return ['error' => 'Cartela is already in use'];
+
+                $cartela->error = null;
                 return $cartela;
             })
         ]);
