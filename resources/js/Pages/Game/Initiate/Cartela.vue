@@ -15,9 +15,11 @@ const gameCategory = usePage().props.gameCategory;
 const cartelaName = ref(null);
 const isLoading = ref(false);
 const cartela = computed(() => usePage().props.cartela);
+
 watch(cartelaName, () => {
     getCartela();
 }, {});
+
 const getCartela = debounce(() => {
     isLoading.value = true;
     router.visit('/game/initiate/'+gameCategory.id+'/' +cartelaName.value,{
@@ -59,7 +61,7 @@ const getCartela = debounce(() => {
                 <div class="text-xs font-light">You can select from # 1 - 3000</div>
             </div>
            <div class="flex flex-col space-y-4">
-            <div class="p-3 rounded-lg text-center font-medium bg-red-500 text-white" v-if="cartelaName && !cartela?.numbers && !isLoading">Cartela Not Available, Please Change Cartela Number!</div>
+            <div class="p-3 rounded-lg text-sm text-center font-medium bg-red-500 text-white" v-if="cartelaName && cartela?.error && !isLoading">Cartela Not Available, Please Change Cartela Number!</div>
             <ConfirmCartelaDrawer :is-trigger-disabled="!cartelaName || !cartela?.numbers" />
            </div>
         </div>

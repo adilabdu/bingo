@@ -65,7 +65,8 @@ class GameController extends Controller
             'gameCategory' => GameCategory::findOrFail($categoryId),
             'cartela' => Inertia::lazy(function () use ($cartelaName, $categoryId) {
                 if (!$cartelaName)
-                    return null;
+                    return ['error' => 'Cartela name is required.'];
+
                 $cartela =  Cartela::where('name', $cartelaName)->first();
                 // Check if the cartela is already in use
                 $cartelaInUse = GamePlayer::where('cartela_id', $cartela->id)
@@ -75,7 +76,7 @@ class GameController extends Controller
                     })
                     ->first();
                 if ($cartelaInUse)
-                    return null;
+                    return ['error' => 'Cartela is already in use'];
                 return $cartela;
             })
         ]);
@@ -142,9 +143,11 @@ class GameController extends Controller
             })
             ->first();
 
+        Log::info($cartelaInUse);
         if ($cartelaInUse) {
+            Log::info("Cartela in use ". $cartelaInUse->game_id);
              // Todo: Handle Error
-            return redirect()->back()->withErrors(['cartela_id' => 'Cartela is already in use']);
+            return redirect()->back()->with('error' ,'Cartela is already in use');
         }
 
         $game = JoinGameService::startGame($request->cartela_id, $request->game_category_id);
