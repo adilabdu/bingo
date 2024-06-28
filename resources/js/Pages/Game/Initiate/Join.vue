@@ -90,8 +90,8 @@ Echo.private('game-players')
     <Loading v-if="isLoading" is-full-screen/>
     <div class="flex flex-col divide-y space-y-14 h-screen w-full md:max-w-md  mx-auto">
         <div class="flex flex-col items-center justify-center font-bold text-[7rem] px-4 pt-2 space-y-6 h-2/3 w-full">
-            <span v-if="remainingSeconds > 0 " class="bg-brand-secondary text-white text-lg flex items-center justify-center font-medium rounded-lg px-4 py-1 space-x-3">
-                <span class="text-5xl font-bold">{{ totalPlayers }}</span> <span>PLAYERS JOINED</span>
+            <span v-if="remainingSeconds > 0 " class="text-white text-lg flex items-center justify-center font-medium rounded-lg px-4 py-1 space-x-3" :class="totalPlayers > 1 ? 'bg-brand-secondary' : 'bg-red-500'">
+                <span class="text-5xl font-bold">{{ totalPlayers }}</span> <span>Total PLAYERS</span>
             </span>
             <span v-if="isGameValidToStart">{{ remainingSeconds }}<span class="uppercase font-light text-xl">sec</span></span>
             <div v-if="remainingSeconds > 0 && isGameValidToStart" class="text-lg font-light text-center">

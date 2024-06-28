@@ -151,7 +151,7 @@ class GameController extends Controller
 
         $remainingSeconds = floor(now()->diffInSeconds($game->scheduled_at, true));
 
-        $totalPlayers = $game->players()->count() - 1;
+        $totalPlayers = $game->players()->count();
 
         return Inertia::render('Game/Initiate/Join',[
             'gameCategory' => GameCategory::findOrFail($request->game_category_id),
