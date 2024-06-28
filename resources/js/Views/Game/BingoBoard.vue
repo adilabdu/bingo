@@ -36,18 +36,21 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
-
 });
 
 const emits = defineEmits(['bingo', 'finish']);
 
-const { addToClickedNumbers, clickedNumbers } = useGameDataStore();
+const gameStore = useGameDataStore();
 
 const handleClick = (number) => {
     if (props.winnerNumbers.includes(number)) return;
-    if (props.drawnNumbers.includes(number) && !clickedNumbers.has(number)) {
-        clickedNumbers.add(number);
-        addToClickedNumbers(number);
+    if (
+        props.drawnNumbers.includes(number) &&
+        props.drawnNumbers.indexOf(number) <= gameStore.revealIndex &&
+        !gameStore.clickedNumbers.has(number)
+    ) {
+        gameStore.clickedNumbers.add(number);
+        gameStore.addToClickedNumbers(number);
     }
 };
 
@@ -63,10 +66,10 @@ const formattedBingoData = computed(() => {
     });
 });
 
-watch(() => Array.from(clickedNumbers), () => {
-    if (Array.from(clickedNumbers).length > 3) {
-        if (useIsBoardWinner(Array.from(clickedNumbers), formattedBingoData.value)) {
-            emits('bingo', Array.from(clickedNumbers));
+watch(() => Array.from(gameStore.clickedNumbers), () => {
+    if (Array.from(gameStore.clickedNumbers).length > 3) {
+        if (useIsBoardWinner(Array.from(gameStore.clickedNumbers), formattedBingoData.value)) {
+            emits('bingo', Array.from(gameStore.clickedNumbers));
         }
     }
 });
@@ -88,9 +91,9 @@ Echo.private('game-result')
 
 
 const getClassForNumber = (num) => {
-    if (num === props.currentDrawnNumber && !clickedNumbers.has(num)) {
+    if (num === props.currentDrawnNumber && !gameStore.clickedNumbers.has(num)) {
         return 'animate-pulse bg-brand-tertiary text-white';
-    } else if (clickedNumbers.has(num)) {
+    } else if (gameStore.clickedNumbers.has(num)) {
         return 'bg-brand-secondary text-white';
     }else if (props.winnerNumbers.includes(num)) {
         return 'bg-brand-secondary text-white cursor-not-allowed';
