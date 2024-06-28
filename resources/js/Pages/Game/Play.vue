@@ -46,6 +46,7 @@ function callBingo() {
         onSuccess() {
             gameStore.clearGameData();
         },
+        showProgress:false
     })
 }
 
