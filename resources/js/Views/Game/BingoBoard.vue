@@ -46,7 +46,7 @@ const handleClick = (number) => {
     if (props.winnerNumbers.includes(number)) return;
     if (
         props.drawnNumbers.includes(number) &&
-        props.drawnNumbers.indexOf(number) <= gameStore.revealIndex &&
+        props.drawnNumbers.indexOf(number) < gameStore.revealIndex &&
         !gameStore.clickedNumbers.has(number)
     ) {
         gameStore.clickedNumbers.add(number);
