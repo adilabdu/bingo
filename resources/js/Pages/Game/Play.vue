@@ -34,6 +34,7 @@ function enableBingoButton(numbers) {
 function handleFinish() {
     isLoading.value = false;
     gameStore.clearGameData();
+    clearInterval(pollRevealNumbers);
 }
 
 function callBingo() {
@@ -43,10 +44,6 @@ function callBingo() {
         selected_numbers: selectedNumbers.value
     }, {
         preserveState: true,
-        onSuccess() {
-            gameStore.clearGameData();
-        },
-        showProgress:false
     })
 }
 
@@ -96,7 +93,6 @@ onMounted(() => {
 
 onUnmounted(() => {
     clearInterval(pollRevealNumbers);
-    gameStore.clearGameData();
 })
 </script>
 
