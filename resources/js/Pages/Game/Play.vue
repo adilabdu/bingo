@@ -95,6 +95,7 @@ onMounted(() => {
 
 onUnmounted(() => {
     clearInterval(pollRevealNumbers);
+    gameStore.clearGameData();
 })
 </script>
 
