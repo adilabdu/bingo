@@ -7,6 +7,7 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
+import { createPinia } from 'pinia';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -43,9 +44,10 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .use(createPinia())
             .mount(el);
     },
     progress: {
-        color: '#4B5563',
+        color: '#1E9F32',
     },
 });

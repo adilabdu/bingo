@@ -36,13 +36,18 @@ defineProps({
 </script>
 
 <template>
-    <WalletPageHeader />
-    <YourBalance :balance="balance" />
-    <Deposit />
-    <TransferMoney :flash="flash" />
-    <Withdraw :banks="banks" :flash="flash" />
-    <TransactionTable :transactions="transactions" />
+    <div class="flex flex-col space-y-4 md:space-y-0 md:py-5 md:flex-row md:justify-between md:items-center mx-auto max-w-6xl w-full">
+        <div class="flex flex-col space-y-4 md:space-y-6">
+            <WalletPageHeader />
+            <YourBalance :balance="balance" />
+            <Deposit />
+            <TransferMoney :flash="flash" />
+            <Withdraw :banks="banks" :flash="flash" />
+        </div>
+        <TransactionTable :transactions="transactions" />
+    </div>
 </template>
 
 <style scoped>
+
 </style>

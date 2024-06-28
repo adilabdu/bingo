@@ -24,22 +24,16 @@ const form = useForm({
 
 const submit = () => {
     form.login = `+251${form.login}`;
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
-    });
+    form.post(route('login'));
 };
 </script>
 
 <template>
-    <div class="px-3 w-full flex justify-between">
-        <div class="w-full lg:w-7/12 max-w-sm">
+    <div class="px-3 w-full flex justify-evenly mx-auto min-h-screen md:min-h-fit py-16 md:pt-0 ">
+        <div class="w-full lg:w-7/12 max-w-sm md:max-w-md">
             <div class="flex justify-between items-center pb-10">
-                <div class="text-4xl lg:text-5xl w-full">
+                <div class="text-5xl lg:text-6xl font-medium w-full">
                     Sign in to your account
-                </div>
-
-                <div class="flex w-3/12 justify-end lg:hidden">
-                    <img class="w-full object-cover" src="../../../../public/assets/images/logo.png">
                 </div>
             </div>
             <form @submit.prevent="submit">
@@ -115,8 +109,6 @@ const submit = () => {
 
         </div>
         <div class="hidden lg:flex flex-col space-y-2 w-4/12 text-center rounded-lg justify-center items-center">
-
-
             <div class="flex w-full justify-center">
                 <img class="w-7/12 object-cover" src="../../../../public/assets/images/logo.png">
             </div>
@@ -127,7 +119,6 @@ const submit = () => {
             <div class="text-sm">
                 Embrace the fun of playing bingo online!
             </div>
-
         </div>
     </div>
 </template>

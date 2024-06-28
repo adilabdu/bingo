@@ -32,20 +32,14 @@ class GameController extends Controller
             });
         });
 
-        $player = auth()->user()->load('player');
+        $pendingGameRedirect = $this->checkPendingGame();
+        if ($pendingGameRedirect) {
+            return $pendingGameRedirect;
+        }
 
-        // Check if the player has an active game
-        $activeGame = GamePlayer::where('player_id', $player->id)
-            ->whereHas('game', function ($query) {
-                $query->whereIn('status', [Game::STATUS_PENDING]);
-            })
-            ->first();
-
-        if ($activeGame) {
-            return redirect()->route('game.join', [
-                'game_category_id' => $activeGame->game->game_category_id,
-                'cartela_id' => $activeGame->cartela_id
-            ]);
+        $activeGameRedirect = $this->checkActiveGame();
+        if ($activeGameRedirect) {
+            return $activeGameRedirect;
         }
 
         return Inertia::render('Game/Initiate/Index', [
@@ -53,17 +47,39 @@ class GameController extends Controller
         ]);
     }
 
-    public function selectCartela(Request $request, $categoryId, $cartelaName = null): Response
+    public function selectCartela(Request $request, $categoryId, $cartelaName = null): Response | RedirectResponse
     {
         $page = $request->input('page', 'Game/Initiate/Cartela');
 
+        $pendingGameRedirect = $this->checkPendingGame();
+        if ($pendingGameRedirect) {
+            return $pendingGameRedirect;
+        }
+
+        $activeGameRedirect = $this->checkActiveGame();
+        if ($activeGameRedirect) {
+            return $activeGameRedirect;
+        }
+
         return Inertia::render($page,[
             'gameCategory' => GameCategory::findOrFail($categoryId),
-            'cartela' => Inertia::lazy(function () use ($cartelaName) {
+            'cartela' => Inertia::lazy(function () use ($cartelaName, $categoryId) {
                 if (!$cartelaName)
                     return null;
 
-                return Cartela::where('name', $cartelaName)->first();
+                $cartela =  Cartela::where('name', $cartelaName)->first();
+                // Check if the cartela is already in use
+                $cartelaInUse = GamePlayer::where('cartela_id', $cartela->id)
+                    ->whereHas('game', function ($query) use ($categoryId) {
+                        $query->where('game_category_id', $categoryId)
+                        ->whereIn('status', [Game::STATUS_ACTIVE, Game::STATUS_PENDING]);
+                    })
+                    ->first();
+                if ($cartelaInUse)
+                    return ['error' => 'Cartela is already in use'];
+
+                $cartela->error = null;
+                return $cartela;
             })
         ]);
     }
@@ -80,9 +96,7 @@ class GameController extends Controller
             return redirect()->route('game.initiate');
         }
 
-//        if ($game->status !== Game::STATUS_PENDING || $game->status !== Game::STATUS_ACTIVE ){
-//            return redirect()->route('game.initiate');
-//        }
+        $this->checkPendingGame();
 
         // Validate player participation in the game
         $playerGame = GamePlayer::where('game_id', $game->id)
@@ -114,6 +128,12 @@ class GameController extends Controller
         $player = auth()->user()->load('player')->player;
 
         $gameCategory = GameCategory::findOrFail($request->game_category_id);
+
+        $activeGameRedirect = $this->checkActiveGame();
+        if ($activeGameRedirect) {
+            return $activeGameRedirect;
+        }
+
         if ($player->balance < $gameCategory->amount) {
             return redirect()->route('game.initiate');
         }
@@ -125,17 +145,25 @@ class GameController extends Controller
             })
             ->first();
 
+        Log::info($cartelaInUse);
         if ($cartelaInUse) {
+            Log::info("Cartela in use ". $cartelaInUse->game_id);
              // Todo: Handle Error
-            return redirect()->back()->withErrors(['cartela_id' => 'Cartela is already in use']);
+            return redirect()->back()->with('error' ,'Cartela is already in use');
         }
 
         $game = JoinGameService::startGame($request->cartela_id, $request->game_category_id);
 
+        $remainingSeconds = floor(now()->diffInSeconds($game->scheduled_at, true));
+
+        $totalPlayers = $game->players()->count();
+
         return Inertia::render('Game/Initiate/Join',[
             'gameCategory' => GameCategory::findOrFail($request->game_category_id),
             'cartela' => Cartela::findOrFail($request->cartela_id),
-            'game' => $game
+            'game' => $game,
+            'remainingSeconds' => $remainingSeconds,
+            'totalPlayers' => $totalPlayers,
         ]);
     }
 
@@ -163,4 +191,45 @@ class GameController extends Controller
 
         SettleGameService::settleWinnerBalance($game);
     }
+
+    private function checkActiveGame(): ?RedirectResponse
+    {
+        $player = auth()->user()->load('player');
+
+        $activeGame = GamePlayer::where('player_id', $player->player->id)
+            ->whereHas('game', function ($query) {
+                $query->whereIn('status', [Game::STATUS_ACTIVE]);
+            })->first();
+
+        if ($activeGame) {
+            Log::info($activeGame->game_id);
+            return redirect()->route('game.play', [
+                'game_id' => $activeGame->game_id,
+            ]);
+        }
+
+        return null;
+    }
+
+    private function checkPendingGame(): ?RedirectResponse
+    {
+        $player = auth()->user()->load('player');
+
+        $pendingGame = GamePlayer::where('player_id', $player->id)
+            ->whereHas('game', function ($query) {
+                $query->whereIn('status', [Game::STATUS_PENDING]);
+            })->first();
+
+
+        if ($pendingGame) {
+            return redirect()->route('game.join', [
+                'game_category_id' => $pendingGame->game->game_category_id,
+                'cartela_id' => $pendingGame->cartela_id
+            ]);
+        }
+
+        return null;
+    }
 }
+
+

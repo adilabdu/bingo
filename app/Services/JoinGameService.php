@@ -3,6 +3,7 @@ namespace App\Services;
 
 
 
+use App\Events\GamePlayersEvent;
 use App\Models\Game;
 use App\Models\GamePlayer;
 use Carbon\Carbon;
@@ -35,6 +36,9 @@ class JoinGameService
         $game->load('gameCategory');
 
         self::joinGame($game, $player->id, $cartelaId);
+
+        $totalPlayers = $game->players()->count();
+        GamePlayersEvent::dispatch($totalPlayers, $game);
 
         return $game;
     }
