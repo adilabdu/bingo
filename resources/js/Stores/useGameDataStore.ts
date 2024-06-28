@@ -5,7 +5,7 @@ import {RemovableRef, useStorage} from "@vueuse/core";
 interface GameStore {
     clickedNumbers: Array<(number|string)>;
     recentNumbers: Array<number>;
-    drawNumbers: Array<number>;
+    drawNumbers: Array<(number|string)>;
     revealIndex: number;
 }
 
@@ -14,14 +14,14 @@ export const useGameDataStore = defineStore('gameDataStore', () => {
     const persistedGameData: RemovableRef<GameStore> = useStorage('gameData', {
         clickedNumbers: ['FREE'],
         recentNumbers: [],
-        drawNumbers: [],
+        drawNumbers: ['FREE'],
         revealIndex: 0,
     })
 
 
     const clickedNumbers: Ref<Set<(number|string)>> = ref(new Set(persistedGameData.value.clickedNumbers));
     const recentNumbers: Ref<Array<number>> = ref(persistedGameData.value.recentNumbers);
-    const drawNumbers: Ref<Set<number>> = ref(new Set(persistedGameData.value.drawNumbers))
+    const drawNumbers: Ref<Set<(number|string)>> = ref(new Set(persistedGameData.value.drawNumbers))
     const revealIndex: Ref<number> = ref(persistedGameData.value.revealIndex);
 
     function addToDrawNumbers(numbers: Array<number>) {
@@ -34,6 +34,16 @@ export const useGameDataStore = defineStore('gameDataStore', () => {
     function addToClickedNumbers(number: number) {
         clickedNumbers.value.add(number)
         persistedGameData.value.clickedNumbers = Array.from(clickedNumbers.value)
+    }
+
+    function addToRecentNumbers(number: number) {
+        recentNumbers.value.unshift(number)
+
+        if (recentNumbers.value.length > 8) {
+            recentNumbers.value.pop()
+        }
+
+        persistedGameData.value.recentNumbers = recentNumbers.value
     }
 
     function setRecentNumbers(numbers: Array<number>) {
@@ -56,7 +66,7 @@ export const useGameDataStore = defineStore('gameDataStore', () => {
         recentNumbers.value = []
         revealIndex.value = 0
         drawNumbers.value = new Set([])
-        persistedGameData.value.drawNumbers = []
+        persistedGameData.value.drawNumbers = ['FREE']
         persistedGameData.value.clickedNumbers = ['FREE']
         persistedGameData.value.recentNumbers = []
         persistedGameData.value.revealIndex = 0
@@ -68,6 +78,7 @@ export const useGameDataStore = defineStore('gameDataStore', () => {
         setRecentNumbers,
         incrementRevealIndex,
         addToDrawNumbers,
+        addToRecentNumbers,
         resetRevealIndex,
         drawNumbers,
         clickedNumbers,

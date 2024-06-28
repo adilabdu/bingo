@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
             'phone_number' => '+251912345678',
+            'phone_verified_at' => now()
         ]);
 
         $user->player()->create([
@@ -39,6 +40,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User 2',
             'email' => 'test2@example.com',
             'phone_number' => '+251911223344',
+            'phone_verified_at' => now()
         ]);
 
         $user->player()->create([
