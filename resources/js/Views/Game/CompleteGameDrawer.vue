@@ -74,8 +74,8 @@ function routeToChangeCartelaPage() {
                 <div class="overflow-y-auto flex flex-col space-y-8 w-full px-5 py-4 sm:max-w-lg mx-auto">
                     <div class="flex flex-col space-y-5 items-center">
 
-                        <div @click="routeToGameMenu" class="w-14 h-14 bg-brand-primary rounded-full flex items-center justify-center">
-                            <X size="35" class="text-white"/>
+                        <div @click="routeToChangeCartelaPage" class="w-10 h-10 md:w-12 md:h-12 cursor-pointer hover:scale-105 bg-brand-primary rounded-full flex items-center justify-center">
+                            <X size="30" class="text-white"/>
                         </div>
 
                         <div v-if="isWinner" class="w-full bg-gradient-to-l from-green-500 to-emerald-500 p-3 rounded-xl shadow-md text-white flex items-center justify-center space-x-2 text-center font-semibold text-2xl">
