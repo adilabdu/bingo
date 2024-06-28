@@ -34,18 +34,17 @@ function enableBingoButton(numbers) {
 function handleFinish() {
     isLoading.value = false;
     gameStore.clearGameData();
+    clearInterval(pollRevealNumbers);
 }
 
 function callBingo() {
     isLoading.value = true;
+    clearInterval(pollRevealNumbers);
     router.post(`/game/play/bingo/${cartela.value.id}/${game.value.id}`, {
         draw_numbers_cut_off_index: gameStore.revealIndex,
         selected_numbers: selectedNumbers.value
     }, {
         preserveState: true,
-        onSuccess() {
-            gameStore.clearGameData();
-        },
     })
 }
 
