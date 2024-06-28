@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,14 +21,7 @@ class CheckUserType
         // '401 Unauthorized' error.
 
         if (! auth()->check()) {
-            // Handle request from InertiaJS
-            if ($request->header('X-Inertia')) {
-                abort(401, 'Access Denied!');
-            }
-
-            return response([
-                'message' => 'You are not authenticated.',
-            ], 401);
+            abort(401, 'Access Denied!');
         }
 
         // Get the currently authenticated user
@@ -35,15 +29,12 @@ class CheckUserType
 
         // Check the user type
         if (! in_array($user->type, $userTypes)) {
-            // Handle request from InertiaJS
-            if ($request->header('X-Inertia')) {
-                abort(403, 'Access Denied!');
-            }
 
-            return response([
-                'message' => 'Access Denied',
-                'detailedMessage' => 'Access Denied. You are forbidden from accessing this resource or performing this operation.',
-            ], 403);
+            if ($user->type === User::TYPE_PLAYER)
+                return redirect()->route('game.initiate');
+
+            abort(403, 'Access Denied!');
+
         }
 
         return $next($request);
