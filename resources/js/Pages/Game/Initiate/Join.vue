@@ -9,11 +9,14 @@ import {debounce} from "lodash";
 import Loading from "@/Components/Loading.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import {Frown} from "lucide-vue-next";
+import {useGameDataStore} from "@/Stores/useGameDataStore.ts";
 
 const game  = computed(() => usePage().props.game);
 const gameCategory = usePage().props.gameCategory;
 const cartela = computed(() => usePage().props.cartela);
 const remainingSeconds = ref(usePage().props.remainingSeconds);
+
+const gameStore = useGameDataStore();
 
 const updateRemainingSeconds = () => {
     if (remainingSeconds.value > 0) {
@@ -24,6 +27,7 @@ const updateRemainingSeconds = () => {
 let intervalId;
 
 onMounted(() => {
+    gameStore.clearGameData(); // Clear residual game data
     updateRemainingSeconds();  // Initialize the current time
     intervalId = setInterval(updateRemainingSeconds, 1000);  // Update every second
 });
