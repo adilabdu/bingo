@@ -18,7 +18,6 @@ Route::middleware('auth')->prefix('chapa')->group(function () {
     Route::post('/withdraw/initiate', [PaymentController::class, 'initiateWithdrawal'])->name('withdraw.initiate');
     Route::get('/withdrawal/callback/{transactionId}', [PaymentController::class, 'handleWithdrawalCallback'])->name('withdrawal.callback');
 
-
     // Routes for handling withdrawal success and failure
     Route::get('/withdraw/success', [PaymentController::class, 'withdrawalSuccess'])->name('withdraw.success');
     Route::get('/withdraw/failure', [PaymentController::class, 'withdrawalFailure'])->name('withdraw.failure');
