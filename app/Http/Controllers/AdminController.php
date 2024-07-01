@@ -6,14 +6,18 @@ use App\Models\Game;
 use App\Models\Player;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Activitylog\Models\Activity;
 
 class AdminController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
         $totalGames = Game::count();
 
         $totalPlayers = User::where('type', 'player')->count();
@@ -48,6 +52,16 @@ class AdminController extends Controller
                 ];
             });
 
+        // Calculate total revenue and profit with date filters if provided
+        $revenueQuery = Game::join('game_categories', 'games.game_category_id', '=', 'game_categories.id');
+
+        if ($startDate && $endDate) {
+            $revenueQuery->whereBetween('games.scheduled_at', [$startDate, $endDate]);
+        }
+
+        $totalRevenue = $revenueQuery->sum('game_categories.amount');
+        $totalProfit = $totalRevenue * 0.10;
+
         return Inertia::render('Admin/Dashboard/Index', [
             'authUser' => auth()->user(),
             'totalPlayers' => $totalPlayers,
@@ -55,6 +69,10 @@ class AdminController extends Controller
             'recentWinners' => $recentWinners,
             'totalGames' => $totalGames,
             'activePlayers' => $activePlayers,
+            'totalRevenue' => $totalRevenue,
+            'totalProfit' => $totalProfit,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
         ]);
     }
 
@@ -110,17 +128,19 @@ class AdminController extends Controller
     {
         $game = Game::with('gameCategory', 'players.player.user', 'players.cartela')->find($id->id);
 
-        $winners = $game->players->where('is_winner', true);
-
         return Inertia::render('Admin/Games/Single', [
             'game' => $game,
-            'winners' => $winners,
         ]);
     }
 
     public function player($userId): Response
     {
-        $player = User::find($userId);
+        $player = User::with('player')->find($userId);
+
+        if (!$player) {
+            // Handle the case where the player is not found
+            abort(404, 'Player not found');
+        }
 
         $recentActivities = Activity::where('causer_id', $userId)
             ->orderBy('created_at', 'desc')
@@ -131,10 +151,36 @@ class AdminController extends Controller
             $query->where('user_id', $userId);
         })->count();
 
+        // Calculate the total won amount for the specific player
+        $totalWonAmount = Game::where('winner_player_id', $player->id)
+            ->sum('winner_net_amount');
+
+        // Calculate the total wagered amount by joining game_categories
+        $totalWageredAmount = Game::whereHas('players.player', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->join('game_categories', 'games.game_category_id', '=', 'game_categories.id')
+            ->sum('game_categories.amount');
+
+        // Calculate the total loss amount
+        $totalLossAmount = $totalWageredAmount - $totalWonAmount;
+
         return Inertia::render('Admin/Users/Player', [
             'player' => $player,
             'recentActivities' => $recentActivities,
             'gamesPlayed' => $gamesPlayed,
+            'totalWonAmount' => $totalWonAmount,
+            'totalWageredAmount' => $totalWageredAmount,
+            'totalLossAmount' => $totalLossAmount,
         ]);
+    }
+
+    public function register(): Response
+    {
+        return Inertia::render('Admin/Users/Register');
+    }
+
+    public function profile(): Response
+    {
+        return Inertia::render('Admin/Profile/Edit');
     }
 }

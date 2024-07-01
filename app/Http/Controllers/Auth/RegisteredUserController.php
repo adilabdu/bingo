@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Player;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -32,24 +33,20 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => $request->type === 'admin' ? 'required|string|lowercase|email|max:255|unique:users,email' : 'nullable',
-            'phone_number' => $request->type === 'player'
-                ? 'required|regex:/^\+251[79][0-9]{8}$/|max:13|unique:users,phone_number'
-                : 'nullable',
+            'phone_number' => 'required|regex:/^\+251[79][0-9]{8}$/|max:13|unique:users,phone_number',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'type' => 'required|string|in:admin,player',
         ]);
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->type === 'admin' ? $request->email : null,
-            'phone_number' => $request->type === 'player' ? $request->phone_number : null,
+            'phone_number' => $request->phone_number,
             'type' => $request->type,
             'password' => Hash::make($request->password),
         ]);
 
         match ($request->type) {
-            'admin' => $user->assignRole('admin'),
+            'admin' => Admin::create(['user_id' => $user->id]),
             'player' => Player::create(['user_id' => $user->id, 'balance' => env('INITIAL_PLAYER_BONUS_BALANCE', 0)]),
         };
         event(new Registered($user));

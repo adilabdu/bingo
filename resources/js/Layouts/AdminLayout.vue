@@ -28,6 +28,7 @@ const logout = () => {
         <!-- Header -->
         <header class="bg-white shadow">
             <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                <img class="w-10 object-cover" src="../../../public/assets/images/logo.png">
                 <nav class="flex items-center space-x-6">
                     <ul class="flex space-x-6">
                         <li>
@@ -64,7 +65,7 @@ const logout = () => {
                         </svg>
                         <transition name="fade">
                             <div v-if="showDropdown" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 z-10">
-                                <a href="/profile" class="block px-4 py-2 text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out">
+                                <a href="/admin/profile" class="block px-4 py-2 text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out">
                                     Profile
                                 </a>
                                 <a @click="logout" class="block cursor-pointer px-4 py-2 text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out">
