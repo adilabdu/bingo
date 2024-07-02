@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Game;
+use App\Services\SettleGameService;
 use App\Services\StartGameService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -10,5 +12,16 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::call(function () {
+    // Check if active game has elapsed five minutes make the game status cancelled
+    if (Game::where('status', Game::STATUS_ACTIVE)
+        ->where('created_at', '<=', now()->subMinutes(5))
+        ->exists()) {
+        $game = Game::where('status', Game::STATUS_ACTIVE)
+            ->where('created_at', '<=', now()->subMinutes(5))
+            ->first();
+        $game->update(['status' => Game::STATUS_CANCELLED]);
+        SettleGameService::returnPlayerBalance($game);
+    }
+
     StartGameService::checkGame();
  })->everySecond();

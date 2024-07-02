@@ -10,5 +10,7 @@ Route::middleware(['auth', 'checkUserType:admin'])->prefix('admin/')->group(func
     Route::post('users/{id}/block', [UserController::class, 'block'])->name('users.block');
     Route::get('games', [AdminController::class, 'games'])->name('games');
     Route::get('games/{id}', [AdminController::class, 'game'])->name('game');
+    Route::get('users/register', [AdminController::class, 'register'])->name('users.register');
     Route::get('users/{userId}', [AdminController::class, 'player'])->name('users.player');
+    Route::get('profile', [AdminController::class, 'profile'])->name('admin.profile.edit');
 });
