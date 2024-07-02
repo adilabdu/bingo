@@ -12,7 +12,7 @@ const totalGames = computed(() => usePage().props.totalGames);
 const totalGamesToday = computed(() => usePage().props.totalGamesToday);
 const activeGames = computed(() => usePage().props.activeGames);
 
-const statuses = ['pending', 'active', 'completed'];
+const statuses = ['pending', 'active', 'completed', 'cancelled'];
 const selectedStatus = ref('');
 
 const fetchGames = (url = '/admin/games') => {

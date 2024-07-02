@@ -20,7 +20,7 @@ const totalWageredAmount = computed(() => usePage().props.totalWageredAmount);
                 <p class="text-lg">View detailed information about {{ player.name }}</p>
             </div>
             <div class="text-right">
-                <p class="text-2xl font-semibold text-green-200">Balance: ${{ player.player.balance || '0.00' }}</p>
+                <p class="text-lg font-md text-green-200">Balance: {{ player.player.balance || '0.00' }} <span class="text-sm font-light">birr</span></p>
             </div>
         </div>
 
@@ -29,9 +29,9 @@ const totalWageredAmount = computed(() => usePage().props.totalWageredAmount);
             <h3 class="text-2xl font-bold mb-4">Player Profile</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <p><strong>Name:</strong> {{ player.name || 'N/A' }}</p>
-                    <p><strong>Email:</strong> {{ player.email || 'N/A' }}</p>
-                    <p><strong>Phone Number:</strong> {{ player.phone_number || 'N/A' }}</p>
+                    <p class="text-md font-semibold">{{ player.name || 'N/A' }}</p>
+                    <p> {{ player.email || 'N/A' }} </p>
+                    <p> {{ player.phone_number || 'N/A' }} </p>
                 </div>
                 <div>
                     <p><strong>Joined:</strong> {{ player.created_at ? new Date(player.created_at).toLocaleString() : 'N/A' }}</p>
@@ -76,7 +76,7 @@ const totalWageredAmount = computed(() => usePage().props.totalWageredAmount);
         </div>
 
         <!-- Back Button -->
-        <button class="bg-gray-500 text-white py-2 px-4 rounded-lg" @click="router.visit('/admin/players')">
+        <button class="bg-gray-500 text-white py-2 px-4 rounded-lg" @click="router.visit('/admin/users')">
             Back to Players
         </button>
     </div>

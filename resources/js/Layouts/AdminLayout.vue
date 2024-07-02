@@ -8,7 +8,10 @@ const currentPath = window.location.pathname;
 const user = computed(() => usePage().props.auth.user);
 
 const isActiveRoute = (path) => {
-    return currentPath === path;
+    if (path === '/admin') {
+        return currentPath === path;
+    }
+    return currentPath.startsWith(path);
 };
 
 // State for managing dropdown visibility
