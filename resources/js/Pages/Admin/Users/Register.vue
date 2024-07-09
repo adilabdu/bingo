@@ -47,6 +47,7 @@ const submit = () => {
                         <SelectLabel>User Type</SelectLabel>
                         <SelectItem value="admin">Admin</SelectItem>
                         <SelectItem value="player">Player</SelectItem>
+                        <SelectItem value="cashier">Cashier</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>
