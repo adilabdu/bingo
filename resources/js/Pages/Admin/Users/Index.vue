@@ -166,7 +166,7 @@ onMounted(() => {
                         <TableCell class="p-4">
                             <Button
                                 :class="user.is_blocked ? 'bg-green-300' : 'bg-red-300'"
-                                class="text-black py-1 px-2 rounded-lg w-full"
+                                class="text-black py-1 px-2 rounded-lg w-20 hover:text-white hover:bg-opacity-75 transition-colors duration-200"
                                 @click="toggleBlockUser(user)"
                             >
                                 {{ user.is_blocked ? 'Unblock' : 'Block' }}

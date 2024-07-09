@@ -12,8 +12,8 @@ const recentWinners = computed(() => usePage().props.recentWinners || []);
 const totalGames = computed(() => usePage().props.totalGames || 0);
 const activePlayers = computed(() => usePage().props.activePlayers || 0);
 
-const totalRevenue = computed(() => usePage().props.totalRevenue || "$0");
-const totalProfit = computed(() => usePage().props.totalProfit || "$0");
+const totalRevenue = computed(() => usePage().props.totalRevenue || "0");
+const totalProfit = computed(() => usePage().props.totalProfit || "0");
 
 const startDate = ref(usePage().props.startDate || '');
 const endDate = ref(usePage().props.endDate || '');
@@ -48,8 +48,8 @@ const clearDateFilter = () => {
         <div class="bg-white p-6 rounded-lg shadow-lg space-y-4">
             <h3 class="text-2xl font-bold">Revenue and Profit</h3>
             <div class="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
-                <InfoCard title="Total Revenue" :value="totalRevenue" />
-                <InfoCard title="Total Profit" :value="totalProfit" />
+                <InfoCard title="Total Revenue" :amount="totalRevenue" currency="birr" />
+                <InfoCard title="Total Profit" :amount="totalProfit" currency="birr"/>
             </div>
             <!-- Date Filter Section -->
             <div class="flex justify-end space-x-4 text-sm">
