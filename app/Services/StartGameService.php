@@ -10,6 +10,7 @@ class StartGameService
     public static function checkGame(){
         $game = Game::where('scheduled_at', '<=', now())
             ->where('status', Game::STATUS_PENDING)
+            ->where('is_tv_game', false)
             ->first();
 
         if ($game) {
