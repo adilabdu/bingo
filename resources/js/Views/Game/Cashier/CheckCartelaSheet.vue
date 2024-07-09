@@ -60,7 +60,7 @@ function getCartela(){
     <Sheet>
         <SheetTrigger>
             <div
-                class="text-5xl font-bold uppercase bg-brand-secondary text-white px-3 py-2 text-center rounded-lg">
+                class="text-5xl font-bold uppercase bg-brand-secondary text-white px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl">
                 Check
             </div>
         </SheetTrigger>

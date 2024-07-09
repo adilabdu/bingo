@@ -133,6 +133,23 @@ class CashierController extends Controller
                 return $cartela;
             })
         ]);
-
     }
+
+    public function finish(Request $request)
+    {
+        $request->validate([
+            'game_id' => 'required|exists:games,id',
+        ]);
+
+        $game = Game::find($request->game_id);
+
+        if (!$game->is_tv_game || $game->status !== Game::STATUS_ACTIVE) {
+            return redirect()->route('cashier.game.initiate')->with('error', 'Invalid game');
+        }
+
+        $game->update(['status' => Game::STATUS_COMPLETED]);
+
+        return redirect()->route('cashier.game.initiate')->with('success', 'Game completed successfully');
+    }
+
 }

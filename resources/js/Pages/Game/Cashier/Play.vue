@@ -14,9 +14,6 @@ const props = defineProps({
         type: Number,
         required: true
     },
-    drawnNumbers: {
-        type: Array
-    }
 });
 
 const pageProps = usePage().props;
@@ -26,6 +23,7 @@ let pollRevealNumbers = null;
 
 const game = computed(() => pageProps.game);
 const batchIndex = computed(() => usePage().props.nextBatchIndex);
+const drawnNumbers = computed(() => usePage().props.drawnNumbers);
 
 const currentNumber = ref(null);
 const currentIndex = ref(0)
@@ -50,7 +48,7 @@ async function fetchGameUpdates() {
         }, {
             preserveState: true,
             onSuccess() {
-                gameStore.addToDrawNumbers(props.drawnNumbers);
+                gameStore.addToDrawNumbers(drawnNumbers.value);
                 resolve();
             },
             onError(error) {
@@ -84,15 +82,18 @@ watch(() => gameStore.revealIndex, () => {
 
 onMounted(() => {
     if (game.value.status === 'completed') {
-        router.get('/game/initiate');
+        router.get('/cashier/game/initiate');
     }
-
-    gameStore.addToDrawNumbers(props.drawnNumbers);
-    pollRevealNumbers = setInterval(revealNumbers, 2000);
+    if (drawnNumbers.value !== null)
+    gameStore.addToDrawNumbers(drawnNumbers.value);
+    else
+        fetchGameUpdates()
+    pollRevealNumbers = setInterval(revealNumbers, 200);
 });
 
 onUnmounted(() => {
     clearInterval(pollRevealNumbers);
+    gameStore.clearGameData()
 });
 
 const isPaused = ref(false);
@@ -103,6 +104,15 @@ function togglePause() {
 function isRevealed(number) {
     return revealedNumbers.value.some(arr => arr.includes(number));
 }
+
+
+function finishGame() {
+    router.post('/cashier/game/finish', {
+        game_id: game.value.id
+    }, {
+        preserveState: true
+    });
+}
 </script>
 
 <template>
@@ -111,24 +121,24 @@ function isRevealed(number) {
             <div class="w-full h-64 flex items-center justify-center text-center  font-bold text-[13rem]">
                 {{ currentNumber ?? '-' }}
             </div>
-            <div class="text-5xl font-bold flex items-center justify-center text-gray-600 h-36  text-center">{{currentIndex}}/75</div>
+            <div class="text-5xl font-bold flex items-center justify-center text-gray-600 h-36  text-center">{{currentIndex > 75 ? 75 : currentIndex   }}/{{drawnNumbers?.length}}</div>
             <div class="flex flex-col space-y-6">
                 <div
-                    class="text-5xl font-bold uppercase bg-brand-tertiary px-3 py-2 text-center rounded-lg cursor-pointer"
+                    class="text-5xl font-bold uppercase bg-brand-tertiary px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl"
                     :class="{ 'opacity-50': isPaused }"
                     @click="togglePause"
                 >
                     Pause
                 </div>
                 <div
-                    class="text-5xl font-bold uppercase bg-brand-primary text-white px-3 py-2 text-center rounded-lg cursor-pointer"
+                    class="text-5xl font-bold uppercase bg-brand-primary text-white px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl"
                     :class="{ 'opacity-50': !isPaused }"
                     @click="togglePause"
                 >
                     Play
                 </div>
                 <CheckCartelaSheet :game="game" :current-index="currentIndex"/>
-                <div class="text-5xl font-bold uppercase bg-rose-600 text-white px-3 py-2 text-center rounded-lg">
+                <div @click="finishGame" class="text-5xl font-bold uppercase bg-rose-600 text-white px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl">
                     Finish
                 </div>
             </div>
