@@ -3,6 +3,7 @@ import { router, usePage } from "@inertiajs/vue3";
 import { useGameDataStore } from "@/Stores/useGameDataStore.ts";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import CheckCartelaSheet from "@/Views/Game/Cashier/CheckCartelaSheet.vue";
 
 const props = defineProps({
     game: {
@@ -95,12 +96,16 @@ onUnmounted(() => {
             <div class="w-full flex items-center justify-center text-center  font-bold text-[13rem] rounded-full">
                 {{ currentNumber }}45
             </div>
-               <div class="flex flex-col space-y-6">
-               <div class="text-5xl font-bold uppercase bg-brand-tertiary px-3 py-2 text-center rounded-lg">Pause</div>
-               <div class="text-5xl font-bold uppercase bg-brand-primary text-white px-3 py-2 text-center rounded-lg">Play</div>
-               <div class="text-5xl font-bold uppercase bg-brand-secondary text-white px-3 py-2 text-center rounded-lg">Check</div>
-                   <div class="text-5xl font-bold uppercase bg-rose-600 text-white px-3 py-2 text-center rounded-lg">Finish</div>
-               </div>
+            <div class="flex flex-col space-y-6">
+                <div class="text-5xl font-bold uppercase bg-brand-tertiary px-3 py-2 text-center rounded-lg">Pause</div>
+                <div class="text-5xl font-bold uppercase bg-brand-primary text-white px-3 py-2 text-center rounded-lg">
+                    Play
+                </div>
+                <CheckCartelaSheet/>
+                <div class="text-5xl font-bold uppercase bg-rose-600 text-white px-3 py-2 text-center rounded-lg">
+                    Finish
+                </div>
+            </div>
 
            </div>
             <div class="flex flex-col justify-center w-8/12">
