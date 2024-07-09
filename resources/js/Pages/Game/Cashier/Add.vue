@@ -24,7 +24,7 @@ const props = defineProps({
 const cartelaName = ref(null);
 const errorMessages = ref([]);
 const isLoading = ref(false);
-// listen for enter and send the cartela number
+
 window.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
         isLoading.value = true;
@@ -47,6 +47,22 @@ window.addEventListener('keydown', function (e) {
 })
 
 const winnerAmount = computed(() => Math.round(Number(props.gameCategory.amount) * Number(props.gamePlayersCount) - Number(props.gameCategory.amount) * Number(props.gamePlayersCount) * 0.1));
+
+function startGame() {
+    isLoading.value = true;
+    router.get('/cashier/game/start', {
+        game_id: props.game.id,
+        game_category_id: props.gameCategory.id
+    }, {
+        preserveState: true,
+        onError: (e) => {
+            errorMessages.value = Object.values(e).flat();
+        },
+        onFinish: () => {
+            isLoading.value = false;
+        }
+    })
+}
 </script>
 
 <template>
@@ -61,7 +77,7 @@ const winnerAmount = computed(() => Math.round(Number(props.gameCategory.amount)
 
         <GradientBorder class="h-3/6">
             <template #default>
-                <div class="flex justify-between bg-white rounded-xl w-full h-full">
+                <div class="flex justify-between bg-white rounded-xl w-full h-full px-10">
                     <div class="min-h-full flex flex-col justify-evenly space-y-10 py-10 px-5">
                         <div
                             class="flex w-full flex-col h-32 space-y-2 items-center justify-center bg-gray-800 text-white px-4 rounded-lg shadow-2xl font-bold text-7xl">
@@ -96,6 +112,7 @@ const winnerAmount = computed(() => Math.round(Number(props.gameCategory.amount)
 
         <div class="flex items-center h-1/5">
             <div
+                @click="startGame"
                 class="bg-gray-800 border-8 border-black cursor-pointer hover:scale-105 hover:shadow-2xl shadow-md rounded-xl text-white w-fit font-bold text-7xl px-5 py-4 mx-auto">
                 START BINGO
             </div>
