@@ -33,8 +33,6 @@ const gameStore = useGameDataStore();
 window.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
         getCartela();
-    }else {
-        cartelaName.value = null;
     }
 })
 
@@ -74,14 +72,14 @@ function getCartela(){
                         <div class="flex w-full flex-col space-y-4">
                             <InputLabel class="!text-2xl">Add Cartela Number (1-50)</InputLabel>
                             <Input v-model="cartelaName" type="number" class="h-24 font-semibold text-5xl border-black"
-                                   placeholder="Ex:20,16,50,44..."/>
+                                   placeholder="Ex: 20, 16, 50, 44..."/>
                             <span class="text-red-600" v-for="(message, index) in errorMessages"
                                   :key="index">* {{ message }}</span>
 
                         </div>
 
                         <Loading v-if="isLoading"/>
-                        <CashierBingoBoard v-else-if="cartela?.numbers" :cartela="cartela" :numbers="cartela?.numbers" :winner-numbers="drawNumbers[0]"/>
+                        <CashierBingoBoard v-else-if="cartela?.numbers && cartelaName" :cartela="cartela" :numbers="cartela?.numbers" :winner-numbers="drawNumbers[0]"/>
                         <div v-if="cartela === null && cartelaName && !isLoading" class="text-2xl font-bold bg-red-600 text-white px-5 py-2 rounded-lg">
                             Cartela Not found!
                         </div>

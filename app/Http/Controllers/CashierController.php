@@ -35,7 +35,7 @@ class CashierController extends Controller
         // Check if there is a pending game where the category is the same and is a tv game
         $game = Game::where('game_category_id', $gameCategory->id)
             ->where('is_tv_game', true)
-            ->where('status', Game::STATUS_PENDING)
+            ->whereIn('status', [Game::STATUS_PENDING, Game::STATUS_ACTIVE])
             ->first();
 
         if (!$game) {
@@ -71,7 +71,7 @@ class CashierController extends Controller
             })->exists();
 
         if ($cartelaInUse) {
-            return redirect()->back()->with('error', 'Cartela already in use');
+            return redirect()->back()->withErrors(['cartelaName' => 'Cartela already in use']);
         }
         GamePlayer::create([
             'game_id' => $game->id,
@@ -96,11 +96,6 @@ class CashierController extends Controller
         $game->load(['players', 'gameCategory']);
 
         if ($game->status === Game::STATUS_PENDING) {
-            if ($game->players()->count() < 2) {
-                $game->update(['status' => Game::STATUS_CANCELLED]);
-                return redirect()->back()->with('error', 'Game cancelled due to insufficient players');
-            }
-
 
             $totalPlayers = $game->players()->count();
 
