@@ -14,26 +14,28 @@ function redirectToGame(categoryId) {
     router.visit(`/cashier/game/create/${categoryId}`)
 }
 
-const gameCategories = props.gameCategories.filter(cat => cat.amount <= 200);
+const gameCategoriesOne = props.gameCategories.filter(cat => cat.amount <= 50);
+const gameCategoriesTwo = props.gameCategories.filter(cat => cat.amount > 100);
 </script>
 
 <template>
-<div class="flex justify-between pt-16 h-screen">
-    <div class="w-5/12 flex items-center flex-col space-y-8">
-        <GameCategoryCard view="cashier" @click="redirectToGame(item.id, item.amount)" :players="item?.games?.length" :name="item.name" :amount="item.amount" v-for="(item, index) in gameCategories" :key="index" />
-    </div>
-    <div class="hidden lg:flex flex-col h-4/6 justify-center space-y-4 w-6/12 text-center rounded-lg">
-        <div class="flex w-full justify-center ">
-            <img class="w-7/12 h-64 object-cover" src="../../../../../public/assets/images/logo.png">
-        </div>
-        <div class="text-8xl font-bold text-brand-100">
-            <span class="text-brand-150">Kiwi</span>
-            Bingo
-        </div>
-        <div class="text-sm">
-            Embrace the fun of playing bingo online!
+<div class="flex flex-col  h-screen">
+    <div class="flex items-center py-5 justify-center h-fit">
+        <img class="w-24 h-20 object-cover " src="../../../../../public/assets/images/logo.png">
+        <div class="text-center text-brand-primary font-bold text-7xl">Kiwi <span
+            class="text-brand-secondary">Bingo</span>
         </div>
     </div>
+    <div class="flex justify-evenly h-5/6">
+
+    <div class="w-5/12 h-4/5 flex flex-col justify-evenly">
+        <GameCategoryCard view="cashier" @click="redirectToGame(item.id, item.amount)" :players="item?.games?.length" :name="item.name" :amount="item.amount" v-for="(item, index) in gameCategoriesOne" :key="index" />
+    </div>
+    <div class="w-5/12 h-4/5 flex flex-col justify-evenly">
+        <GameCategoryCard view="cashier" @click="redirectToGame(item.id, item.amount)" :players="item?.games?.length" :name="item.name" :amount="item.amount" v-for="(item, index) in gameCategoriesTwo" :key="index" />
+    </div>
+</div>
+
 </div>
 </template>
 
