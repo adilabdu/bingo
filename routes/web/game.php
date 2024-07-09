@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GameController;
 use App\Http\Middleware\EnsurePhoneNumberIsVerified;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'checkUserType:player', EnsurePhoneNumberIsVerified::class])->prefix('game')->group(function () {
     Route::get('/initiate', [GameController::class, 'index'])->name('game.initiate');

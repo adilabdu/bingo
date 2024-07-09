@@ -30,7 +30,7 @@ const isBalanceEnough = computed(() => balance >= props.amount);
 </script>
 
 <template>
-    <div class="bg-white max-w-lg hover:shadow-2xl hover:bg-brand-secondary hover:text-white cursor-pointer rounded-md flex flex-col space-y-4 mb-2" :class="view === 'cashier' ? 'py-5 px-10' : isBalanceEnough ? 'bg-white opacity-100 p-4' : 'px-4 py-2'">
+    <div class="bg-white w-full max-w-lg hover:shadow-2xl hover:bg-brand-secondary hover:text-white cursor-pointer rounded-md flex flex-col space-y-4 mb-2" :class="view === 'cashier' ? 'py-3 px-10' : isBalanceEnough ? 'bg-white opacity-100 p-4' : 'px-4 py-2'">
 
     <div  class="flex justify-between items-center" >
         <div class="flex items-center w-full" :class="view==='player' ? 'space-x-5':'space-x-10'">

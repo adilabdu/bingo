@@ -24,8 +24,8 @@ class Game extends Model
         'winner_net_amount',
         'draw_numbers',
         'winning_numbers',
-        'winner_player_id'
-
+        'winner_player_id',
+        'is_tv_game',
     ];
 
     public function gameCategory(): BelongsTo

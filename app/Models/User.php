@@ -20,6 +20,7 @@ class User extends Authenticatable
 
     const TYPE_PLAYER = 'player';
 
+    const TYPE_CASHIER = 'cashier';
     protected $fillable = [
         'name',
         'email',
