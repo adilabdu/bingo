@@ -23,6 +23,11 @@ class CashierController extends Controller
         ]);
     }
 
+    public function finance()
+    {
+        return Inertia::render('Cashier/Finance');
+    }
+
     public function createGame(Request $request)
     {
         $gameCategory = GameCategory::find($request->gameCategoryId);

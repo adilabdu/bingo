@@ -21,6 +21,7 @@ class User extends Authenticatable
     const TYPE_PLAYER = 'player';
 
     const TYPE_CASHIER = 'cashier';
+
     protected $fillable = [
         'name',
         'email',
@@ -71,5 +72,10 @@ class User extends Authenticatable
     {
         return LogOptions::defaults()
             ->logOnly(['name', 'email', 'phone_number', 'type', 'is_blocked']);
+    }
+
+    public function cashier(): HasOne
+    {
+        return $this->hasOne(Cashier::class);
     }
 }

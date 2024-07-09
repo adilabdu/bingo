@@ -11,6 +11,12 @@ import TransactionTable from "@/Views/Wallet/TransactionTable.vue";
 import TransferMoney from "@/Views/Wallet/TransferMoney.vue";
 import YourBalance from "@/Views/Wallet/YourBalance.vue";
 import WalletPageHeader from "@/Views/Wallet/WalletPageHeader.vue";
+import Deposit from "@/Views/Wallet/Deposit.vue";
+import Withdraw from "@/Views/Wallet/Withdraw.vue";
+import {computed} from "vue";
+
+const { props } = usePage();
+const banks = computed(() => props.banks);
 
 defineProps({
     balance: {
@@ -34,7 +40,9 @@ defineProps({
         <div class="flex flex-col space-y-4 md:space-y-6">
             <WalletPageHeader />
             <YourBalance :balance="balance" />
+            <Deposit />
             <TransferMoney :flash="flash" />
+            <Withdraw :banks="banks" :flash="flash" />
         </div>
         <TransactionTable :transactions="transactions" />
     </div>

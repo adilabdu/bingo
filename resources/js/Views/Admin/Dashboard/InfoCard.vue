@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps } from 'vue';
+import {defineProps} from 'vue';
 
 const props = defineProps({
     title: {
@@ -8,7 +8,12 @@ const props = defineProps({
     },
     value: {
         type: String,
-        required: true
+        required: false,
+    },
+    amount: {
+        type: String,
+        required: false,
+        default: "",
     },
     icon: {
         type: Boolean,
@@ -21,6 +26,10 @@ const props = defineProps({
     iconColor: {
         type: String,
         default: 'text-gray-500'
+    },
+    currency: {
+        type: String,
+        required: false,
     }
 });
 </script>
@@ -33,7 +42,11 @@ const props = defineProps({
             </svg>
         </div>
         <h2 class="text-md font-semibold text-gray-900">{{ title }}</h2>
-        <p class="text-gray-500">{{ value }}</p>
+        <p class="flex items-center space-x-2">
+            <span class="text-lg" >{{ value }}</span>
+            <span v-if="amount !== ''" class="text-lg">{{ Number(amount).toFixed(2) }}</span>
+            <span class="text-sm">{{ currency }}</span>
+        </p>
     </div>
 </template>
 

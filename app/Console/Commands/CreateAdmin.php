@@ -41,7 +41,7 @@ class CreateAdmin extends Command
 
             $user = User::create([
                 'name' => $this->argument('name'),
-                'email' => $this->argument('phone_number'),
+                'phone_number' => $this->argument('phone_number'),
                 'password' => Hash::make('secret'),
                 'type' => User::TYPE_ADMIN,
             ]);
@@ -66,10 +66,10 @@ class CreateAdmin extends Command
     {
         $validator = Validator::make([
             'name' => $this->argument('name'),
-            'email' => $this->argument('phone_number'),
+            'phone_number' => $this->argument('phone_number'),
         ], [
             'name' => ['required'],
-            'email' => ['required', 'regex:/^\+2519[0-9]{8}$/', 'max:13' , 'unique:users,phone_number'],
+            'phone_number' => ['required', 'regex:/^\+2519[0-9]{8}$/', 'max:13' , 'unique:users,phone_number'],
         ]);
 
         if ($validator->fails()) {

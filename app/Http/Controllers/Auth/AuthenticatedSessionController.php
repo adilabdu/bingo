@@ -54,8 +54,9 @@ class AuthenticatedSessionController extends Controller
         $userType = Auth::user()->type;
 
         return match ($userType) {
-            User::TYPE_ADMIN => redirect()->intended('/admin/dashboard'),
+            User::TYPE_ADMIN => redirect()->intended('/admin'),
             User::TYPE_PLAYER => redirect()->intended('/game/initiate'),
+            User::TYPE_CASHIER => redirect()->intended('/cashier'),
             default => redirect()->intended('/'),
         };
     }

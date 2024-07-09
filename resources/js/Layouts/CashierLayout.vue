@@ -8,7 +8,7 @@ const currentPath = window.location.pathname;
 const user = computed(() => usePage().props.auth.user);
 
 const isActiveRoute = (path) => {
-    if (path === '/admin') {
+    if (path === '/cashier') {
         return currentPath === path;
     }
     return currentPath.startsWith(path);
@@ -32,34 +32,39 @@ const logout = () => {
         <header class="bg-white shadow">
             <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                 <img class="w-10 object-cover" src="../../../public/assets/images/logo.png">
-                <nav class="flex items-center space-x-6">
-                    <ul class="flex space-x-6">
+                <nav class="flex items-center space-x-14">
+                    <ul class="flex space-x-20 ">
                         <li>
-                            <a :href="'/admin'"
+                            <a :href="'/cashier'"
                                :class="{
                    'relative text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out': true,
-                   'active': isActiveRoute('/admin')
+                   'active': isActiveRoute('/cashier')
                  }">
-                                Dashboard
+                                Home
                             </a>
                         </li>
                         <li>
-                            <a :href="'/admin/users'"
+                            <a :href="'/cashier/play'"
                                :class="{
                    'relative text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out': true,
-                   'active': isActiveRoute('/admin/users')
+                   'active': isActiveRoute('/cashier/play')
                  }">
-                                Users
+                                Play
                             </a>
                         </li>
                         <li>
-                            <a :href="'/admin/games'"
+                            <a :href="'/cashier/finance'"
                                :class="{
                    'relative text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out': true,
-                   'active': isActiveRoute('/admin/games')
+                   'active': isActiveRoute('/cashier/finance')
                  }">
-                                Games
+                                Finance
                             </a>
+                        </li>
+                        <li>
+                            <div class="px-2 bg-gray-50 min-w-fit text-lg mr-2 rounded-lg h-fit font-bold my-auto mb-4">
+                                0 Br
+                            </div>
                         </li>
                     </ul>
                     <div class="relative ml-auto" @mouseover="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
