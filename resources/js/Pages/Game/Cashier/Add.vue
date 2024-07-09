@@ -27,6 +27,7 @@ const isLoading = ref(false);
 
 window.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
+        errorMessages.value = [];
         isLoading.value = true;
         router.post('/cashier/game/add', {
             cartelaName: String(cartelaName.value),
@@ -87,21 +88,22 @@ function startGame() {
                         <div
                             class="flex w-full flex-col h-32 space-y-2 items-center justify-center bg-gray-800 text-white px-4 rounded-lg shadow-2xl font-bold text-7xl">
                             <span class="font-normal text-2xl"> Winner Amount</span>
-                            <span>{{ winnerAmount }} Birr</span>
+                            <span v-if="gamePlayersCount > 1">{{ winnerAmount }} Birr</span>
+                            <span v-else>-</span>
                         </div>
                     </div>
                     <div class="w-7/12 flex flex-col justify-evenly space-y-10 py-10 px-5">
                         <div class="flex flex-col space-y-4">
                             <InputLabel class="!text-2xl">Enter Cartela Number (1-50)</InputLabel>
                             <Input v-model="cartelaName" type="number" class="h-24 font-semibold text-5xl border-black"
-                                   placeholder="Ex:20,16,50,44..."/>
-                            <span class="text-red-600" v-for="(message, index) in errorMessages"
+                                   placeholder="Ex: 20, 16, 50, 44..."/>
+                            <span class="bg-red-600 text-white p-3 rounded-lg w-fit" v-for="(message, index) in errorMessages"
                                   :key="index">* {{ message }}</span>
 
                         </div>
 
                         <div
-                            class="flex flex-col items-center space-y-10 bg-gray-800 text-white text-xl w-full px-10 py-6 rounded-lg font-bold">
+                            class="flex flex-col items-center space-y-10  text-xl w-full px-10 py-6 rounded-lg font-bold" :class="gamePlayersCount <= 1 ?'bg-red-600 text-white': 'bg-brand-secondary text-white'">
                             <span class="text-6xl">{{gamePlayersCount}} Players Joined</span>
                         </div>
                     </div>
@@ -113,7 +115,8 @@ function startGame() {
         <div class="flex items-center h-1/5">
             <div
                 @click="startGame"
-                class="bg-gray-800 border-8 border-black cursor-pointer hover:scale-105 hover:shadow-2xl shadow-md rounded-xl text-white w-fit font-bold text-7xl px-5 py-4 mx-auto">
+                :class="gamePlayersCount <= 1 ?'bg-gray-800 opacity-40 cursor-not-allowed': 'bg-brand-secondary hover:scale-105 cursor-pointer opacity-100'"
+                class=" border-8 border-black hover:shadow-2xl shadow-md rounded-xl text-white w-fit font-bold text-7xl px-5 py-4 mx-auto">
                 START BINGO
             </div>
         </div>
