@@ -77,15 +77,18 @@ class CashierController extends Controller
         return redirect()->back()->with('success', 'Player added successfully');
     }
 
-    public function startGame(Request $request)
+    public function startGame(Request $request, $cartelaName = null, $gameId = null)
     {
         $request->validate([
-            'game_id' => 'required|exists:games,id',
+            'game_id' => 'nullable|exists:games,id',
         ]);
 
         $game = Game::whereIn('status', [Game::STATUS_PENDING, Game::STATUS_ACTIVE])
             ->where('is_tv_game', true)
             ->first();
+
+
+        $game->load(['players', 'gameCategory']);
 
         if ($game->status === Game::STATUS_PENDING) {
             if ($game->players()->count() < 2) {
@@ -93,8 +96,6 @@ class CashierController extends Controller
                 return redirect()->back()->with('error', 'Game cancelled due to insufficient players');
             }
 
-
-            $game->load(['players', 'gameCategory']);
 
             $totalPlayers = $game->players()->count();
 
@@ -108,15 +109,30 @@ class CashierController extends Controller
         }
 
         $batchIndex = $request->input('batch_index', 0);
-        $drawnNumbers = StartGameService::getDrawnNumbersForBatch($game, $batchIndex);
-
 
         return Inertia::render('Game/Cashier/Play', [
             'game' => $game,
             'gamePlayersCount' => $game->players()->count(),
             'nextBatchIndex' => $batchIndex + 1,
             'totalPlayers' => $game->players->count(),
-            'drawnNumbers' => $drawnNumbers,
+            'drawnNumbers' => $game->draw_numbers,
+            'cartela' => Inertia::lazy(function () use ($cartelaName, $gameId) {
+                if (!$cartelaName)
+                    return null;
+
+                // Return cartela if the cartela is in the game
+                $cartela = Cartela::where('name', $cartelaName)->first();
+                // Check if is in the game
+                $cartelaInGame = GamePlayer::where('cartela_id', $cartela->id)
+                    ->where('game_id', $gameId)
+                    ->first();
+
+                if (!$cartelaInGame)
+                    return null;
+
+                return $cartela;
+            })
         ]);
+
     }
 }

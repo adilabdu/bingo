@@ -145,9 +145,7 @@ class GameController extends Controller
             })
             ->first();
 
-        Log::info($cartelaInUse);
         if ($cartelaInUse) {
-            Log::info("Cartela in use ". $cartelaInUse->game_id);
              // Todo: Handle Error
             return redirect()->back()->with('error' ,'Cartela is already in use');
         }
@@ -202,7 +200,6 @@ class GameController extends Controller
             })->first();
 
         if ($activeGame) {
-            Log::info($activeGame->game_id);
             return redirect()->route('game.play', [
                 'game_id' => $activeGame->game_id,
             ]);

@@ -92,7 +92,7 @@ function startGame() {
                     </div>
                     <div class="w-7/12 flex flex-col justify-evenly space-y-10 py-10 px-5">
                         <div class="flex flex-col space-y-4">
-                            <InputLabel class="!text-2xl">Add Cartela Number (1-50)</InputLabel>
+                            <InputLabel class="!text-2xl">Enter Cartela Number (1-50)</InputLabel>
                             <Input v-model="cartelaName" type="number" class="h-24 font-semibold text-5xl border-black"
                                    placeholder="Ex:20,16,50,44..."/>
                             <span class="text-red-600" v-for="(message, index) in errorMessages"
