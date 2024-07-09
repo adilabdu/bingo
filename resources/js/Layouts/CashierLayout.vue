@@ -44,10 +44,10 @@ const logout = () => {
                             </a>
                         </li>
                         <li>
-                            <a :href="'/cashier/play'"
+                            <a :href="'/cashier/game/initiate'"
                                :class="{
                    'relative text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out': true,
-                   'active': isActiveRoute('/cashier/play')
+                   'active': isActiveRoute('/cashier/game/initiate')
                  }">
                                 Play
                             </a>
