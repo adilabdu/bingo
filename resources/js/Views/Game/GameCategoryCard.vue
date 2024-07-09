@@ -17,6 +17,10 @@ const props = defineProps({
     players:{
         type: Number,
         default: 0
+    },
+    view:{
+        type: String,
+        default: 'player'
     }
 });
 
@@ -26,17 +30,17 @@ const isBalanceEnough = computed(() => balance >= props.amount);
 </script>
 
 <template>
-    <div class="bg-white rounded-md flex flex-col space-y-4 mb-2" :class="isBalanceEnough ? 'bg-white opacity-100 p-4' : 'px-4 py-2'">
+    <div class="bg-white max-w-lg hover:shadow-2xl hover:bg-brand-secondary hover:text-white cursor-pointer rounded-md flex flex-col space-y-4 mb-2" :class="view === 'cashier' ? 'py-5 px-10' : isBalanceEnough ? 'bg-white opacity-100 p-4' : 'px-4 py-2'">
 
     <div  class="flex justify-between items-center" >
-        <div class="flex items-center space-x-5">
+        <div class="flex items-center w-full" :class="view==='player' ? 'space-x-5':'space-x-10'">
             <CircleDollarSign />
-            <div>
-                <div class="font-semibold text-lg">{{ amount }} Birr</div>
+            <div :class="view === 'player' ? 'flex flex-col': 'flex w-full items-center justify-evenly'">
+                <div class=" " :class="view === 'player' ? 'text-lg font-semibold' : 'font-bold text-6xl pb-2'">{{ amount }} Birr</div>
                 <div class="text-xs">{{ name }}</div>
             </div>
         </div>
-        <div class="flex items-end justify-center text-xs text-gray-700 font-medium rounded-sm text-center ">
+        <div v-if="view === 'player'" class="flex items-end justify-center text-xs text-gray-700 font-medium rounded-sm text-center ">
             <SignalLow v-if="players < 3" class="!my-auto h-fit"/>
             <SignalMedium v-else-if="players > 3 && players < 8" class="!my-auto h-fit"/>
             <SignalHigh v-else-if="players > 7" class="!my-auto h-fit"/>
@@ -44,9 +48,9 @@ const isBalanceEnough = computed(() => balance >= props.amount);
             <span>{{ players }} Players</span>
         </div>
     </div>
-        <div v-if="!isBalanceEnough" class="flex justify-between items-center">
+        <div v-if="!isBalanceEnough && view ==='player'" class="flex justify-between items-center">
             <div class="text-xs text-red-600">Not Enough Balance</div>
-        <PrimaryButton  class="w-5/12" size="xs">Deposit</PrimaryButton>
+            <PrimaryButton  class="w-5/12" size="xs">Deposit</PrimaryButton>
         </div>
 
     </div>
