@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\StartGameEvent;
 use App\Models\Cartela;
+use App\Models\Cashier;
 use App\Models\Game;
 use App\Models\GameCategory;
 use App\Models\GamePlayer;
@@ -78,6 +79,9 @@ class CashierController extends Controller
             'cartela_id' => $cartela->id,
             'gamePlayersCount' => $game->players()->count()
         ]);
+
+        $cashier = Cashier::where('user_id', auth()->user()->id)->first();
+        $cashier->update(['balance' => $cashier->balance + $game->gameCategory->amount]);
 
         return redirect()->back()->with('success', 'Player added successfully');
     }
