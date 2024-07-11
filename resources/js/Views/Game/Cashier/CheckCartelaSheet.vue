@@ -78,7 +78,7 @@ function getCartela(){
 
                         </div>
 
-                        <Loading v-if="isLoading"/>
+                        <Loading v-if="isLoading" type="brand" class="pt-10"/>
                         <CashierBingoBoard v-else-if="cartela?.numbers && cartelaName" :cartela="cartela" :numbers="cartela?.numbers" :winner-numbers="drawNumbers[0]"/>
                         <div v-if="cartela === null && cartelaName && !isLoading" class="text-2xl font-bold bg-red-600 text-white px-5 py-2 rounded-lg">
                             Cartela Not found!
