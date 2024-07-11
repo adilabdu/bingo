@@ -2,8 +2,9 @@
 import {router, usePage} from "@inertiajs/vue3";
 import {useGameDataStore} from "@/Stores/useGameDataStore.ts";
 import {computed, onMounted, onUnmounted, ref, watch} from "vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CheckCartelaSheet from "@/Views/Game/Cashier/CheckCartelaSheet.vue";
+import {Volume2, VolumeX} from "lucide-vue-next";
+import N33 from "../../../../../public/assets/sounds/numbers/33.mp3";
 
 const props = defineProps({
     game: {
@@ -69,6 +70,7 @@ function revealNumbers() {
         currentIndex.value = gameStore.revealIndex;
         gameStore.addToRecentNumbers(currentNumber.value);
         gameStore.incrementRevealIndex();
+        playSound();
     }
 }
 
@@ -85,10 +87,10 @@ onMounted(() => {
         router.get('/cashier/game/initiate');
     }
     if (drawnNumbers.value !== null)
-    gameStore.addToDrawNumbers(drawnNumbers.value);
+        gameStore.addToDrawNumbers(drawnNumbers.value);
     else
         fetchGameUpdates()
-    pollRevealNumbers = setInterval(revealNumbers, 20);
+    pollRevealNumbers = setInterval(revealNumbers, 2500);
 });
 
 onUnmounted(() => {
@@ -101,6 +103,7 @@ const isPaused = ref(false);
 function togglePause() {
     isPaused.value = !isPaused.value;
 }
+
 function isRevealed(number) {
     return revealedNumbers.value.some(arr => arr.includes(number));
 }
@@ -113,6 +116,22 @@ function finishGame() {
         preserveState: true
     });
 }
+
+const soundEnabled = ref(true);
+
+function toggleSound() {
+    soundEnabled.value = !soundEnabled.value;
+}
+
+function playSound() {
+    const audio = new Audio(`/assets/sounds/numbers/${currentNumber.value}.mp3`);
+    if (soundEnabled.value) {
+        audio.currentTime = 0;
+        audio.play().catch(error => {
+            // console.log('Sound play failed:', error);
+        });
+    }
+}
 </script>
 
 <template>
@@ -121,7 +140,9 @@ function finishGame() {
             <div class="w-full h-64 flex items-center justify-center text-center  font-bold text-[13rem]">
                 {{ currentNumber ?? '-' }}
             </div>
-            <div class="text-5xl font-bold flex items-center justify-center text-gray-600 h-36  text-center">{{currentIndex + 1 > 75 ? 75 : currentIndex   }}/{{drawnNumbers?.length}}</div>
+            <div class="text-5xl font-bold flex items-center justify-center text-gray-600 h-36  text-center">
+                {{ currentIndex + 1 > 75 ? 75 : currentIndex }}/{{ drawnNumbers?.length }}
+            </div>
             <div class="flex flex-col space-y-6">
                 <div
                     class="text-5xl font-bold uppercase bg-brand-tertiary px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl"
@@ -138,7 +159,8 @@ function finishGame() {
                     Play
                 </div>
                 <CheckCartelaSheet :game="game" :current-index="currentIndex"/>
-                <div @click="finishGame" class="text-5xl font-bold uppercase bg-rose-600 text-white px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl">
+                <div @click="finishGame"
+                     class="text-5xl font-bold uppercase bg-rose-600 text-white px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl">
                     Finish
                 </div>
             </div>
@@ -162,17 +184,19 @@ function finishGame() {
             </div>
             <div
                 class="flex w-full divide-x divide-white items-center justify-evenly py-6 mt-10 border-4 bg-gray-800 text-white rounded-lg mx-auto">
-                <div class="flex flex-col space-y-2 items-center w-1/3 ">
+                <div class="flex flex-col space-y-2 items-center w-2/5 ">
                     <div class="font-normal text-xl">Bet Amount</div>
                     <div class="text-6xl   font-bold">{{ game.game_category.amount }} Br</div>
                 </div>
-                <div class="flex flex-col space-y-2 items-center w-1/3">
+                <div class="flex flex-col space-y-2 items-center w-2/5">
                     <div class="font-normal text-xl">Winning Amount</div>
                     <div class="text-6xl   font-bold">{{ game.winner_net_amount }} Br</div>
                 </div>
-                <div class="flex flex-col space-y-2 w-1/3 items-center ">
-                    <div class="font-normal text-xl">Total Players</div>
-                    <div class="text-6xl   font-bold">{{ gamePlayersCount }}</div>
+                <div class="flex flex-col cursor-pointer space-y-2 w-1/5 h-full justify-center items-center ">
+                    <div @click="toggleSound()">
+                        <Volume2 size="50" class="hover:scale-110 hover:text-brand-secondary" v-if="soundEnabled"/>
+                        <VolumeX size="50"  class="hover:scale-110 hover:text-brand-secondary" v-else/>
+                    </div>
                 </div>
             </div>
         </div>
