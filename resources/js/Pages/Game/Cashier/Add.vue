@@ -69,14 +69,7 @@ function startGame() {
 <template>
     <Loading is-full-screen v-if="isLoading"/>
     <div class="flex flex-col space-y-6 min-h-screen h-screen">
-        <div class="flex items-center justify-center h-fit">
-            <img class="w-24 h-20 object-cover " src="../../../../../public/assets/images/logo.png">
-            <div class="text-center text-brand-primary font-bold text-6xl">Kiwi <span
-                class="text-brand-secondary">Bingo</span>
-            </div>
-        </div>
-
-        <GradientBorder class="h-3/6">
+        <GradientBorder class="h-3/5">
             <template #default>
                 <div class="flex justify-between bg-white rounded-xl w-full h-full px-10">
                     <div class="min-h-full flex flex-col justify-evenly space-y-10 py-10 px-5">

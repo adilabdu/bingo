@@ -73,8 +73,8 @@ const getClassForNumber = (num) => {
                 <h3 class="bg-brand-primary font-bold text-white text-5xl rounded py-2 mb-4 min-w-20">{{ columnLabels[index] }}</h3>
                 <ul>
                     <li v-for="(num, ind) in column" :key="ind" :class="cardSize">
-                        <div v-if="columnLabels[index] === 'N' && ind === 2" class="bg-brand-secondary font-semibold text-white rounded my-2 flex justify-center items-center py-3 px-2 min-h-20 min-w-20">FREE</div>
-                        <div v-else :class="getClassForNumber(num)" class="rounded-md border-2 border-black font-bold text-4xl my-2 py-3 text-center px-2 cursor-pointer min-h-20 min-w-20">
+                        <div v-if="columnLabels[index] === 'N' && ind === 2" class="bg-brand-secondary font-semibold text-white rounded my-2 flex justify-center text-3xl items-center py-3 px-2 min-h-20 min-w-20">FREE</div>
+                        <div v-else :class="getClassForNumber(num)" class="rounded-md border-2 border-black font-bold text-4xl my-2 py-3 text-center px-2 cursor-pointer min-h-20 min-w-20 flex items-center justify-center">
                             {{ num }}
                         </div>
                     </li>

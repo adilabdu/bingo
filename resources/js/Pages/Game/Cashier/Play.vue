@@ -88,7 +88,7 @@ onMounted(() => {
     gameStore.addToDrawNumbers(drawnNumbers.value);
     else
         fetchGameUpdates()
-    pollRevealNumbers = setInterval(revealNumbers, 200);
+    pollRevealNumbers = setInterval(revealNumbers, 20);
 });
 
 onUnmounted(() => {
@@ -121,7 +121,7 @@ function finishGame() {
             <div class="w-full h-64 flex items-center justify-center text-center  font-bold text-[13rem]">
                 {{ currentNumber ?? '-' }}
             </div>
-            <div class="text-5xl font-bold flex items-center justify-center text-gray-600 h-36  text-center">{{currentIndex > 75 ? 75 : currentIndex   }}/{{drawnNumbers?.length}}</div>
+            <div class="text-5xl font-bold flex items-center justify-center text-gray-600 h-36  text-center">{{currentIndex + 1 > 75 ? 75 : currentIndex   }}/{{drawnNumbers?.length}}</div>
             <div class="flex flex-col space-y-6">
                 <div
                     class="text-5xl font-bold uppercase bg-brand-tertiary px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl"

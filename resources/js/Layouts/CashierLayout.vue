@@ -31,9 +31,12 @@ const logout = () => {
         <!-- Header -->
         <header class="bg-white shadow">
             <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                <img class="w-10 object-cover" src="../../../public/assets/images/logo.png">
+              <div class="flex items-center space-x-2">
+                <img class="w-20 h-12 object-cover" src="../../../public/assets/images/logo.png">
+                <div class="font-bold text-5xl text-brand-primary">Kiwi <span class="text-brand-secondary">bingo</span></div>
+              </div>
                 <nav class="flex items-center space-x-14">
-                    <ul class="flex space-x-20 ">
+                    <ul class="flex items-center space-x-20 ">
                         <li>
                             <a :href="'/cashier'"
                                :class="{
@@ -62,7 +65,7 @@ const logout = () => {
                             </a>
                         </li>
                         <li>
-                            <div class="px-2 bg-gray-50 min-w-fit text-lg mr-2 rounded-lg h-fit font-bold my-auto mb-4">
+                            <div class="px-2 bg-gray-50 min-w-fit text-lg mr-2 rounded-lg h-full font-bold my-auto">
                                 0 Br
                             </div>
                         </li>
