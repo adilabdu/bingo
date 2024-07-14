@@ -155,6 +155,9 @@ class CashierController extends Controller
 
         $game->update(['status' => Game::STATUS_COMPLETED]);
 
+        $cashier = Cashier::where('user_id', auth()->user()->id)->first();
+        $cashier->update(['balance' => $cashier->balance - $game->winner_net_amount]);
+
         return redirect()->route('cashier.game.initiate')->with('success', 'Game completed successfully');
     }
 
