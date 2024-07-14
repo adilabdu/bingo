@@ -69,7 +69,7 @@ function startGame() {
 <template>
     <Loading is-full-screen v-if="isLoading"/>
     <div class="flex flex-col space-y-6 min-h-screen h-screen">
-        <GradientBorder class="h-3/5">
+        <GradientBorder class="!h-3/5">
             <template #default>
                 <div class="flex justify-between bg-white rounded-xl w-full h-full px-10">
                     <div class="min-h-full flex flex-col justify-evenly space-y-10 py-10 px-5">

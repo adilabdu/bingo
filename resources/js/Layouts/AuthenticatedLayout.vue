@@ -160,7 +160,7 @@ function closeNavigationDropDown(){
             </header>
 
             <!-- Page Content -->
-            <main class="px-4 sm:px-0 sm:container 2xl:max-w-[1600px] pb-5 flex flex-col space-y-6 w-full">
+            <main class="px-4 sm:px-0 sm:container xl:max-w-[1700px]  pb-5 flex flex-col space-y-6 w-full">
                 <Notification class="min-w-full" />
                 <slot />
             </main>

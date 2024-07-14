@@ -40,7 +40,7 @@ const drawNumbers = computed(() => []);
 function getCartela(){
     errorMessages.value = [];
     isLoading.value = true;
-    router.visit(cartelaName.value ? `/cashier/game/start/${cartelaName.value}/${props.game.id}` : '/cashier/game/start', {
+    router.visit(cartelaName.value ? `/cashier/game/start/${cartelaName.value}/${props.game.id}/${props.game.game_category_id}` : '/cashier/game/start', {
     preserveState: true,
         only: ['cartela'],
         onError: (e) => {
@@ -57,7 +57,8 @@ function getCartela(){
 </script>
 
 <template>
-    <Sheet>
+    <Sheet
+     @close="cartelaName = null">
         <SheetTrigger>
             <div
                 class="text-5xl font-bold uppercase bg-brand-secondary text-white px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl">
