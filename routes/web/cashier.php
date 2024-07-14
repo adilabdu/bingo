@@ -12,6 +12,6 @@ Route::middleware('auth')->prefix('cashier/')->group(function () {
     Route::get('/initiate', [CashierController::class, 'index'])->name('cashier.game.initiate');
     Route::get('/create/{gameCategoryId}', [CashierController::class, 'createGame'])->name('cashier.game.create');
     Route::post('/add', [CashierController::class, 'addPlayers'])->name('cashier.game.add');
-    Route::get('/start/{cartelaName?}/{gameId?}', [CashierController::class, 'startGame'])->name('cashier.game.start');
+    Route::get('/start/{cartelaName?}/{gameId?}/{gameCategoryId?}', [CashierController::class, 'startGame'])->name('cashier.game.start');
     Route::post('/finish', [CashierController::class, 'finish'])->name('cashier.game.finish');
     });

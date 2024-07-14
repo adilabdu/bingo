@@ -86,14 +86,16 @@ class CashierController extends Controller
         return redirect()->back()->with('success', 'Player added successfully');
     }
 
-    public function startGame(Request $request, $cartelaName = null, $gameId = null)
+    public function startGame(Request $request, $cartelaName = null, $gameId = null, $gameCategoryId = null)
     {
         $request->validate([
             'game_id' => 'nullable|exists:games,id',
+            'game_category_id' => 'nullable|exists:game_categories,id',
         ]);
 
         $game = Game::whereIn('status', [Game::STATUS_PENDING, Game::STATUS_ACTIVE])
             ->where('is_tv_game', true)
+            ->where('game_category_id', $request->input('game_category_id', $gameCategoryId ))
             ->first();
 
 
