@@ -28,7 +28,7 @@ const cartelaName = ref(null);
 const errorMessages = ref([]);
 const isLoading = ref(false);
 const cartela = computed(() => usePage().props.cartela)
-const gameStore = useGameDataStore();
+const gameStore = computed(()=>useGameDataStore());
 
 window.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
@@ -36,7 +36,7 @@ window.addEventListener('keydown', function (e) {
     }
 })
 
-const drawNumbers = computed(() => []);
+const drawNumbers = ref([]);
 function getCartela(){
     errorMessages.value = [];
     isLoading.value = true;
@@ -47,10 +47,13 @@ function getCartela(){
             errorMessages.value = Object.values(e).flat();
         },
         onFinish: () => {
-            drawNumbers.value.push(Array.from(gameStore.drawNumbers).slice(0, gameStore.revealIndex + 1))
             isLoading.value = false;
         }
     })
+
+    drawNumbers.value = [];
+    drawNumbers.value.push(Array.from(gameStore.value.drawNumbers).slice(0, gameStore.value.revealIndex + 1))
+
 }
 
 
