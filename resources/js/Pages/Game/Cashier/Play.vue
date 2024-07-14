@@ -4,7 +4,7 @@ import {useGameDataStore} from "@/Stores/useGameDataStore.ts";
 import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 import CheckCartelaSheet from "@/Views/Game/Cashier/CheckCartelaSheet.vue";
 import {Volume2, VolumeX} from "lucide-vue-next";
-import N33 from "../../../../../public/assets/sounds/numbers/33.mp3";
+import Loading from "@/Components/Loading.vue";
 
 const props = defineProps({
     game: {
@@ -45,6 +45,7 @@ async function fetchGameUpdates() {
     return new Promise((resolve, reject) => {
         router.get('/cashier/game/start', {
             game_id: game.value.id,
+            game_category_id: game.value.game_category_id,
             batch_index: batchIndex.value
         }, {
             preserveState: true,
@@ -83,6 +84,7 @@ watch(() => gameStore.revealIndex, () => {
 });
 
 onMounted(() => {
+    gameStore.clearGameData()
     if (game.value.status === 'completed') {
         router.get('/cashier/game/initiate');
     }
@@ -90,7 +92,7 @@ onMounted(() => {
         gameStore.addToDrawNumbers(drawnNumbers.value);
     else
         fetchGameUpdates()
-    pollRevealNumbers = setInterval(revealNumbers, 2500);
+    pollRevealNumbers = setInterval(revealNumbers, 4000);
 });
 
 onUnmounted(() => {
@@ -108,12 +110,16 @@ function isRevealed(number) {
     return revealedNumbers.value.some(arr => arr.includes(number));
 }
 
-
+const isLoading = ref(false);
 function finishGame() {
+    isLoading.value = true;
     router.post('/cashier/game/finish', {
         game_id: game.value.id
     }, {
-        preserveState: true
+        preserveState: true,
+        onFinish: () => {
+            isLoading.value = false;
+        }
     });
 }
 
@@ -124,7 +130,7 @@ function toggleSound() {
 }
 
 function playSound() {
-    const audio = new Audio(`/assets/sounds/numbers/${currentNumber.value}.mp3`);
+    const audio = new Audio(`/assets/sounds/numbers/${currentNumber.value}.aac`);
     if (soundEnabled.value) {
         audio.currentTime = 0;
         audio.play().catch(error => {
@@ -135,6 +141,7 @@ function playSound() {
 </script>
 
 <template>
+    <Loading is-full-screen v-if="isLoading"/>
     <div class="flex w-full space-x-2 justify-evenly mx-auto">
         <div class="flex flex-col w-2/12">
             <div class="w-full h-64 flex items-center justify-center text-center  font-bold text-[13rem]">
@@ -166,7 +173,7 @@ function playSound() {
             </div>
 
         </div>
-        <div class="flex flex-col justify-center w-8/12">
+        <div class="flex flex-col justify-center w-9/12">
             <div v-for="letter in ['B', 'I', 'N', 'G', 'O']" :key="letter" class="text-center font-bold text-5xl">
                 <div class="flex space-x-4 my-6 h-full pr-4 items-center">
                     <div
