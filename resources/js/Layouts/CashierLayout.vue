@@ -66,7 +66,7 @@ const logout = () => {
                         </li>
                         <li>
                             <div class="px-2 bg-gray-50 min-w-fit text-lg mr-2 rounded-lg h-full font-bold my-auto">
-                                0 Br
+                                {{ $page.props.auth.user.cashier.balance }} Br
                             </div>
                         </li>
                     </ul>
@@ -91,7 +91,7 @@ const logout = () => {
 
         <!-- Main Content -->
         <main class="flex-grow">
-            <div class="container mx-auto py-6 sm:px-6 lg:px-8">
+            <div class="container md:max-w-[1650px] mx-auto py-6 sm:px-6 lg:px-8">
                 <!-- Dynamic Content -->
                 <slot></slot>
             </div>
