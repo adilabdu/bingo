@@ -106,7 +106,7 @@ class CashierController extends Controller
             $totalPlayers = $game->players()->count();
 
             // Todo: Change the percentage value to .env variable
-            $game->update(['winner_net_amount' => $totalPlayers * (int)$game->gameCategory->amount * 0.9]);
+            $game->update(['winner_net_amount' => $totalPlayers * (int)$game->gameCategory->amount * config('WINNER_RETAIN_PERCENTAGE', 0.85)]);
             $game->update(['status' => Game::STATUS_ACTIVE]);
 
             if (!$game->draw_numbers) {
