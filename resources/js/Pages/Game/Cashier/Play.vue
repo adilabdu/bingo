@@ -165,7 +165,7 @@ function playSound() {
                 >
                     Play
                 </div>
-                <CheckCartelaSheet :game="game" :current-index="currentIndex"/>
+                <CheckCartelaSheet @toggle-pause="togglePause" :game="game" :current-index="currentIndex"/>
                 <div @click="finishGame"
                      class="text-5xl font-bold uppercase bg-rose-600 text-white px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl">
                     Finish

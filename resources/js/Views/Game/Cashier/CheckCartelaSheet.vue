@@ -14,6 +14,7 @@ import Loading from "@/Components/Loading.vue";
 import CashierBingoBoard from "@/Views/Game/CashierBingoBoard.vue";
 import {useGameDataStore} from "@/Stores/useGameDataStore.ts";
 
+const emit = defineEmits(['togglePause'])
 const props = defineProps({
     currentIndex: {
         type: Number,
@@ -64,6 +65,7 @@ function getCartela(){
      @close="cartelaName = null">
         <SheetTrigger>
             <div
+                @click="emit('togglePause')"
                 class="text-5xl font-bold uppercase bg-brand-secondary text-white px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl">
                 Check
             </div>
