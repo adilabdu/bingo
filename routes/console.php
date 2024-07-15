@@ -20,6 +20,7 @@ Schedule::call(function () {
             ->where('created_at', '<=', now()->subMinutes(5))
             ->where('is_tv_game', false)
             ->first();
+        if ($game)
         $game->update(['status' => Game::STATUS_CANCELLED]);
         SettleGameService::returnPlayerBalance($game);
     }
