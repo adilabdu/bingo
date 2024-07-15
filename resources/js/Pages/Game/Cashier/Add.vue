@@ -47,7 +47,7 @@ window.addEventListener('keydown', function (e) {
     }
 })
 
-const winnerAmount = computed(() => Math.round(Number(props.gameCategory.amount) * Number(props.gamePlayersCount) - Number(props.gameCategory.amount) * Number(props.gamePlayersCount) * 0.1));
+const winnerAmount = computed(() => Math.round(Number(props.gameCategory.amount) * Number(props.gamePlayersCount) - Number(props.gameCategory.amount) * Number(props.gamePlayersCount) * 0.15));
 
 function startGame() {
     isLoading.value = true;
