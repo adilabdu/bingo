@@ -92,7 +92,12 @@ onMounted(() => {
         gameStore.addToDrawNumbers(drawnNumbers.value);
     else
         fetchGameUpdates()
-    pollRevealNumbers = setInterval(revealNumbers, 4000);
+    pollRevealNumbers = setInterval(revealNumbers, 5500);
+
+    // Load all audio files
+    Array.from(gameStore.drawNumbers).forEach(number => {
+        new Audio(`/assets/sounds/numbers/${number}.aac`);
+    });
 });
 
 onUnmounted(() => {
