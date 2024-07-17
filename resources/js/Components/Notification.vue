@@ -13,6 +13,7 @@
                 v-if="success || error || info"
                 :key="success || error || info"
                 :class="`fixed ${positionClass} w-full z-50`"
+                class="max-w-sm"
             >
                 <div
                     :class="{
@@ -37,7 +38,7 @@
 </template>
 
 <script setup>
-import { computed, defineAsyncComponent, inject, ref, watch } from "vue";
+import { computed, inject, ref, watch } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { Check, X, Info} from "lucide-vue-next"
 
@@ -128,7 +129,7 @@ const positionClass = computed(() => {
         case "bottom-right":
             return "bottom-0 right-0";
         default:
-            return "top-0 left-1/2 transform -translate-x-1/2  ";
+            return "bottom-0 right-0 transform -translate-x-1/2  ";
     }
 });
 </script>

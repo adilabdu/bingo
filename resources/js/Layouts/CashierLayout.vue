@@ -31,9 +31,12 @@ const logout = () => {
         <!-- Header -->
         <header class="bg-white shadow">
             <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                <img class="w-10 object-cover" src="../../../public/assets/images/logo.png">
+              <div class="flex items-center space-x-2">
+                <img class="w-20 h-12 object-cover" src="../../../public/assets/images/logo.png">
+                <div class="font-bold text-5xl text-brand-primary">Kiwi <span class="text-brand-secondary">bingo</span></div>
+              </div>
                 <nav class="flex items-center space-x-14">
-                    <ul class="flex space-x-20 ">
+                    <ul class="flex items-center space-x-20 ">
                         <li>
                             <a :href="'/cashier'"
                                :class="{
@@ -44,10 +47,10 @@ const logout = () => {
                             </a>
                         </li>
                         <li>
-                            <a :href="'/cashier/play'"
+                            <a :href="'/cashier/game/initiate'"
                                :class="{
                    'relative text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out': true,
-                   'active': isActiveRoute('/cashier/play')
+                   'active': isActiveRoute('/cashier/game/initiate')
                  }">
                                 Play
                             </a>
@@ -62,8 +65,8 @@ const logout = () => {
                             </a>
                         </li>
                         <li>
-                            <div class="px-2 bg-gray-50 min-w-fit text-lg mr-2 rounded-lg h-fit font-bold my-auto mb-4">
-                                0 Br
+                            <div class="px-2 bg-gray-50 min-w-fit text-lg mr-2 rounded-lg h-full font-bold my-auto">
+                                {{ $page.props.auth.user.cashier.balance }} Br
                             </div>
                         </li>
                     </ul>
@@ -93,7 +96,7 @@ const logout = () => {
 
         <!-- Main Content -->
         <main class="flex-grow">
-            <div class="container mx-auto py-6 sm:px-6 lg:px-8">
+            <div class="container md:max-w-[1650px] mx-auto py-6 sm:px-6 lg:px-8">
                 <!-- Dynamic Content -->
                 <slot></slot>
             </div>

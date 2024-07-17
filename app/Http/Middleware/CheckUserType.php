@@ -33,6 +33,9 @@ class CheckUserType
             if ($user->type === User::TYPE_PLAYER)
                 return redirect()->route('game.initiate');
 
+            if ($user->type === User::TYPE_CASHIER)
+                return redirect()->route('cashier.game.initiate');
+
             abort(403, 'Access Denied!');
 
         }

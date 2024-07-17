@@ -72,6 +72,7 @@ function routeToChangeCartelaPage() {
                 class="bg-gray-100 flex flex-col space-y-6 rounded-t-xl !min-h-full h-[calc(100%-(env(safe-area-inset-top)+51px+1rem))] fixed bottom-0 left-0 right-0 z-[60]"
             >
                 <div class="overflow-y-auto flex flex-col space-y-8 w-full px-5 py-4 sm:max-w-lg mx-auto">
+                    <div class="mt-4 mx-auto w-14 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-5" />
                     <div class="flex flex-col space-y-5 items-center">
 
                         <div @click="routeToChangeCartelaPage" class="w-10 h-10 md:w-12 md:h-12 cursor-pointer hover:scale-105 bg-brand-primary rounded-full flex items-center justify-center">

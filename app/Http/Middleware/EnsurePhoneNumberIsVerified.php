@@ -19,7 +19,7 @@ class EnsurePhoneNumberIsVerified
     {
         $user = Auth::user();
         if ($user->phone_verified_at === null) {
-            return redirect()->route('verify.phone');
+            return redirect()->route('verify.phone.get');
         }
 
         return $next($request);

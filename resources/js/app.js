@@ -1,8 +1,8 @@
 import './bootstrap';
 import '../css/app.css';
 
-import {createApp, h, provide, ref} from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
+import {computed, createApp, h, provide, ref} from 'vue';
+import {createInertiaApp, usePage} from '@inertiajs/vue3';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
@@ -14,7 +14,6 @@ import AgentLayout from "@/Layouts/AgentLayout.vue";
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 const notificationData = ref(null);
-
 const showNotification = (data) => {
     notificationData.value = data;
 };
@@ -27,7 +26,8 @@ function getLayout(name) {
     switch (true) {
         case name.startsWith("Admin/"):
             return AdminLayout;
-        case name.startsWith("Cashier/"):
+        case name.startsWith("Cashier/") || name.includes("Cashier"):
+
             return CashierLayout;
         case name.startsWith("Agent/"):
             return AgentLayout;

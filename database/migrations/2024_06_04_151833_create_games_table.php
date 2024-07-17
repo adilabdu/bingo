@@ -19,7 +19,8 @@ return new class extends Migration
             $table->json('winning_numbers')->nullable();
             $table->json('draw_numbers')->nullable();
             $table->integer('winner_net_amount')->nullable();
-            $table->timestamp('scheduled_at');
+            $table->timestamp('scheduled_at')->nullable();
+            $table->boolean('is_tv_game')->default(false);
             $table->timestamps();
         });
     }

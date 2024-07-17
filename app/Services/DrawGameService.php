@@ -2,10 +2,7 @@
 
 namespace App\Services;
 
-use App\Events\DrawGameEvent;
 use App\Models\Game;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 
 class DrawGameService
 {

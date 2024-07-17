@@ -10,6 +10,7 @@ class StartGameService
     public static function checkGame(){
         $game = Game::where('scheduled_at', '<=', now())
             ->where('status', Game::STATUS_PENDING)
+            ->where('is_tv_game', false)
             ->first();
 
         if ($game) {
@@ -26,8 +27,7 @@ class StartGameService
 
             $totalPlayers = $game->players()->count();
 
-            // Todo: Change the percentage value to .env variable
-            $game->update(['winner_net_amount' => $totalPlayers * (int)$game->gameCategory->amount * 0.9]);
+            $game->update(['winner_net_amount' => $totalPlayers * (int)$game->gameCategory->amount * config('WINNER_RETAIN_PERCENTAGE', 0.85) ]);
             $game->update(['status' => Game::STATUS_ACTIVE]);
 
             if (!$game->draw_numbers) {

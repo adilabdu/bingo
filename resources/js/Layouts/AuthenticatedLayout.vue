@@ -154,13 +154,13 @@ function closeNavigationDropDown(){
 
             <!-- Page Heading -->
             <header class="bg-white shadow" v-if="$slots.header">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-7xlmx-auto py-6 px-4 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>
             </header>
 
             <!-- Page Content -->
-            <main class="px-4 sm:px-0 sm:container pb-5 flex flex-col space-y-6 w-full">
+            <main class="px-4 sm:px-0 sm:container xl:max-w-[1700px]  pb-5 flex flex-col space-y-6 w-full">
                 <Notification class="min-w-full" />
                 <slot />
             </main>
