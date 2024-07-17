@@ -12,14 +12,18 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/Components/shadcn/ui/select/index.js";
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
+import { computed } from "vue";
+
+const branches = computed(() => usePage().props.branches);
 
 const form = useForm({
     name: '',
     phone_number: '',
     password: '',
     password_confirmation: '',
-    type: ''
+    type: '',
+    branch_id: '',
 });
 
 const submit = () => {
@@ -48,15 +52,33 @@ const submit = () => {
                         <SelectItem value="admin">Admin</SelectItem>
                         <SelectItem value="player">Player</SelectItem>
                         <SelectItem value="cashier">Cashier</SelectItem>
+                        <SelectItem value="agent">Agent</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>
             <InputError class="mt-2" :message="form.errors.type" />
         </div>
 
+        <div v-if="form.type === 'cashier'">
+            <InputLabel for="branch_id" value="Branch" />
+            <Select v-model="form.branch_id">
+                <SelectTrigger class="w-full">
+                    <SelectValue placeholder="Select branch" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectGroup>
+                        <SelectLabel>Branches</SelectLabel>
+                        <SelectItem v-for="branch in branches" :key="branch.id" :value="branch.id" class="cursor-pointer">
+                            {{ branch.name }}
+                        </SelectItem>
+                    </SelectGroup>
+                </SelectContent>
+            </Select>
+            <InputError class="mt-2" :message="form.errors.branch_id" />
+        </div>
+
         <div>
             <InputLabel for="name" value="Name" />
-
             <TextInput
                 id="name"
                 type="text"
@@ -66,67 +88,55 @@ const submit = () => {
                 autofocus
                 autocomplete="name"
             />
-
             <InputError class="mt-2" :message="form.errors.name" />
         </div>
 
         <div class="mt-4">
-            <div class="mt-4">
-                <InputLabel for="phone" value="Phone Number" />
-                <TextInput
-                    id="phone"
-                    type="number"
-                    class="mt-1 block w-full border"
-                    v-model="form.phone_number"
-                    required
-                    autocomplete="tel"
-                />
-                <InputError class="mt-2" :message="form.errors.phone_number" />
-            </div>
+            <InputLabel for="phone" value="Phone Number" />
+            <TextInput
+                id="phone"
+                type="number"
+                class="mt-1 block w-full border"
+                v-model="form.phone_number"
+                required
+                autocomplete="tel"
+            />
+            <InputError class="mt-2" :message="form.errors.phone_number" />
+        </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+        <div class="mt-4">
+            <InputLabel for="password" value="Password" />
+            <TextInput
+                id="password"
+                type="password"
+                class="mt-1 block w-full border"
+                v-model="form.password"
+                required
+                autocomplete="new-password"
+            />
+            <InputError class="mt-2" :message="form.errors.password" />
+        </div>
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full border"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
+        <div class="mt-4">
+            <InputLabel for="password_confirmation" value="Confirm Password" />
+            <TextInput
+                id="password_confirmation"
+                type="password"
+                class="mt-1 block w-full border"
+                v-model="form.password_confirmation"
+                required
+                autocomplete="new-password"
+            />
+            <InputError class="mt-2" :message="form.errors.password_confirmation" />
+        </div>
 
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full border"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <div class="flex items-center justify-end mt-6">
-                    <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                            Register
-                        </PrimaryButton>
-                    </PrimaryButton>
-                </div>
-            </div>
+        <div class="flex items-center justify-end mt-4">
+            <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                Register
+            </PrimaryButton>
         </div>
     </form>
 </template>
 
 <style scoped>
-
 </style>

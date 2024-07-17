@@ -9,6 +9,7 @@ import AdminLayout from "@/Layouts/AdminLayout.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import { createPinia } from 'pinia';
 import CashierLayout from "@/Layouts/CashierLayout.vue";
+import AgentLayout from "@/Layouts/AgentLayout.vue";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -28,6 +29,8 @@ function getLayout(name) {
             return AdminLayout;
         case name.startsWith("Cashier/"):
             return CashierLayout;
+        case name.startsWith("Agent/"):
+            return AgentLayout;
         case name.startsWith("Auth/") || name === "Welcome":
             return GuestLayout;
         default:
