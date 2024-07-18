@@ -26,6 +26,7 @@ class Game extends Model
         'winning_numbers',
         'winner_player_id',
         'is_tv_game',
+        'cashier_id'
     ];
 
     public function gameCategory(): BelongsTo

@@ -14,6 +14,7 @@ use App\Services\StartGameService;
 use App\Models\Branch;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -35,9 +36,10 @@ class CashierController extends Controller
     {
         $gameCategory = GameCategory::find($request->gameCategoryId);
 
-        // Check if there is a pending game where the category is the same and is a tv game
+       // Check if there is a pending game where the category is the same and is a tv game
         $game = Game::where('game_category_id', $gameCategory->id)
             ->where('is_tv_game', true)
+            ->where('cashier_id', auth()->user()->cashier->id)
             ->whereIn('status', [Game::STATUS_PENDING, Game::STATUS_ACTIVE])
             ->first();
 
@@ -46,6 +48,7 @@ class CashierController extends Controller
                 'game_category_id' => $gameCategory->id,
                 'status' => Game::STATUS_PENDING,
                 'is_tv_game' => true,
+                'cashier_id' => auth()->user()->cashier->id,
             ]);
         }
 
@@ -98,6 +101,7 @@ class CashierController extends Controller
 
         $game = Game::whereIn('status', [Game::STATUS_PENDING, Game::STATUS_ACTIVE])
             ->where('is_tv_game', true)
+            ->where('cashier_id', auth()->user()->cashier->id)
             ->where('game_category_id', $request->input('game_category_id', $gameCategoryId ))
             ->first();
 
@@ -170,7 +174,7 @@ class CashierController extends Controller
         $user = User::create([
             'name' => $request->name,
             'phone_number' => $request->phone_number,
-            'password' => bcrypt($request->password),
+            'password' => Hash::make('password'),
             'type' => 'cashier',
         ]);
 
