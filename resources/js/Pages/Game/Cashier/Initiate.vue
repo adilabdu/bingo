@@ -14,7 +14,7 @@ function redirectToGame(categoryId) {
     router.visit(`/cashier/game/create/${categoryId}`)
 }
 
-const gameCategoriesOne = props.gameCategories.filter(cat => cat.amount <= 50);
+const gameCategoriesOne = props.gameCategories.filter(cat => cat.amount <= 100);
 const gameCategoriesTwo = props.gameCategories.filter(cat => cat.amount > 100);
 </script>
 

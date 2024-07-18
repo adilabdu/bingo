@@ -40,7 +40,7 @@ class Game extends Model
 
     public function cartelas(): HasManyThrough
     {
-        return $this->hasManyThrough(Cartela::class, GamePlayer::class);
+        return $this->hasManyThrough(Cartela::class, GamePlayer::class, 'game_id', 'id', 'id', 'cartela_id');
     }
 
     protected $casts = [

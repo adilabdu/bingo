@@ -160,10 +160,13 @@ const currentNumberLetter = computed(() => {
     <Loading is-full-screen v-if="isLoading"/>
     <div class="flex w-full space-x-2 justify-evenly mx-auto">
         <div class="flex flex-col w-4/12 px-1">
-            <div class="w-full h-64 flex items-center  font-bold text-[13rem]">
+            <div class="w-full h-64 flex items-center justify-center font-bold text-[13rem]" v-if="currentNumber">
                 <span class="text-brand-secondary">{{ currentNumberLetter }}</span>
                 <span class="text-6xl">-</span>
-                <span>{{ currentNumber ?? '-' }}</span>
+                <span>{{ currentNumber }}</span>
+            </div>
+            <div v-else class="text-7xl text-center font-bold max-w-sm">
+                -
             </div>
             <div class="text-5xl font-bold flex items-center justify-center text-gray-600 h-36 max-w-sm">
                 {{ currentIndex + 1 > 75 ? 75 : currentIndex }}/{{ drawnNumbers?.length }}
