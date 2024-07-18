@@ -19,7 +19,7 @@ const props = defineProps({
         type: Number,
         required: true
     },
-    cartelas: {
+    selectedCartelas: {
         type: Object,
         required: true
     }
@@ -75,7 +75,7 @@ function addCartela(value){
 
 // function to check if the cartela is already added
 function isCartelaAdded(cartelaName) {
-    return props.cartelas.some(cartela => cartela.name === String(cartelaName));
+    return props.selectedCartelas.some(cartela => cartela.name === String(cartelaName));
 }
 </script>
 

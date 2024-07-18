@@ -53,7 +53,8 @@ class CashierController extends Controller
         return Inertia::render('Game/Cashier/Add', [
             'gameCategory' => $gameCategory,
             'game' => $game,
-            'gamePlayersCount' => $game->players()->count()
+            'gamePlayersCount' => $game->players()->count(),
+            'selectedCartelas' => $game->cartelas()->get(),
         ]);
     }
 
