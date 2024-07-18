@@ -28,8 +28,6 @@ class AgentController extends Controller
             return $branch->transactions->sum('amount');
         });
 
-        Log::info('Total revenue: ' . $totalRevenue);
-
         return Inertia::render('Agent/Index', [
             'agent' => $agent,
             'branches' => $branches,
