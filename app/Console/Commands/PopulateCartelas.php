@@ -30,11 +30,11 @@ class PopulateCartelas extends Command
         DB::table('cartelas')->delete(); // Optional: Clear the table on each run
 
         $rangeMap = [
-            'B' => [1, 15],
-            'I' => [16, 30],
-            'N' => [31, 45],
-            'G' => [46, 60],
-            'O' => [61, 75]
+            'B' => range(1, 15),
+            'I' => range(16, 30),
+            'N' => range(31, 45),
+            'G' => range(46, 60),
+            'O' => range(61, 75)
         ];
 
         $cartelas = [];
@@ -44,8 +44,12 @@ class PopulateCartelas extends Command
             $numbers = [];
             foreach ($rangeMap as $letter => $range) {
                 // 'N' has one less number to account for the free space in traditional bingo
-                $count = 5;
-                $numbers[$letter] = $this->generateUniqueNumbers($range, $count, $cartelas, $letter);
+                $count = ($letter === 'N') ? 4 : 5;
+                $numbers[$letter] = $this->generateUniqueNumbers($range, $count);
+
+                if ($letter === 'N') {
+                    array_splice($numbers['N'], 2, 0, 'FREE'); // Insert 'FREE' in the middle of 'N' column
+                }
             }
 
             $cartelas[] = $numbers;
@@ -60,23 +64,9 @@ class PopulateCartelas extends Command
         $this->info('Cartelas generated successfully.');
     }
 
-    private function generateUniqueNumbers($range, $count, $existingCartelas, $letter)
+    private function generateUniqueNumbers($range, $count)
     {
-        $numbers = [];
-        $iteration = 0;
-
-        while (count($numbers) < $count) {
-            $number = rand($range[0], $range[1]);
-
-            if ($letter === 'N' && $iteration === 2) {
-                $numbers[2] = 'FREE';
-            } else if (!in_array($number, $numbers)) {
-                $numbers[] = $number;
-            }
-
-            $iteration++;
-        }
-
-        return $numbers;
+        shuffle($range);
+        return array_slice($range, 0, $count);
     }
 }
