@@ -1,6 +1,7 @@
 <script setup>
-import { computed, ref } from 'vue';
+import {computed, provide, ref} from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
+import Notification from "@/Components/Notification.vue";
 
 // Determine the active route based on the current URL
 const currentPath = window.location.pathname;
@@ -24,6 +25,16 @@ const toggleDropdown = (state) => {
 const logout = () => {
     router.post("/logout", {}, {});
 };
+
+const notificationData = ref(null);
+
+const showNotification = (data) => {
+    notificationData.value = data;
+};
+
+provide("showNotification", showNotification);
+provide("notificationData", notificationData);
+
 </script>
 
 <template>
@@ -75,6 +86,7 @@ const logout = () => {
         <!-- Main Content -->
         <main class="flex-grow">
             <div class="container mx-auto py-6 sm:px-6 lg:px-8">
+                <Notification class="min-w-full" />
                 <!-- Dynamic Content -->
                 <slot></slot>
             </div>

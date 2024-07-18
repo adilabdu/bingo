@@ -39,7 +39,7 @@ const clearDateFilter = () => {
 <template>
     <div class="container mx-auto space-y-8 px-4 sm:px-6 lg:px-8">
         <!-- Hero Section -->
-        <div class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-8 rounded-lg shadow-lg">
+        <div class="bg-gradient-to-r from-brand-secondary to-brand-secondary/50 text-white p-8 rounded-lg shadow-lg">
             <h2 class="text-4xl font-bold mb-4">Welcome to the Admin Dashboard</h2>
             <p class="text-lg">Manage your games, and view recent activities with ease.</p>
         </div>

@@ -29,7 +29,7 @@ const form = useForm({
 const submit = () => {
     form.phone_number = `+251${form.phone_number}`;
     form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+        onSuccess: () => form.reset(),
     });
 };
 </script>
@@ -44,15 +44,15 @@ const submit = () => {
             <InputLabel for="type" value="User Type" />
             <Select v-model="form.type">
                 <SelectTrigger class="w-full">
-                    <SelectValue placeholder="Select user type" />
+                    <SelectValue placeholder="Select User Type" />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectGroup>
                         <SelectLabel>User Type</SelectLabel>
                         <SelectItem value="admin">Admin</SelectItem>
+                        <SelectItem value="agent">Agent</SelectItem>
                         <SelectItem value="player">Player</SelectItem>
                         <SelectItem value="cashier">Cashier</SelectItem>
-                        <SelectItem value="agent">Agent</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>

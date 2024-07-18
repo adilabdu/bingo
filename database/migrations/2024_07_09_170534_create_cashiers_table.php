@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('cashiers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('branch_id')->constrained()->cascadeOnDelete();
             $table->integer('balance')->default(0);
             $table->timestamps();
         });

@@ -8,6 +8,7 @@ import Modal from '@/Components/AdminModal.vue';
 import { router, usePage } from "@inertiajs/vue3";
 import { debounce } from "lodash";
 import { Link } from "@inertiajs/vue3";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 // Initialize paginated users with usePage props
 const pageData = usePage().props;
@@ -101,7 +102,7 @@ onMounted(() => {
 <template>
     <div class="space-y-8">
         <!-- Header Section -->
-        <div class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-8 rounded-lg shadow-lg">
+        <div class="bg-gradient-to-r from-brand-secondary to-brand-secondary/50 text-white p-8 rounded-lg shadow-lg">
             <h2 class="text-4xl font-bold mb-4">User Management</h2>
             <p class="text-lg">Manage your users, roles, and permissions with ease.</p>
         </div>
@@ -127,6 +128,8 @@ onMounted(() => {
                         <SelectGroup>
                             <SelectLabel value="">Select User Type</SelectLabel>
                             <SelectItem value="Admin" :disabled="isDisabled('Admin')" class="cursor-pointer">Admin</SelectItem>
+                            <SelectItem value="Agent" :disabled="isDisabled('Agent')" class="cursor-pointer">Agent</SelectItem>
+                            <SelectItem value="Cashier" :disabled="isDisabled('Cashier')" class="cursor-pointer">Cashier</SelectItem>
                             <SelectItem value="Player" :disabled="isDisabled('Player')" class="cursor-pointer">Player</SelectItem>
                             <SelectItem :value="null" :disabled="isDisabled(null)" class="cursor-pointer">All</SelectItem>
                         </SelectGroup>
@@ -134,9 +137,9 @@ onMounted(() => {
                 </Select>
             </div>
 
-            <Button class="bg-blue-500 text-white py-2 px-4 rounded-lg" @click="router.visit(route('users.register'))">
+            <PrimaryButton @click="router.visit(route('users.register'))">
                 Add New User
-            </Button>
+            </PrimaryButton>
         </div>
 
         <!-- Users Table -->
@@ -164,13 +167,13 @@ onMounted(() => {
                         </TableCell>
                         <TableCell class="p-4">{{ user.type.charAt(0).toUpperCase() + user.type.slice(1) }}</TableCell>
                         <TableCell class="p-4">
-                            <Button
+                            <PrimaryButton
                                 :class="user.is_blocked ? 'bg-green-300' : 'bg-red-300'"
                                 class="text-black py-1 px-2 rounded-lg w-20 hover:text-white hover:bg-opacity-75 transition-colors duration-200"
                                 @click="toggleBlockUser(user)"
                             >
                                 {{ user.is_blocked ? 'Unblock' : 'Block' }}
-                            </Button>
+                            </PrimaryButton>
                         </TableCell>
                     </TableRow>
                     <TableRow v-if="filteredUsers.length === 0">
@@ -182,13 +185,13 @@ onMounted(() => {
 
         <!-- Pagination -->
         <div class="flex justify-between items-center mt-4">
-            <Button @click="fetchUsers(paginatedUsers.prev_page_url)" :disabled="!paginatedUsers.prev_page_url">
+            <PrimaryButton @click="fetchUsers(paginatedUsers.prev_page_url)" :disabled="!paginatedUsers.prev_page_url">
                 &laquo; Previous
-            </Button>
+            </PrimaryButton>
             <span>Page {{ paginatedUsers.current_page }} of {{ paginatedUsers.last_page }}</span>
-            <Button @click="fetchUsers(paginatedUsers.next_page_url)" :disabled="!paginatedUsers.next_page_url">
+            <PrimaryButton @click="fetchUsers(paginatedUsers.next_page_url)" :disabled="!paginatedUsers.next_page_url">
                 Next &raquo;
-            </Button>
+            </PrimaryButton>
         </div>
 
         <!-- User Modal -->

@@ -64,11 +64,6 @@ const logout = () => {
                                 Finance
                             </a>
                         </li>
-                        <li>
-                            <div class="px-2 bg-gray-50 min-w-fit text-lg mr-2 rounded-lg h-full font-bold my-auto">
-                                {{ $page.props.auth.user.cashier.balance }} Br
-                            </div>
-                        </li>
                     </ul>
                     <div class="relative ml-auto" @mouseover="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-600 cursor-pointer" fill="none"

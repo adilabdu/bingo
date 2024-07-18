@@ -64,7 +64,7 @@ class RegisteredUserController extends Controller
             auth()->login($user);
 
             if ($user->type == 'cashier') {
-                return redirect()->route('cashier.index')->with('success', 'Cashier registered successfully.');
+                return redirect()->route('agent.branches')->with('success', 'Cashier registered successfully.');
             } elseif ($user->type == 'admin') {
                 return redirect()->route('index')->with('success', 'Admin registered successfully.');
             } elseif ($user->type == 'agent') {

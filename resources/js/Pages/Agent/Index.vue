@@ -38,25 +38,25 @@ const submit = () => {
 </script>
 
 <template>
-    <div class="bg-white shadow rounded-lg p-6">
+    <div class="bg-white rounded-lg p-6">
         <div class="mb-6">
             <h2 class="text-3xl font-bold mb-2">Welcome, {{ agent.name }}</h2>
             <p class="text-gray-600">Manage your branches and cashiers below.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-            <div class="bg-blue-100 p-4 rounded-lg shadow-md">
+            <div class="bg-blue-100 p-4 rounded-lg ">
                 <h3 class="text-xl font-semibold mb-2">Total Branches</h3>
                 <p v-if="branches?.length > 0" class="text-lg">{{ branches?.length }}</p>
                 <p v-else class="text-lg">0</p>
             </div>
-            <div class="bg-green-100 p-4 rounded-lg shadow-md">
+            <div class="bg-green-100 p-4 rounded-lg ">
                 <h3 class="text-xl font-semibold mb-2">Total Cashiers</h3>
                 <p class="text-lg">
                     {{ branches.reduce((acc, branch) => acc + branch.cashiers.length, 0) }}
                 </p>
             </div>
-            <div class="bg-blue-100 p-4 rounded-lg shadow-md">
+            <div class="bg-blue-100 p-4 rounded-lg ">
                 <h3 class="text-xl font-semibold mb-2">Total Revenue</h3>
                 <p class="text-lg">
                     {{ totalRevenue }}
