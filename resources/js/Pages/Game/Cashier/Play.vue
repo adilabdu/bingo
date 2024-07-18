@@ -116,6 +116,7 @@ function isRevealed(number) {
 }
 
 const isLoading = ref(false);
+
 function finishGame() {
     isLoading.value = true;
     router.post('/cashier/game/finish', {
@@ -143,19 +144,31 @@ function playSound() {
         });
     }
 }
+
+// Computed property to get the current number letter
+const currentNumberLetter = computed(() => {
+    if (currentNumber.value === null) return null;
+    if (currentNumber.value <= 15) return 'B';
+    if (currentNumber.value <= 30) return 'I';
+    if (currentNumber.value <= 45) return 'N';
+    if (currentNumber.value <= 60) return 'G';
+    return 'O';
+});
 </script>
 
 <template>
     <Loading is-full-screen v-if="isLoading"/>
     <div class="flex w-full space-x-2 justify-evenly mx-auto">
-        <div class="flex flex-col w-2/12">
-            <div class="w-full h-64 flex items-center justify-center text-center  font-bold text-[13rem]">
-                {{ currentNumber ?? '-' }}
+        <div class="flex flex-col w-4/12 px-1">
+            <div class="w-full h-64 flex items-center  font-bold text-[13rem]">
+                <span class="text-brand-secondary">{{ currentNumberLetter }}</span>
+                <span class="text-6xl">-</span>
+                <span>{{ currentNumber ?? '-' }}</span>
             </div>
-            <div class="text-5xl font-bold flex items-center justify-center text-gray-600 h-36  text-center">
+            <div class="text-5xl font-bold flex items-center justify-center text-gray-600 h-36 max-w-sm">
                 {{ currentIndex + 1 > 75 ? 75 : currentIndex }}/{{ drawnNumbers?.length }}
             </div>
-            <div class="flex flex-col space-y-6">
+            <div class="flex flex-col space-y-6 max-w-sm">
                 <div
                     class="text-5xl font-bold uppercase bg-brand-tertiary px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl"
                     :class="{ 'opacity-50': isPaused }"
@@ -178,7 +191,7 @@ function playSound() {
             </div>
 
         </div>
-        <div class="flex flex-col justify-center w-9/12">
+        <div class="flex flex-col justify-center w-8/12">
             <div v-for="letter in ['B', 'I', 'N', 'G', 'O']" :key="letter" class="text-center font-bold text-5xl">
                 <div class="flex space-x-4 my-6 h-full pr-4 items-center">
                     <div
@@ -207,7 +220,7 @@ function playSound() {
                 <div class="flex flex-col cursor-pointer space-y-2 w-1/5 h-full justify-center items-center ">
                     <div @click="toggleSound()">
                         <Volume2 size="50" class="hover:scale-110 hover:text-brand-secondary" v-if="soundEnabled"/>
-                        <VolumeX size="50"  class="hover:scale-110 hover:text-brand-secondary" v-else/>
+                        <VolumeX size="50" class="hover:scale-110 hover:text-brand-secondary" v-else/>
                     </div>
                 </div>
             </div>
