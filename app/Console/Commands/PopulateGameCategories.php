@@ -28,11 +28,10 @@ class PopulateGameCategories extends Command
     {
         // Add some default game categories
         $gameCategories = [
-            ['name' => 'Bronze', 'amount' => 10, 'category' => 'basic'],
-            ['name' => 'Silver', 'amount' => 15, 'category' => 'basic'],
             ['name' => 'Gold', 'amount' => 20, 'category' => 'basic'],
             ['name' => 'Platinum', 'amount' => 30, 'category' => 'basic'],
             ['name' => 'Diamond', 'amount' => 50, 'category' => 'basic'],
+            ['name' => 'Silver', 'amount' => 70, 'category' => 'basic'],
             ['name' => 'Master', 'amount' => 100, 'category' => 'basic'],
             ['name' => 'Grandmaster', 'amount' => 200, 'category' => 'vip'],
             ['name' => 'Challenger', 'amount' => 500, 'category' => 'vip'],
