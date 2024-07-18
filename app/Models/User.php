@@ -22,6 +22,8 @@ class User extends Authenticatable
 
     const TYPE_CASHIER = 'cashier';
 
+    const TYPE_AGENT = 'agent';
+
     protected $fillable = [
         'name',
         'email',
@@ -77,5 +79,10 @@ class User extends Authenticatable
     public function cashier(): HasOne
     {
         return $this->hasOne(Cashier::class);
+    }
+
+    public function agent(): HasOne
+    {
+        return $this->hasOne(Agent::class);
     }
 }
