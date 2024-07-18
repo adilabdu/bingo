@@ -57,6 +57,7 @@ class AuthenticatedSessionController extends Controller
             User::TYPE_ADMIN => redirect()->intended('/admin'),
             User::TYPE_PLAYER => redirect()->intended('/game/initiate'),
             User::TYPE_CASHIER => redirect()->intended('/cashier/game/initiate'),
+            User::TYPE_AGENT => redirect()->intended('/agent'),
             default => redirect()->intended('/'),
         };
     }

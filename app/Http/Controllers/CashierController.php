@@ -11,6 +11,8 @@ use App\Models\GamePlayer;
 use App\Services\DrawGameService;
 use App\Services\SettleGameService;
 use App\Services\StartGameService;
+use App\Models\Branch;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -161,4 +163,28 @@ class CashierController extends Controller
         return redirect()->route('cashier.game.initiate')->with('success', 'Game completed successfully');
     }
 
+
+    public function store(Request $request)
+    {
+        $user = User::create([
+            'name' => $request->name,
+            'phone_number' => $request->phone_number,
+            'password' => bcrypt($request->password),
+            'type' => 'cashier',
+        ]);
+
+        $cashier = Cashier::create([
+            'user_id' => $user->id,
+            'branch_id' => $request->branch_id,
+            'balance' => 0,
+        ]);
+
+        activity()
+            ->causedBy(auth()->user())
+            ->performedOn($cashier)
+            ->log('added a cashier to a branch');
+
+        return redirect()->route('cashier.store')->with('success', 'Cashier created successfully.');
+
+    }
 }

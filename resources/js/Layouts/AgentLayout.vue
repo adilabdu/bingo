@@ -1,6 +1,6 @@
 <script setup>
-import {computed, ref} from 'vue';
-import {router, usePage} from "@inertiajs/vue3";
+import { computed, ref } from 'vue';
+import { router, usePage } from '@inertiajs/vue3';
 
 // Determine the active route based on the current URL
 const currentPath = window.location.pathname;
@@ -8,7 +8,7 @@ const currentPath = window.location.pathname;
 const user = computed(() => usePage().props.auth.user);
 
 const isActiveRoute = (path) => {
-    if (path === '/cashier') {
+    if (path === '/agent') {
         return currentPath === path;
     }
     return currentPath.startsWith(path);
@@ -31,60 +31,38 @@ const logout = () => {
         <!-- Header -->
         <header class="bg-white shadow">
             <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-              <div class="flex items-center space-x-2">
-                <img class="w-20 h-12 object-cover" src="../../../public/assets/images/logo.png">
-                <div class="font-bold text-5xl text-brand-primary">Kiwi <span class="text-brand-secondary">bingo</span></div>
-              </div>
-                <nav class="flex items-center space-x-14">
-                    <ul class="flex items-center space-x-20 ">
+                <img class="w-10 object-cover" src="../../../public/assets/images/logo.png">
+                <nav class="flex items-center space-x-6">
+                    <ul class="flex space-x-6">
                         <li>
-                            <a :href="'/cashier'"
+                            <a :href="'/agent'"
                                :class="{
                    'relative text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out': true,
-                   'active': isActiveRoute('/cashier')
+                   'active': isActiveRoute('/agent')
                  }">
-                                Home
+                                Dashboard
                             </a>
                         </li>
                         <li>
-                            <a :href="'/cashier/game/initiate'"
+                            <a :href="'/agent/branches'"
                                :class="{
                    'relative text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out': true,
-                   'active': isActiveRoute('/cashier/game/initiate')
+                   'active': isActiveRoute('/agent/branches')
                  }">
-                                Play
+                                Branches
                             </a>
-                        </li>
-                        <li>
-                            <a :href="'/cashier/finance'"
-                               :class="{
-                   'relative text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out': true,
-                   'active': isActiveRoute('/cashier/finance')
-                 }">
-                                Finance
-                            </a>
-                        </li>
-                        <li>
-                            <div class="px-2 bg-gray-50 min-w-fit text-lg mr-2 rounded-lg h-full font-bold my-auto">
-                                {{ $page.props.auth.user.cashier.balance }} Br
-                            </div>
                         </li>
                     </ul>
                     <div class="relative ml-auto" @mouseover="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-600 cursor-pointer" fill="none"
-                             viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M5.121 17.804A11.955 11.955 0 0112 15c3.142 0 6.028 1.166 8.121 3.071A8.962 8.962 0 0021 12c0-4.962-4.038-9-9-9s-9 4.038-9 9a8.962 8.962 0 003.121 6.804zM15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-600 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A11.955 11.955 0 0112 15c3.142 0 6.028 1.166 8.121 3.071A8.962 8.962 0 0021 12c0-4.962-4.038-9-9-9s-9 4.038-9 9a8.962 8.962 0 003.121 6.804zM15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
                         <transition name="fade">
-                            <div v-if="showDropdown"
-                                 class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 z-10">
-                                <a href="/admin/profile"
-                                   class="block px-4 py-2 text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out">
+                            <div v-if="showDropdown" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 z-10">
+                                <a href="/agent/profile" class="block px-4 py-2 text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out">
                                     Profile
                                 </a>
-                                <a @click="logout"
-                                   class="block cursor-pointer px-4 py-2 text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out">
+                                <a @click="logout" class="block cursor-pointer px-4 py-2 text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out">
                                     Logout
                                 </a>
                             </div>
@@ -96,7 +74,7 @@ const logout = () => {
 
         <!-- Main Content -->
         <main class="flex-grow">
-            <div class="container md:max-w-[1650px] mx-auto py-6 sm:px-6 lg:px-8">
+            <div class="container mx-auto py-6 sm:px-6 lg:px-8">
                 <!-- Dynamic Content -->
                 <slot></slot>
             </div>
@@ -142,9 +120,7 @@ a.active {
 .fade-enter-active, .fade-leave-active {
     transition: opacity 0.5s;
 }
-
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */
-{
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
     opacity: 0;
 }
 </style>
