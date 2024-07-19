@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Spatie\Activitylog\Models\Activity;
 
 class CashierController extends Controller
 {
@@ -29,7 +30,25 @@ class CashierController extends Controller
 
     public function finance()
     {
-        return Inertia::render('Cashier/Finance');
+        $cashier = auth()->user()->cashier;
+
+        if (!$cashier) {
+            abort(403, 'Unauthorized access.');
+        }
+
+        $balance = $cashier->balance;
+
+        // Fetch recent activities related to the cashier
+        $recentActivities = Activity::causedBy(auth()->user())
+            ->where('subject_type', Game::class)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return Inertia::render('Cashier/Finance', [
+            'balance' => $balance,
+            'recentActivities' => $recentActivities,
+        ]);
     }
 
     public function createGame(Request $request)
@@ -134,6 +153,11 @@ class CashierController extends Controller
         }
 
         $batchIndex = $request->input('batch_index', 0);
+
+        activity()
+            ->causedBy(auth()->user())
+            ->performedOn($game)
+            ->log('Game started with ' . $game->gameCategory->amount . ' amount stake and ' . $game->winner_net_amount . ' amount won');
 
         return Inertia::render('Game/Cashier/Play', [
             'game' => $game,
