@@ -58,7 +58,8 @@ const submit = () => {
         <div>
             <Header class="font-semibold" value="Your Stats"/>
             <div class="flex flex-wrap justify-between">
-                <OverViewItem base-class="bg-blue-100" label="Total Cashiers" :value="branches.reduce((acc, branch) => acc + branch.cashiers.length, 0)"/>
+                <OverViewItem base-class="bg-blue-100" label="Total Cashiers"
+                              :value="branches.reduce((acc, branch) => acc + branch.cashiers.length, 0)"/>
                 <OverViewItem base-class="bg-pink-100" label="Total Branches" :value="branches?.length ?? 0"/>
             </div>
         </div>
@@ -77,8 +78,13 @@ const submit = () => {
                     </TableBody>
                     <TableBody>
                         <TableRow v-for="activity in recentActivities" :key="activity.id" class="border-b">
-                            <TableCell class="p-4 !text-xs md:!text-sm capitalize">{{ activity.description }}</TableCell>
-                            <TableCell class="p-4 !text-xs md:text-sm capitalize">{{ moment(activity.created_at).fromNow() }}</TableCell>
+                            <!--                            Todo: Populate data's with properties but not events -->
+                            <TableCell class="p-4 !text-xs md:!text-sm capitalize" v-if="!activity.event">
+                                {{ activity.description }}
+                            </TableCell>
+                            <TableCell class="p-4 !text-xs md:text-sm capitalize" v-if="!activity.event">
+                                {{ moment(activity.created_at).fromNow() }}
+                            </TableCell>
                         </TableRow>
                         <TableRow v-if="recentActivities.length === 0">
                             <TableCell class="p-4 text-center" colspan="2">No recent activities available.</TableCell>
