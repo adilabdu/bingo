@@ -208,7 +208,7 @@ const submitCashier = () => {
                         <div class="flex justify-end mt-6">
                             <PrimaryButton :disabled="formCashier.processing">Add</PrimaryButton>
                             <button @click="isAddCashierModalOpen = false" type="button"
-                                    class="ml-2 bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition">
+                                    class="ml-2 bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition">
                                 Cancel
                             </button>
                         </div>
@@ -248,7 +248,7 @@ const submitCashier = () => {
                     </div>
                     <div class="flex justify-end mt-6">
                         <button @click="isCashiersModalOpen = false" type="button"
-                                class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition">
+                                class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition">
                             Close
                         </button>
                     </div>
