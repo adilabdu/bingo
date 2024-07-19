@@ -10,6 +10,7 @@ import GuestLayout from "@/Layouts/GuestLayout.vue";
 import { createPinia } from 'pinia';
 import CashierLayout from "@/Layouts/CashierLayout.vue";
 import AgentLayout from "@/Layouts/AgentLayout.vue";
+import BottomNavBar from "@/Layouts/BottomNavBar.vue";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -23,20 +24,25 @@ provide("showNotification", showNotification);
 provide("notificationData", notificationData);
 
 function getLayout(name) {
-    switch (true) {
-        case name.startsWith("Admin/"):
-            return AdminLayout;
-        case name.startsWith("Cashier/") || name.includes("Cashier"):
-
-            return CashierLayout;
-        case name.startsWith("Agent/"):
-            return AgentLayout;
-        case name.startsWith("Auth/") || name === "Welcome":
-            return GuestLayout;
-        default:
-            return AuthenticatedLayout;
+    if (name.startsWith("Auth/") || name === "Welcome")
+        return GuestLayout;
+    else if (window.innerWidth >= 1024) {
+        switch (true) {
+            case name.startsWith("Admin/"):
+                return AdminLayout;
+            case name.startsWith("Cashier/") || name.includes("Cashier"):
+                return CashierLayout;
+            case name.startsWith("Agent/"):
+                return AgentLayout;
+            default:
+                return AuthenticatedLayout;
+        }
     }
+    else {
+            return BottomNavBar;
+        }
 }
+
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
