@@ -5,6 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import Loading from "@/Components/Loading.vue";
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -15,7 +16,9 @@ const form = useForm({
     password_confirmation: '',
 });
 
+const isLoading = ref(false);
 const updatePassword = () => {
+    isLoading.value = true;
     form.put(route('password.update'), {
         preserveScroll: true,
         onSuccess: () => form.reset(),
@@ -29,12 +32,14 @@ const updatePassword = () => {
                 currentPasswordInput.value.focus();
             }
         },
+        onFinish: () => isLoading.value = false,
     });
 };
 </script>
 
 <template>
     <section>
+        <Loading v-if="isLoading" type="brand" is-full-screen/>
         <header>
             <h2 class="text-lg font-medium text-gray-900">Update Password</h2>
 
