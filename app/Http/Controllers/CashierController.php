@@ -36,7 +36,7 @@ class CashierController extends Controller
     {
         $gameCategory = GameCategory::find($request->gameCategoryId);
 
-       // Check if there is a pending game where the category is the same and is a tv game
+        // Check if there is a pending game where the category is the same and is a tv game
         $game = Game::where('game_category_id', $gameCategory->id)
             ->where('is_tv_game', true)
             ->where('cashier_id', auth()->user()->cashier->id)
@@ -52,12 +52,14 @@ class CashierController extends Controller
             ]);
         }
 
+        $percentage = auth()->user()->cashier->load('branch')->branch->percent;
 
         return Inertia::render('Game/Cashier/Add', [
             'gameCategory' => $gameCategory,
             'game' => $game,
             'gamePlayersCount' => $game->players()->count(),
             'selectedCartelas' => $game->cartelas()->get(),
+            'percentage' => $percentage
         ]);
     }
 
@@ -80,10 +82,11 @@ class CashierController extends Controller
         if ($cartelaInUse) {
             return redirect()->back()->withErrors(['cartelaName' => 'Cartela already in use']);
         }
+
         GamePlayer::create([
             'game_id' => $game->id,
             'cartela_id' => $cartela->id,
-            'gamePlayersCount' => $game->players()->count()
+            'gamePlayersCount' => $game->players()->count(),
         ]);
 
         $cashier = Cashier::where('user_id', auth()->user()->id)->first();
@@ -99,10 +102,12 @@ class CashierController extends Controller
             'game_category_id' => 'nullable|exists:game_categories,id',
         ]);
 
+        $cashier = auth()->user()->cashier;
+
         $game = Game::whereIn('status', [Game::STATUS_PENDING, Game::STATUS_ACTIVE])
             ->where('is_tv_game', true)
-            ->where('cashier_id', auth()->user()->cashier->id)
-            ->where('game_category_id', $request->input('game_category_id', $gameCategoryId ))
+            ->where('cashier_id', $cashier->id)
+            ->where('game_category_id', $request->input('game_category_id', $gameCategoryId))
             ->first();
 
 
@@ -112,8 +117,11 @@ class CashierController extends Controller
 
             $totalPlayers = $game->players()->count();
 
-            // Todo: Change the percentage value to .env variable
-            $game->update(['winner_net_amount' => $totalPlayers * (int)$game->gameCategory->amount * config('WINNER_RETAIN_PERCENTAGE', 0.85)]);
+            $percent = (float)$cashier->branch->percent;
+            $totalAmount = $totalPlayers * (int)$game->gameCategory->amount;
+            $winnerNetAmount = $totalAmount * ((100 - $percent) / 100);
+
+            $game->update(['winner_net_amount' => $winnerNetAmount]);
             $game->update(['status' => Game::STATUS_ACTIVE]);
 
             if (!$game->draw_numbers) {

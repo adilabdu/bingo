@@ -22,6 +22,10 @@ const props = defineProps({
     selectedCartelas: {
         type: Object,
         required: true
+    },
+    percentage: {
+        type: Number,
+        required: true
     }
 })
 
@@ -36,7 +40,12 @@ window.addEventListener('keydown', function (e) {
     }
 })
 
-const winnerAmount = computed(() => Math.round(Number(props.gameCategory.amount) * Number(props.gamePlayersCount) - Number(props.gameCategory.amount) * Number(props.gamePlayersCount) * 0.15));
+const winnerAmount = computed(() => {
+    const amount = Number(props.gameCategory.amount);
+    const playersCount = Number(props.gamePlayersCount);
+    const percentage = Number(props.percentage) / 100;
+    return Math.round(amount * playersCount * (1 - percentage));
+});
 
 function startGame() {
     isLoading.value = true;
@@ -54,7 +63,7 @@ function startGame() {
     })
 }
 
-function addCartela(value){
+function addCartela(value) {
     isLoading.value = true;
     router.post('/cashier/game/add', {
         cartelaName: String(value),
@@ -73,7 +82,6 @@ function addCartela(value){
     })
 }
 
-// function to check if the cartela is already added
 function isCartelaAdded(cartelaName) {
     return props.selectedCartelas.some(cartela => cartela.name === String(cartelaName));
 }

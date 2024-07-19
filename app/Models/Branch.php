@@ -15,6 +15,7 @@ class Branch extends Model
         'agent_id',
         'name',
         'location',
+        'percent'
     ];
 
     public function agent(): BelongsTo
