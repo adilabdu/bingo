@@ -1,5 +1,5 @@
 <script setup>
-import {usePage} from '@inertiajs/vue3';
+import {router, usePage} from '@inertiajs/vue3';
 import {ref} from 'vue';
 import Modal from '@/Components/Modal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -11,6 +11,8 @@ import {useForm} from '@inertiajs/vue3';
 import OverViewItem from "@/Views/Agent/Dashboard/OverViewItem.vue";
 import Header from "@/Components/Header.vue";
 import moment from "moment";
+import {RefreshCcw} from "lucide-vue-next";
+import Loading from "@/Components/Loading.vue";
 
 const page = usePage();
 const agent = page.props.auth.user;
@@ -20,6 +22,8 @@ const totalRevenue = page.props.totalRevenue;
 const todayRevenue = page.props.todayRevenue;
 const thisMonthRevenue = page.props.thisMonthRevenue;
 const thisWeekRevenue = page.props.thisWeekRevenue;
+const activeGames = page.props.activeGames;
+const totalGames = page.props.totalGames;
 
 const isCreateBranchModalOpen = ref(false);
 
@@ -36,9 +40,22 @@ const submit = () => {
         }
     });
 };
+
+const isLoading = ref(false);
+function refreshData() {
+    isLoading.value = true;
+    router.visit('/agent',{
+        replace: true,
+        onFinish: () => {
+            isLoading.value = false;
+        }
+    });
+}
+
 </script>
 
 <template>
+    <Loading v-if="isLoading" type="brand" is-full-screen/>
     <div class="flex flex-col space-y-4">
         <div class="mb-6 hidden md:inline-block">
             <h2 class="text-2xl md:text-3xl font-semibold mb-2">Welcome, {{ agent.name }}</h2>
@@ -46,18 +63,27 @@ const submit = () => {
         </div>
 
         <div>
+            <div class="flex justify-between pb-2">
             <Header class="font-semibold" value="Revenue Numbers"/>
+                <div @click="refreshData" class="flex items-center space-x-2 text-xs bg-brand-secondary rounded-md shadow-md text-white px-2">
+                <RefreshCcw class="w-3" />
+                    <span>Refresh</span>
+                </div>
+            </div>
             <div class="flex flex-wrap justify-between">
                 <OverViewItem base-class="bg-lime-100" label="Today" :value="todayRevenue + ' Br'"/>
                 <OverViewItem base-class="bg-emerald-100" label="This Week" :value="thisWeekRevenue + ' Br'"/>
                 <OverViewItem base-class="bg-purple-100" label="This Month" :value="thisMonthRevenue + ' Br'"/>
                 <OverViewItem base-class="bg-zinc-200" label="Total" :value="totalRevenue + ' Br'"/>
-            </div>
+              </div>
         </div>
 
         <div>
             <Header class="font-semibold" value="Your Stats"/>
             <div class="flex flex-wrap justify-between">
+                <OverViewItem base-class="bg-orange-100" label="Active Games" :value="activeGames"/>
+                <OverViewItem base-class="bg-cyan-100" label="Total Games" :value="totalGames"/>
+
                 <OverViewItem base-class="bg-blue-100" label="Total Cashiers"
                               :value="branches.reduce((acc, branch) => acc + branch.cashiers.length, 0)"/>
                 <OverViewItem base-class="bg-pink-100" label="Total Branches" :value="branches?.length ?? 0"/>

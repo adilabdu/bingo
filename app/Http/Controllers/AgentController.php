@@ -32,7 +32,7 @@ class AgentController extends Controller
         // Today's revenue
         $todayRevenue = $branches->sum(function ($branch) {
             return $branch->cashiers->load('games')->sum(function ($cashier) {
-                return $cashier->games->where('status', Game::STATUS_COMPLETED)
+                return $cashier->games->whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
                     ->where('created_at' ,'>=', now()->startOfDay())
                     ->sum('profit');
             });
@@ -41,7 +41,7 @@ class AgentController extends Controller
         // This month's revenue
         $thisMonthRevenue = $branches->sum(function ($branch) {
             return $branch->cashiers->load('games.gameCategory')->sum(function ($cashier) {
-                return $cashier->games->where('status', Game::STATUS_COMPLETED)
+                return $cashier->games->whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
                     ->where('created_at', '>=', now()->startOfMonth())
                     ->sum('profit');
             });
@@ -50,9 +50,23 @@ class AgentController extends Controller
         // This week's revenue
         $thisWeekRevenue = $branches->sum(function ($branch) {
             return $branch->cashiers->load('games.gameCategory')->sum(function ($cashier) {
-                return $cashier->games->where('status', Game::STATUS_COMPLETED)
+                return $cashier->games->whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
                     ->where('created_at', '>=', now()->startOfWeek())
                     ->sum('profit');
+            });
+        });
+
+        // Total Game
+        $totalGames = $branches->sum(function ($branch) {
+            return $branch->cashiers->load('games')->sum(function ($cashier) {
+                return $cashier->games->count();
+            });
+        });
+
+        // Active Game
+        $activeGames = $branches->sum(function ($branch) {
+            return $branch->cashiers->load('games')->sum(function ($cashier) {
+                return $cashier->games->whereIn('status', [Game::STATUS_ACTIVE, Game::STATUS_PENDING])->count();
             });
         });
 
@@ -64,6 +78,8 @@ class AgentController extends Controller
             'todayRevenue' => $todayRevenue,
             'thisMonthRevenue' => $thisMonthRevenue,
             'thisWeekRevenue' => $thisWeekRevenue,
+            'totalGames' => $totalGames,
+            'activeGames' => $activeGames,
         ]);
     }
     public function branches()
