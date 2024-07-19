@@ -9,6 +9,7 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
 import SecondaryButton from "@/Components/SecondaryButton.vue";
+import {EyeIcon, PlusCircleIcon} from "lucide-vue-next";
 
 const page = usePage();
 const branches = ref(page.props.branches);
@@ -78,13 +79,19 @@ const submitCashier = () => {
 </script>
 
 <template>
-    <div class="bg-white shadow rounded-lg p-6">
-        <div class="flex justify-between mb-6">
-            <div class="flex flex-col">
+    <div class="bg-white pt-3">
+        <div class="flex justify-between mb-3">
+                <div class="flex w-full pb-3 justify-between">
+            <div class="flex flex-col justify-center">
+
                 <h2 class="text-3xl font-bold mb-2">Branches</h2>
-                <p class="text-gray-600">Manage your branches below.</p>
+                <p class="text-gray-600 hidden md:inline-block">Manage your branches below.</p>
+                </div>
+                <PrimaryButton class="!h-8" @click="showCreateBranchModal">
+                    Add Branch
+                </PrimaryButton>
             </div>
-            <div>
+            <div class="hidden md:inline-flex">
                 <PrimaryButton @click="showCreateBranchModal">
                     Add Branch
                 </PrimaryButton>
@@ -92,31 +99,29 @@ const submitCashier = () => {
         </div>
 
         <div class="overflow-x-auto">
-            <Table class="min-w-full bg-white shadow rounded-lg">
+            <Table class="min-w-full">
                 <TableBody class="bg-gray-300 font-semibold">
                     <TableRow class="flex w-full">
-                        <TableCell class="flex w-full p-4">Branch Name</TableCell>
-                        <TableCell class="flex w-full p-4">Location</TableCell>
-                        <TableCell class="flex w-full p-4">Actions</TableCell>
+                        <TableCell class="flex w-5/12 py-4">Branch Name</TableCell>
+                         <TableCell class="flex justify-center w-7/12 p-4">Actions</TableCell>
                     </TableRow>
                 </TableBody>
                 <TableBody>
                     <TableRow v-for="branch in branches" :key="branch.id" class="border-b flex w-full">
-                        <TableCell class="flex w-full p-4">{{ branch.name }}</TableCell>
-                        <TableCell class="flex w-full p-4">{{ branch.location }}</TableCell>
-                        <TableCell class="flex w-full p-4 gap-4">
-                            <SecondaryButton
-                                class="hover:bg-gray-300"
+                        <TableCell class="flex w-5/12 py-4">{{ branch.name }}</TableCell>
+                        <TableCell class="flex items-center justify-around w-7/12 ">
+                            <EyeIcon
+                                class="w-5"
                                 @click="showCashiersModal(branch)"
                             >
                                 View Cashiers
-                            </SecondaryButton>
-                            <SecondaryButton
-                                class="hover:bg-gray-300"
+                            </EyeIcon>
+                            <PrimaryButton
+                                class="!bg-brand-secondary !text-[0.6rem] !w-fit"
                                 @click="showAddCashierModal(branch.id)"
                             >
                                 Add Cashier
-                            </SecondaryButton>
+                            </PrimaryButton>
                         </TableCell>
                     </TableRow>
                     <TableRow v-if="branches?.length === 0">
