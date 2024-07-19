@@ -8,7 +8,8 @@ import dashen from "../../../public/assets/images/banks/dashen.webp";
 import zemen from "../../../public/assets/images/banks/zemen.webp";
 import telebirr from "../../../public/assets/images/banks/telebirr.webp";
 import coop from "../../../public/assets/images/banks/coop.webp";
-import {router} from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
+import {computed} from "vue";
 
 const benefits = [
     {
@@ -31,9 +32,12 @@ const benefits = [
         title: 'Secure and Reliable',
         sub_title: 'We are secure and reliable'
     }
-
-
 ]
+
+
+const user = computed(() => {
+    return usePage().props.auth.user;
+});
 </script>
 
 <template>
@@ -43,7 +47,7 @@ const benefits = [
                 <img class="w-8 md:w-20 object-contain" src="../../../public/assets/images/logo.png">
                 <span class="text-brand-primary">Kiwi</span> <span class="text-brand-secondary">Bingo</span>
             </div>
-            <div class="flex space-x-2 md:space-x-6">
+            <div v-if="!user" class="flex space-x-2 md:space-x-6">
                 <PrimaryButton @click="router.visit('/register')" class="!bg-brand-primary md:inline-block">Register</PrimaryButton>
                 <PrimaryButton @click="router.visit('/login')"  class="!bg-brand-secondary">Login</PrimaryButton>
             </div>
