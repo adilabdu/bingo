@@ -1,12 +1,11 @@
 <script setup>
 import BottomNavigationItem from "@/Components/BottomNavigationItem.vue";
 import {computed, ref} from "vue";
-import {usePage} from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 import {LayoutDashboard, User, MapPin} from "lucide-vue-next";
 import Notification from "@/Components/Notification.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 
-const isLoggedIn = computed(() => {
+const user = computed(() => {
     return usePage().props.auth.user;
 });
 const showDropdown = ref(false);
@@ -30,8 +29,8 @@ const toggleDropdown = (state) => {
 
                     <div class="flex justify-end w-full space-x-2">
                         <div class="text-xs font-medium items-end justify-center flex flex-col">
-                            <span>Joya Bar</span>
-                            <span>Agent</span>
+                            <span>{{user.name}}</span>
+                            <span class="capitalize">{{ user.type }}</span>
                         </div>
                     <img
                         :src="'https://api.dicebear.com/9.x/fun-emoji/svg/seed=' + usePage().props.auth.user.name"
@@ -41,10 +40,7 @@ const toggleDropdown = (state) => {
                     </div>
                     <transition name="fade">
                         <div v-if="showDropdown" class="absolute right-0 mt-2 w-48 bg-white shadow-xl rounded-md py-2 z-10">
-                            <a href="/agent/profile" class="block px-4 py-2 text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out">
-                                Profile
-                            </a>
-                            <a @click="logout" class="block cursor-pointer px-4 py-2 text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out">
+                            <a @click="router.post('logout')" class="block cursor-pointer px-4 py-2 text-gray-600 hover:text-gray-900 transition duration-200 ease-in-out">
                                 Logout
                             </a>
                         </div>
@@ -57,7 +53,7 @@ const toggleDropdown = (state) => {
     <div class="fixed right-0 left-0 bottom-0 shadow-lg z-50">
         <div class="flex w-full justify-around py-1.5 bg-white border-t border-gray-100 ">
             <BottomNavigationItem :icon="LayoutDashboard" label="Dashboard" to="/agent" :active="route().current('agent.home')" />
-            <BottomNavigationItem v-if="isLoggedIn" :icon="MapPin" label="Branches" to="/agent/branches" :active="route().current('agent.branches')" />
+            <BottomNavigationItem v-if="user" :icon="MapPin" label="Branches" to="/agent/branches" :active="route().current('agent.branches')" />
             <BottomNavigationItem :icon="User" label="Profile" to="/profile" :active="route().current('profile.edit')" />
         </div>
     </div>

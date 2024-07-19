@@ -69,7 +69,7 @@ const benefits = [
             </div>
 
             <div class="flex flex-col space-y-10 sm:space-y-16 py-5 min-h-full h-full items-center md:w-4/12">
-                <div @click="router.visit('/register')" class="bg-brand-secondary text-white w-full rounded-lg p-3 text-center flex justify-center space-x-4">
+                <div @click="router.visit('/register')" class="md:hidden bg-brand-secondary text-white w-full rounded-lg p-3 text-center flex justify-center space-x-4">
                     <GiftIcon/>
                     <span>Register and get free 20Br</span>
                 </div>
@@ -91,15 +91,21 @@ const benefits = [
                     <Twitter/>
                 </div>
 
-                <div class="flex justify-evenly w-full">
+                <div class="flex justify-center w-full">
                     <div class="flex space-x-2 items-center w-5/12">
                         <PhoneCallIcon class="w-4 md:w-8"/>
                         <a href="" class="hover:underline underline-offset-4">+251943104396</a>
                     </div>
                     <div class="flex space-x-2 justify-center w-5/12">
                         <PhoneCallIcon class="w-4 md:w-8"/>
-                        <a href="" class="hover:underline underline-offset-4">+251943104396</a>
-                    </div> </div>
+                        <a href="" class="hover:underline underline-offset-4">+251716431043</a>
+                    </div>
+                </div>
+
+                <div @click="router.visit('/register')" class="hidden md:flex bg-brand-secondary text-white w-full rounded-lg p-3 text-center justify-center space-x-4 max-w-md">
+                    <GiftIcon/>
+                    <span>Register and get free 20Br</span>
+                </div>
             </div>
         </div>
     </div>
