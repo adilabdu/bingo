@@ -1,13 +1,13 @@
 <script setup>
-import { usePage, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import {usePage, router} from '@inertiajs/vue3';
+import {ref} from 'vue';
 import Modal from '@/Components/Modal.vue';
-import { Table, TableBody, TableRow, TableCell } from '@/Components/shadcn/ui/table/index.js';
+import {Table, TableBody, TableRow, TableCell} from '@/Components/shadcn/ui/table/index.js';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { useForm } from '@inertiajs/vue3';
+import {useForm} from '@inertiajs/vue3';
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import {EyeIcon, PlusCircleIcon} from "lucide-vue-next";
 
@@ -18,7 +18,7 @@ const isCreateBranchModalOpen = ref(false);
 const isAddCashierModalOpen = ref(false);
 const isCashiersModalOpen = ref(false);
 const currentBranchId = ref(null);
-const currentBranch = ref({ name: '', cashiers: [] });
+const currentBranch = ref({name: '', cashiers: []});
 
 const showCreateBranchModal = () => {
     isCreateBranchModalOpen.value = true;
@@ -81,11 +81,10 @@ const submitCashier = () => {
 <template>
     <div class="bg-white pt-3">
         <div class="flex justify-between mb-3">
-                <div class="flex w-full pb-3 justify-between">
-            <div class="flex flex-col justify-center">
-
-                <h2 class="text-3xl font-bold mb-2">Branches</h2>
-                <p class="text-gray-600 hidden md:inline-block">Manage your branches below.</p>
+            <div class="flex w-full pb-3 justify-between">
+                <div class="flex flex-col justify-center">
+                    <h2 class="text-3xl font-bold mb-2">Branches</h2>
+                    <p class="text-gray-600 hidden md:inline-block">Manage your branches below.</p>
                 </div>
                 <PrimaryButton class="!h-8" @click="showCreateBranchModal">
                     Add Branch
@@ -103,7 +102,7 @@ const submitCashier = () => {
                 <TableBody class="bg-gray-300 font-semibold">
                     <TableRow class="flex w-full">
                         <TableCell class="flex w-5/12 py-4">Branch Name</TableCell>
-                         <TableCell class="flex justify-center w-7/12 p-4">Actions</TableCell>
+                        <TableCell class="flex justify-center w-7/12 p-4">Actions</TableCell>
                     </TableRow>
                 </TableBody>
                 <TableBody>
@@ -138,7 +137,7 @@ const submitCashier = () => {
                     <h3 class="text-xl font-semibold mb-4">Create Branch</h3>
                     <form @submit.prevent="submitBranch">
                         <div class="mb-4">
-                            <InputLabel for="name" value="Branch Name" />
+                            <InputLabel for="name" value="Branch Name"/>
                             <TextInput
                                 id="name"
                                 type="text"
@@ -147,11 +146,11 @@ const submitCashier = () => {
                                 required
                                 autofocus
                             />
-                            <InputError :message="formBranch.errors.name" class="mt-2" />
+                            <InputError :message="formBranch.errors.name" class="mt-2"/>
                         </div>
 
                         <div class="mb-4">
-                            <InputLabel for="location" value="Location" />
+                            <InputLabel for="location" value="Location"/>
                             <TextInput
                                 id="location"
                                 type="text"
@@ -159,12 +158,15 @@ const submitCashier = () => {
                                 v-model="formBranch.location"
                                 required
                             />
-                            <InputError :message="formBranch.errors.location" class="mt-2" />
+                            <InputError :message="formBranch.errors.location" class="mt-2"/>
                         </div>
 
                         <div class="flex justify-end mt-6">
                             <PrimaryButton :disabled="formBranch.processing">Create</PrimaryButton>
-                            <button @click="isCreateBranchModalOpen = false" type="button" class="ml-2 bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition">Cancel</button>
+                            <button @click="isCreateBranchModalOpen = false" type="button"
+                                    class="ml-2 bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition">
+                                Cancel
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -178,7 +180,7 @@ const submitCashier = () => {
                     <h3 class="text-xl font-semibold mb-4">Add Cashier</h3>
                     <form @submit.prevent="submitCashier">
                         <div class="mb-4">
-                            <InputLabel for="cashierName" value="Cashier Name" />
+                            <InputLabel for="cashierName" value="Cashier Name"/>
                             <TextInput
                                 id="cashierName"
                                 type="text"
@@ -187,11 +189,11 @@ const submitCashier = () => {
                                 required
                                 autofocus
                             />
-                            <InputError :message="formCashier.errors.name" class="mt-2" />
+                            <InputError :message="formCashier.errors.name" class="mt-2"/>
                         </div>
 
                         <div class="mb-4">
-                            <InputLabel for="phone" value="Phone Number" />
+                            <InputLabel for="phone" value="Phone Number"/>
                             <TextInput
                                 id="phone"
                                 type="number"
@@ -200,12 +202,15 @@ const submitCashier = () => {
                                 required
                                 autocomplete="tel"
                             />
-                            <InputError class="mt-2" :message="formCashier.errors.phone_number" />
+                            <InputError class="mt-2" :message="formCashier.errors.phone_number"/>
                         </div>
 
                         <div class="flex justify-end mt-6">
                             <PrimaryButton :disabled="formCashier.processing">Add</PrimaryButton>
-                            <button @click="isAddCashierModalOpen = false" type="button" class="ml-2 bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition">Cancel</button>
+                            <button @click="isAddCashierModalOpen = false" type="button"
+                                    class="ml-2 bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition">
+                                Cancel
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -242,7 +247,10 @@ const submitCashier = () => {
                         <p class="text-gray-500">No cashiers</p>
                     </div>
                     <div class="flex justify-end mt-6">
-                        <button @click="isCashiersModalOpen = false" type="button" class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition">Close</button>
+                        <button @click="isCashiersModalOpen = false" type="button"
+                                class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition">
+                            Close
+                        </button>
                     </div>
                 </div>
             </template>
