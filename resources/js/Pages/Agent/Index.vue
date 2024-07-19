@@ -19,7 +19,7 @@ const recentActivities = page.props.recentActivities;
 const totalRevenue = page.props.totalRevenue;
 const todayRevenue = page.props.todayRevenue;
 const thisMonthRevenue = page.props.thisMonthRevenue;
-const thisYearRevenue = page.props.thisYearRevenue;
+const thisWeekRevenue = page.props.thisWeekRevenue;
 
 const isCreateBranchModalOpen = ref(false);
 
@@ -49,7 +49,7 @@ const submit = () => {
             <Header class="font-semibold" value="Revenue Numbers"/>
             <div class="flex flex-wrap justify-between">
                 <OverViewItem base-class="bg-lime-100" label="Today" :value="todayRevenue + ' Br'"/>
-                <OverViewItem base-class="bg-emerald-100" label="This Week" :value="todayRevenue + ' Br'"/>
+                <OverViewItem base-class="bg-emerald-100" label="This Week" :value="thisWeekRevenue + ' Br'"/>
                 <OverViewItem base-class="bg-purple-100" label="This Month" :value="thisMonthRevenue + ' Br'"/>
                 <OverViewItem base-class="bg-zinc-200" label="Total" :value="totalRevenue + ' Br'"/>
             </div>

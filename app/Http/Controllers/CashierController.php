@@ -122,6 +122,10 @@ class CashierController extends Controller
             $winnerNetAmount = $totalAmount * ((100 - $percent) / 100);
 
             $game->update(['winner_net_amount' => $winnerNetAmount]);
+
+            $profit = $totalAmount - $winnerNetAmount;
+            $game->update(['profit' => $profit]);
+
             $game->update(['status' => Game::STATUS_ACTIVE]);
 
             if (!$game->draw_numbers) {

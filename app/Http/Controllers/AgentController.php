@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Models\Game;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -15,32 +16,44 @@ class AgentController extends Controller
         $agent = auth()->user()->agent;
         $branches = $agent?->branches()->with('cashiers', 'transactions')->get();
 
-        // Calculate top-performing branches based on the number of transactions
-        $topBranches = $branches->sortByDesc(function ($branch) {
-            return $branch->transactions->count();
-        })->take(3);
 
         // Fetch recent activities
         $recentActivities = Activity::causedBy(auth()->user())->latest()->take(5)->get();
 
         // Total revenue of all branches
         $totalRevenue = $branches->sum(function ($branch) {
-            return $branch->transactions->sum('amount');
+            return $branch->cashiers->load('games')->sum(function ($cashier) {
+                return $cashier->games
+                    ->where('status', Game::STATUS_COMPLETED)
+                    ->sum('profit');
+            });
         });
 
         // Today's revenue
         $todayRevenue = $branches->sum(function ($branch) {
-            return $branch->transactions->where('created_at', '>=', now()->startOfDay())->sum('amount');
+            return $branch->cashiers->load('games')->sum(function ($cashier) {
+                return $cashier->games->where('status', Game::STATUS_COMPLETED)
+                    ->where('created_at' ,'>=', now()->startOfDay())
+                    ->sum('profit');
+            });
         });
 
         // This month's revenue
         $thisMonthRevenue = $branches->sum(function ($branch) {
-            return $branch->transactions->where('created_at', '>=', now()->startOfMonth())->sum('amount');
+            return $branch->cashiers->load('games.gameCategory')->sum(function ($cashier) {
+                return $cashier->games->where('status', Game::STATUS_COMPLETED)
+                    ->where('created_at', '>=', now()->startOfMonth())
+                    ->sum('profit');
+            });
         });
 
         // This week's revenue
         $thisWeekRevenue = $branches->sum(function ($branch) {
-            return $branch->transactions->where('created_at', '>=', now()->startOfWeek())->sum('amount');
+            return $branch->cashiers->load('games.gameCategory')->sum(function ($cashier) {
+                return $cashier->games->where('status', Game::STATUS_COMPLETED)
+                    ->where('created_at', '>=', now()->startOfWeek())
+                    ->sum('profit');
+            });
         });
 
         return Inertia::render('Agent/Index', [

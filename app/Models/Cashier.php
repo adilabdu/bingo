@@ -27,6 +27,10 @@ class Cashier extends Model
         return $this->belongsTo(Branch::class);
     }
 
+    public function games(): HasMany
+    {
+        return $this->hasMany(Game::class, 'cashier_id');
+    }
     public function transactions(): HasMany
     {
         return $this->hasMany(BranchTransaction::class);
