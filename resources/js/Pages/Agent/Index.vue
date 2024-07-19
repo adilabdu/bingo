@@ -15,15 +15,13 @@ import moment from "moment";
 const page = usePage();
 const agent = page.props.auth.user;
 const branches = page.props.branches;
-const topBranches = page.props.topBranches;
 const recentActivities = page.props.recentActivities;
 const totalRevenue = page.props.totalRevenue;
+const todayRevenue = page.props.todayRevenue;
+const thisMonthRevenue = page.props.thisMonthRevenue;
+const thisYearRevenue = page.props.thisYearRevenue;
 
 const isCreateBranchModalOpen = ref(false);
-
-const showCreateBranchModal = () => {
-    isCreateBranchModalOpen.value = true;
-};
 
 const form = useForm({
     name: '',
@@ -50,18 +48,13 @@ const submit = () => {
         <div>
             <Header class="font-semibold" value="Revenue Numbers"/>
             <div class="flex flex-wrap justify-between">
-                <OverViewItem base-class="bg-lime-100" label="Today" value="1650 Br"/>
-                <OverViewItem base-class="bg-emerald-100" label="This Week" value="16950 Br"/>
-                <OverViewItem base-class="bg-purple-100" label="This Month" value="50000 Br"/>
+                <OverViewItem base-class="bg-lime-100" label="Today" :value="todayRevenue + ' Br'"/>
+                <OverViewItem base-class="bg-emerald-100" label="This Week" :value="todayRevenue + ' Br'"/>
+                <OverViewItem base-class="bg-purple-100" label="This Month" :value="thisMonthRevenue + ' Br'"/>
                 <OverViewItem base-class="bg-zinc-200" label="Total" :value="totalRevenue + ' Br'"/>
             </div>
         </div>
 
-        <div class="mb-6 flex justify-end">
-            <PrimaryButton class="!bg-brand-secondary" @click="showCreateBranchModal">
-                Add Branch
-            </PrimaryButton>
-        </div>
         <div>
             <Header class="font-semibold" value="Your Stats"/>
             <div class="flex flex-wrap justify-between">

@@ -28,12 +28,29 @@ class AgentController extends Controller
             return $branch->transactions->sum('amount');
         });
 
+        // Today's revenue
+        $todayRevenue = $branches->sum(function ($branch) {
+            return $branch->transactions->where('created_at', '>=', now()->startOfDay())->sum('amount');
+        });
+
+        // This month's revenue
+        $thisMonthRevenue = $branches->sum(function ($branch) {
+            return $branch->transactions->where('created_at', '>=', now()->startOfMonth())->sum('amount');
+        });
+
+        // This week's revenue
+        $thisWeekRevenue = $branches->sum(function ($branch) {
+            return $branch->transactions->where('created_at', '>=', now()->startOfWeek())->sum('amount');
+        });
+
         return Inertia::render('Agent/Index', [
             'agent' => $agent,
             'branches' => $branches,
-            'topBranches' => $topBranches,
             'recentActivities' => $recentActivities,
             'totalRevenue' => $totalRevenue,
+            'todayRevenue' => $todayRevenue,
+            'thisMonthRevenue' => $thisMonthRevenue,
+            'thisWeekRevenue' => $thisWeekRevenue,
         ]);
     }
     public function branches()
