@@ -6,6 +6,7 @@ import CheckCartelaSheet from "@/Views/Game/Cashier/CheckCartelaSheet.vue";
 import {Volume2, VolumeX} from "lucide-vue-next";
 import Loading from "@/Components/Loading.vue";
 import {useDeviceSize} from "@/Composables/useSize.js";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const props = defineProps({
     game: {
@@ -84,9 +85,11 @@ watch(() => gameStore.revealIndex, () => {
     }
 });
 
+const deviceSize = useDeviceSize().deviceSize;
+
 onMounted(() => {
     gameStore.clearGameData()
-    if (game.value.status === 'completed') {
+    if (game.value.status === 'completed' || (deviceSize.value === 'xs' || deviceSize.value === 'sm' || deviceSize.value === 'md')) {
         router.get('/cashier/game/initiate');
     }
     if (drawnNumbers.value !== null)
@@ -137,7 +140,6 @@ const soundEnabled = ref(true);
 function toggleSound() {
     soundEnabled.value = !soundEnabled.value;
 }
-const deviceSize = useDeviceSize().deviceSize;
 function playSound() {
     const audio = new Audio(`/assets/sounds/numbers/${currentNumber.value}.aac`);
     if (soundEnabled.value ) {
@@ -227,10 +229,14 @@ const currentNumberLetter = computed(() => {
             </div>
         </div>
     </div>
-    <div v-else class="h-96 w-full flex justify-center items-center font-bold text-white">
-        <div class="p-3 rounded-lg bg-red-600">
-        Page Not Allowed on Mobile Devices, Try opening on Desktop or TV
+    <div v-else class="h-96 w-full flex flex-col justify-center items-center space-y-6 text-white">
+        <div class="p-3 rounded-lg text-red-600 font-semibold text-center">
+            Page Not Allowed on Mobile Devices, Try opening on Desktop or TV
         </div>
+
+        <PrimaryButton @click="router.get('/cashier/game/initiate')" class="bg-brand-secondary capitalize !w-full">
+            Go Back
+        </PrimaryButton>
     </div>
 </template>
 
