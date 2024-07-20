@@ -2,7 +2,7 @@
 import InputLabel from "@/Components/InputLabel.vue";
 import {Input} from "@/Components/shadcn/ui/input/index.js";
 import GradientBorder from "@/Components/GradientBorder.vue";
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 import {router} from "@inertiajs/vue3";
 import Loading from "@/Components/Loading.vue";
 
@@ -13,10 +13,6 @@ const props = defineProps({
     },
     game: {
         type: Object,
-        required: true
-    },
-    gamePlayersCount: {
-        type: Number,
         required: true
     },
     selectedCartelas: {
@@ -42,7 +38,7 @@ window.addEventListener('keydown', function (e) {
 
 const winnerAmount = computed(() => {
     const amount = Number(props.gameCategory.amount);
-    const playersCount = Number(props.gamePlayersCount);
+    const playersCount = Number(selectedCartelas.value.length);
     const percentage = Number(props.percentage) / 100;
     return Math.round(amount * playersCount * (1 - percentage));
 });
@@ -83,24 +79,35 @@ function addCartela(value) {
 }
 
 function isCartelaAdded(cartelaName) {
-    return props.selectedCartelas.some(cartela => cartela.name === String(cartelaName));
+    return selectedCartelas.value.some(cartela => cartela.name === String(cartelaName));
 }
+
+const selectedCartelas = ref(props.selectedCartelas);
+watch(() => props.selectedCartelas, () => {
+    selectedCartelas.value = props.selectedCartelas;
+}, {immediate: true});
+
+Echo.private('cashier-players')
+    .listen(`.cashier-players.${props.game.id}`, (e) => {
+        console.log("Received: ", e)
+        selectedCartelas.value = e.selectedCartelas
+    });
 </script>
 
 <template>
     <Loading is-full-screen v-if="isLoading"/>
 
-    <div class="flex flex-col space-y-10 min-h-screen h-screen">
-        <div class="flex w-full justify-between">
-            <div class="w-7/12 flex items-center justify-between flex-wrap bg-white px-5 rounded-lg shadow-md">
+    <div class="flex flex-col space-y-10 min-h-screen lg:h-screen lg:pb-0">
+        <div class="flex flex-col lg:flex-row w-full justify-between">
+            <div class="w-full lg:w-7/12 flex items-center justify-between flex-wrap bg-white pt-3 md:pt-0 px-5 rounded-lg lg:shadow-md">
                 <div v-for="i in 50"
                      @click="addCartela(i)"
-                     :class="['min-w-16 w-12 h-16 mr-5 flex items-center justify-center  border-2 border-black px-2 rounded-lg font-bold text-3xl cursor-pointer hover:bg-brand-secondary hover:text-white',
+                     :class="['min-w-10 w-10 h-10 lg:min-w-16 lg:w-12 lg:h-16 mr-2 mb-2 lg:mr-5 flex items-center justify-center  border-2 border-black px-2 rounded-lg font-bold text-2xl lg:text-3xl cursor-pointer hover:bg-brand-secondary hover:text-white',
                       isCartelaAdded(i) ? 'bg-brand-secondary text-white' : '']">
                     {{ i }}
                 </div>
             </div>
-            <GradientBorder class="!h-fit !w-4/12">
+            <GradientBorder class="hidden md:inline-block !h-fit !w-4/12">
                 <template #default>
                     <div class="flex flex-wrap justify-between bg-white rounded-xl w-full h-full px-10">
 
@@ -118,8 +125,8 @@ function isCartelaAdded(cartelaName) {
 
                             <div
                                 class="flex flex-col justify-center text-center items-center space-y-10  text-xl w-full px-10 py-6 rounded-lg font-bold"
-                                :class="gamePlayersCount <= 1 ?'bg-red-600 text-white': 'bg-brand-secondary text-white'">
-                                <span class="text-6xl">{{ gamePlayersCount }} Players Joined</span>
+                                :class="selectedCartelas.length <= 1 ?'bg-red-600 text-white': 'bg-brand-secondary text-white'">
+                                <span class="text-6xl">{{ selectedCartelas.length }} Players Joined</span>
                             </div>
                         </div>
 
@@ -127,22 +134,28 @@ function isCartelaAdded(cartelaName) {
                 </template>
             </GradientBorder>
         </div>
-        <div class="flex justify-between min-w-full items-center h-1/5">
+        <div class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row justify-between min-w-full items-center h-1/5">
             <div
-                class="flex w-3/12 flex-col h-36 space-y-2 items-center justify-center bg-gray-800 text-white px-4 rounded-lg shadow-2xl font-bold text-7xl">
-                <span class="font-normal text-2xl">Game</span>
+                class="flex lg:hidden flex-col justify-center text-center items-center space-y-2 text-xs w-full px-4 py-2 rounded-lg font-bold"
+                :class="selectedCartelas.length <= 1 ?'bg-red-600 text-white': 'bg-brand-secondary text-white'">
+                <span class="text-sm font-normal">Players Joined</span>
+                <span class="text-5xl font-bold">{{ selectedCartelas.length }} </span>
+            </div>
+            <div
+                class="flex w-full lg:w-3/12 flex-col py-3 lg:h-36 space-y-2 items-center justify-center bg-gray-800 text-white px-4 rounded-lg shadow-2xl font-bold text-4xl lg:text-7xl">
+                <span class="font-normal text-sm lg:text-2xl">Game</span>
                 <span>{{ gameCategory.amount }} Birr</span>
             </div>
             <div
-                class="flex w-3/12 flex-col h-36 space-y-2 items-center justify-center bg-gray-800 text-white px-4 rounded-lg shadow-2xl font-bold text-7xl">
-                <span class="font-normal text-2xl"> Winner Amount</span>
-                <span v-if="gamePlayersCount > 1">{{ winnerAmount }} Birr</span>
+                class="flex w-full lg:w-3/12 flex-col py-3 lg:h-36 space-y-2 items-center justify-center bg-gray-800 text-white px-4 rounded-lg shadow-2xl font-bold text-4xl lg:text-7xl">
+                <span class="font-normal text-sm lg:text-2xl"> Winner Amount</span>
+                <span v-if="selectedCartelas.length > 1">{{ winnerAmount }} Birr</span>
                 <span v-else>-</span>
             </div>
             <div
                 @click="startGame"
-                :class="gamePlayersCount <= 1 ?'bg-gray-800 opacity-40 cursor-not-allowed': 'bg-brand-secondary hover:scale-105 cursor-pointer opacity-100'"
-                class=" border-8 border-black hover:shadow-2xl shadow-md rounded-xl text-white w-4/12 font-bold text-5xl text-center h-3/5 flex items-center justify-center">
+                :class="selectedCartelas.length <= 1 ?'bg-gray-800 opacity-40 cursor-not-allowed': 'bg-brand-secondary hover:scale-105 cursor-pointer opacity-100'"
+                class=" border-8 border-black hover:shadow-2xl shadow-md rounded-xl text-white w-full lg:w-4/12 font-bold py-3 text-3xl lg:text-5xl text-center h-3/5 flex items-center justify-center">
                 START BINGO
             </div>
         </div>

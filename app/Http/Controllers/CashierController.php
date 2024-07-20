@@ -2,20 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\StartGameEvent;
+use App\Events\AddCashierPlayerEvent;
 use App\Models\Cartela;
 use App\Models\Cashier;
 use App\Models\Game;
 use App\Models\GameCategory;
 use App\Models\GamePlayer;
 use App\Services\DrawGameService;
-use App\Services\SettleGameService;
-use App\Services\StartGameService;
-use App\Models\Branch;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class CashierController extends Controller
@@ -53,12 +49,14 @@ class CashierController extends Controller
         }
 
         $percentage = auth()->user()->cashier->load('branch')->branch->percent;
+        $selectedCartelas = $game->cartelas()->get();
+
+        AddCashierPlayerEvent::dispatch($game, $selectedCartelas);
 
         return Inertia::render('Game/Cashier/Add', [
             'gameCategory' => $gameCategory,
             'game' => $game,
-            'gamePlayersCount' => $game->players()->count(),
-            'selectedCartelas' => $game->cartelas()->get(),
+            'selectedCartelas' => $selectedCartelas,
             'percentage' => $percentage
         ]);
     }
