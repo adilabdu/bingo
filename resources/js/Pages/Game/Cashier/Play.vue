@@ -5,6 +5,7 @@ import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 import CheckCartelaSheet from "@/Views/Game/Cashier/CheckCartelaSheet.vue";
 import {Volume2, VolumeX} from "lucide-vue-next";
 import Loading from "@/Components/Loading.vue";
+import {useDeviceSize} from "@/Composables/useSize.js";
 
 const props = defineProps({
     game: {
@@ -107,7 +108,9 @@ onUnmounted(() => {
 
 const isPaused = ref(false);
 
-function togglePause() {
+function togglePause(isCheck = false) {
+    if (isCheck)
+        return isPaused.value = true;
     isPaused.value = !isPaused.value;
 }
 
@@ -134,10 +137,10 @@ const soundEnabled = ref(true);
 function toggleSound() {
     soundEnabled.value = !soundEnabled.value;
 }
-
+const deviceSize = useDeviceSize().deviceSize;
 function playSound() {
     const audio = new Audio(`/assets/sounds/numbers/${currentNumber.value}.aac`);
-    if (soundEnabled.value) {
+    if (soundEnabled.value ) {
         audio.currentTime = 0;
         audio.play().catch(error => {
             // console.log('Sound play failed:', error);
@@ -154,11 +157,13 @@ const currentNumberLetter = computed(() => {
     if (currentNumber.value <= 60) return 'G';
     return 'O';
 });
+
+
 </script>
 
 <template>
     <Loading is-full-screen v-if="isLoading"/>
-    <div class="flex w-full space-x-2 justify-evenly mx-auto">
+    <div v-if="deviceSize ==='lg' || deviceSize ==='xl' || deviceSize ==='2xl'" class="flex w-full space-x-2 justify-evenly mx-auto">
         <div class="flex flex-col w-4/12 px-1">
             <div class="w-full h-64 flex items-center justify-center font-bold text-[13rem]" v-if="currentNumber">
                 <span class="text-brand-secondary">{{ currentNumberLetter }}</span>
@@ -173,20 +178,13 @@ const currentNumberLetter = computed(() => {
             </div>
             <div class="flex flex-col space-y-6 max-w-sm">
                 <div
-                    class="text-5xl font-bold uppercase bg-brand-tertiary px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl"
-                    :class="{ 'opacity-50': isPaused }"
-                    @click="togglePause"
-                >
-                    Pause
-                </div>
-                <div
                     class="text-5xl font-bold uppercase bg-brand-primary text-white px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl"
-                    :class="{ 'opacity-50': !isPaused }"
-                    @click="togglePause"
+                    :class="{ 'bg-brand-tertiary !text-black': !isPaused }"
+                    @click="togglePause(false)"
                 >
-                    Play
+                    {{ isPaused ? 'Play' : 'Pause' }}
                 </div>
-                <CheckCartelaSheet @toggle-pause="togglePause" :game="game" :current-index="currentIndex"/>
+                <CheckCartelaSheet @toggle-pause="togglePause(true)" :game="game" :current-index="currentIndex"/>
                 <div @click="finishGame"
                      class="text-5xl font-bold uppercase bg-rose-600 text-white px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl">
                     Finish
@@ -227,6 +225,11 @@ const currentNumberLetter = computed(() => {
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div v-else class="h-96 w-full flex justify-center items-center font-bold text-white">
+        <div class="p-3 rounded-lg bg-red-600">
+        Page Not Allowed on Mobile Devices, Try opening on Desktop or TV
         </div>
     </div>
 </template>
