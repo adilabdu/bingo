@@ -129,6 +129,10 @@ class CashierController extends Controller
             if (!$game->draw_numbers) {
                 DrawGameService::drawGame($game->id);
             }
+
+            $selectedCartelas = $game->cartelas()->get();
+            AddCashierPlayerEvent::dispatch($game, $selectedCartelas, true);
+
         }
 
         $batchIndex = $request->input('batch_index', 0);

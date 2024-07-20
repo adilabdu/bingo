@@ -20,12 +20,13 @@ class AddCashierPlayerEvent implements ShouldBroadcast
     public Game $game;
     public $selectedCartelas;
 
-    public function __construct($game, $selectedCartelas)
+    public bool $startGame = false;
+
+    public function __construct($game, $selectedCartelas, $startGame = false)
     {
         $this->game = $game;
         $this->selectedCartelas = $selectedCartelas;
-
-        Log::info("Event Constructed");
+        $this->startGame = $startGame;
     }
 
     public function broadcastOn(): PrivateChannel

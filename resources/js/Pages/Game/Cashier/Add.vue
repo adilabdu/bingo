@@ -89,7 +89,8 @@ watch(() => props.selectedCartelas, () => {
 
 Echo.private('cashier-players')
     .listen(`.cashier-players.${props.game.id}`, (e) => {
-        console.log("Received: ", e)
+        if (e.startGame)
+            startGame();
         selectedCartelas.value = e.selectedCartelas
     });
 </script>
