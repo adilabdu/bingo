@@ -20,14 +20,14 @@ const gameCategoriesTwo = props.gameCategories.filter(cat => cat.amount > 100);
 
 <template>
     <div class="flex flex-col  h-screen">
-        <div class="flex justify-evenly h-full">
+        <div class="flex flex-col md:flex-row justify-evenly h-full">
 
-            <div class="w-5/12 h-4/5 flex flex-col justify-evenly">
+            <div class="w-full md:w-5/12 h-4/5 flex flex-col space-y-4 justify-evenly">
                 <GameCategoryCard view="cashier" @click="redirectToGame(item.id, item.amount)"
                                   :players="item?.games?.length" :name="item.name" :amount="item.amount"
                                   v-for="(item, index) in gameCategoriesOne" :key="index"/>
             </div>
-            <div class="w-5/12 h-4/5 flex flex-col justify-evenly">
+            <div class="w-full md:w-5/12 h-4/5 flex flex-col space-y-4 pt-4 md:pt-0 justify-evenly pb-20">
                 <GameCategoryCard view="cashier" @click="redirectToGame(item.id, item.amount)"
                                   :players="item?.games?.length" :name="item.name" :amount="item.amount"
                                   v-for="(item, index) in gameCategoriesTwo" :key="index"/>
