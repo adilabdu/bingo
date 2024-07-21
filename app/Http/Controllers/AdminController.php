@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cartela;
 use App\Models\Game;
-use App\Models\Player;
+use App\Models\PWC;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Activitylog\Models\Activity;
@@ -122,6 +122,40 @@ class AdminController extends Controller
             'totalGamesToday' => $totalGamesToday,
             'activeGames' => $activeGames,
         ]);
+    }
+
+    public function pwc()
+    {
+        $games = Game::where('is_tv_game', 1)->where('status', Game::STATUS_PENDING)->withCount('players', 'cartelas')->with('gameCategory','cashier.branch', 'pwc.cartela')->get();
+        return Inertia::render('Admin/Games/PWC',[
+            'games' => $games,
+        ]);
+    }
+
+    public function addPwc(Request $request)
+    {
+        $request->validate([
+            'game_id' => 'required|exists:games,id',
+            'name' => 'required|string',
+            'rows' => 'required|integer',
+        ]);
+
+        $game = Game::find($request->game_id);
+        $cartela = Cartela::where('name', $request->name)->first();
+
+        if (!$cartela) {
+            return redirect()->back()->with('error', 'Cartela not found');
+        }
+
+        // Todo: Check if the cartela is added to the game
+        PWC::updateOrCreate([
+            'game_id' => $game->id,
+        ], [
+            'game_id' => $game->id,
+            'cartela_id' => $cartela->id,
+            'rows' => $request->rows,
+        ]);
+        return redirect()->back()->with('success', 'PWC added successfully');
     }
 
     public function game(Game $id): Response

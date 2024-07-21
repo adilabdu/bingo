@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Game extends Model
 {
@@ -45,6 +46,15 @@ class Game extends Model
         return $this->hasManyThrough(Cartela::class, GamePlayer::class, 'game_id', 'id', 'id', 'cartela_id');
     }
 
+    public function cashier(): BelongsTo
+    {
+        return $this->belongsTo(Cashier::class);
+    }
+
+    public function pwc(): HasOne
+    {
+        return $this->hasOne(PWC::class, 'game_id');
+    }
     protected $casts = [
         'scheduled_at' => 'datetime',
         'draw_numbers' => 'array',
