@@ -187,4 +187,29 @@ class CashierGameController extends Controller
 
         return redirect()->route('cashier.game.initiate')->with('success', 'Game completed successfully');
     }
+    public  function remove($cartelaName, $gameId)
+    {
+        $cartela = Cartela::where('name', $cartelaName)->first();
+        $game = Game::findOrFail($gameId);
+
+        if (!$game || !$cartela ) {
+            return redirect()->back()->with('error', 'Game not found');
+        }
+
+        $gamePlayer = GamePlayer::where('game_id', $game->id)
+            ->where('cartela_id', $cartela->id)
+            ->where('player_id', null)
+            ->first();
+
+        if (!$gamePlayer) {
+            return redirect()->back()->with('error', 'Player not found');
+        }
+
+        $gamePlayer->delete();
+
+        $cashier = Cashier::where('user_id', auth()->user()->id)->first();
+        $cashier->update(['balance' => $cashier->balance - $game->gameCategory->amount]);
+
+        return redirect()->back()->with('success', 'Player removed successfully');
+    }
 }

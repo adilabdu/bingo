@@ -16,4 +16,5 @@ Route::middleware(['auth', 'checkUserType:cashier'])->prefix('cashier/game')->gr
     Route::post('/add', [CashierGameController::class, 'addPlayers'])->name('cashier.game.add');
     Route::get('/start/{cartelaName?}/{gameId?}/{gameCategoryId?}', [CashierGameController::class, 'startGame'])->name('cashier.game.start');
     Route::post('/finish', [CashierGameController::class, 'finish'])->name('cashier.game.finish');
+    Route::delete('/remove/{cartelaName}/{gameId}', [CashierGameController::class, 'remove'])->name('cashier.game.remove');
 });

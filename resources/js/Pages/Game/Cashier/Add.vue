@@ -78,6 +78,22 @@ function addCartela(value) {
     })
 }
 
+function removeCartela(name) {
+    isLoading.value = true;
+    if (!name)
+        return;
+
+    router.delete(`/cashier/game/remove/${String(name)}/${props.game.id}`, {
+        preserveState: true,
+        onError: (e) => {
+            errorMessages.value = Object.values(e).flat();
+        },
+        onFinish: () => {
+            isLoading.value = false;
+        }
+    })
+}
+
 function isCartelaAdded(cartelaName) {
     return selectedCartelas.value.some(cartela => cartela.name === String(cartelaName));
 }
@@ -96,13 +112,13 @@ Echo.private('cashier-players')
 </script>
 
 <template>
-    <Loading is-full-screen v-if="isLoading"/>
+    <Loading is-full-screen v-if="isLoading" type="brand"/>
 
     <div class="flex flex-col space-y-10 min-h-screen lg:h-screen lg:pb-0">
         <div class="flex flex-col lg:flex-row w-full justify-between">
-            <div class="w-full lg:w-7/12 flex items-center justify-between flex-wrap bg-white pt-3 md:pt-0 px-5 rounded-lg lg:shadow-md">
+            <div class=" w-full lg:w-7/12 flex items-center justify-between flex-wrap bg-white pt-3 md:pt-0 px-5 rounded-lg lg:shadow-md">
                 <div v-for="i in 50"
-                     @click="addCartela(i)"
+                     @click="isCartelaAdded(i) ? removeCartela(i) : addCartela(i)"
                      :class="['min-w-10 w-10 h-10 lg:min-w-16 lg:w-12 lg:h-16 mr-2 mb-2 lg:mr-5 flex items-center justify-center  border-2 border-black px-2 rounded-lg font-bold text-2xl lg:text-3xl cursor-pointer hover:bg-brand-secondary hover:text-white',
                       isCartelaAdded(i) ? 'bg-brand-secondary text-white' : '']">
                     {{ i }}
