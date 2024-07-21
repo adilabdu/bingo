@@ -21,7 +21,8 @@ const toggleDropdown = (state) => {
     <div class="min-h-screen bg-white">
         <main class="px-3 md:px-6 w-11/12 mx-auto md:w-11/12 bg-white pb-20 md:py-6">
             <div class="flex items-center py-6 justify-between w-full">
-                  <span class="font-bold text-2xl text-brand-secondary">
+                <img class="w-8 object-cover" src="../../../public/assets/images/logo.png">
+                <span class="font-bold text-2xl text-brand-secondary">
                     <span class="text-brand-primary">Kiwi</span>
                       Bingo
                   </span>
