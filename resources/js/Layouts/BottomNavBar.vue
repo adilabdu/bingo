@@ -2,7 +2,7 @@
 import BottomNavigationItem from "@/Components/BottomNavigationItem.vue";
 import {computed, ref} from "vue";
 import {router, usePage} from "@inertiajs/vue3";
-import {LayoutDashboard, User, MapPin, Gamepad, Wallet} from "lucide-vue-next";
+import {LayoutDashboard, User, MapPin, Gamepad, Wallet, Home} from "lucide-vue-next";
 import Notification from "@/Components/Notification.vue";
 
 const user = computed(() => {
@@ -56,12 +56,15 @@ const toggleDropdown = (state) => {
             <BottomNavigationItem v-if="user" :icon="MapPin" label="Branches" to="/agent/branches" :active="route().current('agent.branches')" />
             <BottomNavigationItem :icon="User" label="Profile" to="/profile" :active="route().current('profile.edit')" />
         </div>
-        <div v-if="user.type ==='cashier'" class="flex w-full justify-around py-1.5 bg-white border-t border-gray-100 ">
+        <div v-else-if="user.type ==='cashier'" class="flex w-full justify-around py-1.5 bg-white border-t border-gray-100 ">
             <BottomNavigationItem :icon="Gamepad" label="Play" to="/cashier/game/initiate" :active="route().current('cashier.game.initiate') || route().current('cashier.game.create') || route().current('cashier.game.start')" />
             <BottomNavigationItem :icon="Wallet" label="Wallet" to="/cashier/finance" :active="route().current('cashier.finance')" />
             <BottomNavigationItem :icon="User" label="Profile" to="/profile" :active="route().current('profile.edit')" />
         </div>
-    </div>
+        <div v-else class="flex w-full justify-around py-1.5 bg-white border-t border-gray-100 ">
+            <BottomNavigationItem :icon="Home" label="Home" to="/" :active="true" />
+        </div>
+        </div>
     </div>
 </template>
 
