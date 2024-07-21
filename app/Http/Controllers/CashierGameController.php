@@ -127,10 +127,11 @@ class CashierGameController extends Controller
             AddCashierPlayerEvent::dispatch($game, $selectedCartelas, true);
 
             activity()
-                ->causedBy(auth()->user())
-                ->event('game-completed')
+                ->causedBy(auth()->user()->cashier)
+                ->event('Start Game')
                 ->performedOn($game)
-                ->log('Started a game with amount:' . $totalAmount . ' Br');
+                ->withProperties(['amount' => $totalAmount . ' Br'])
+                ->log('Started a game with amount: ' . $totalAmount . ' Br');
         }
 
         $batchIndex = $request->input('batch_index', 0);
@@ -178,9 +179,10 @@ class CashierGameController extends Controller
         $cashier->update(['balance' => $cashier->balance - $game->winner_net_amount]);
 
         activity()
-            ->causedBy(auth()->user())
+            ->causedBy(auth()->user()->cashier)
             ->performedOn($game)
-            ->event('game-completed')
+            ->event('Payout')
+            ->withProperties(['amount' => $game->winner_net_amount . ' Br'])
             ->log('Game completed successfully, with payout amount: ' . $game->winner_net_amount . ' Br');
 
         return redirect()->route('cashier.game.initiate')->with('success', 'Game completed successfully');

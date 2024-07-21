@@ -12,13 +12,22 @@ use App\Services\DrawGameService;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Spatie\Activitylog\Models\Activity;
 
 class CashierController extends Controller
 {
     public function finance()
     {
-        return Inertia::render('Cashier/Finance');
+        // Get cashier transactions
+        $transactions = Activity::where('causer_type', 'App\Models\Cashier')
+            ->where('causer_id', auth()->user()->cashier->id)
+            ->get();
+
+        return Inertia::render('Cashier/Finance', [
+            'transactions' => $transactions,
+        ]);
     }
 
     public function store(Request $request)
