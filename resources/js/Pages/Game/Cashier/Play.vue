@@ -89,7 +89,7 @@ const deviceSize = useDeviceSize().deviceSize;
 
 onMounted(() => {
     gameStore.clearGameData()
-    if (game.value.status === 'completed' || (deviceSize.value === 'xs' || deviceSize.value === 'sm' || deviceSize.value === 'md')) {
+    if (game.value.status === 'completed') {
         router.get('/cashier/game/initiate');
     }
     if (drawnNumbers.value !== null)
@@ -142,14 +142,15 @@ function toggleSound() {
 }
 function playSound() {
     const audio = new Audio(`/assets/sounds/numbers/${currentNumber.value}.aac`);
-    if (soundEnabled.value ) {
+    const isLargeDevice = deviceSize.value === 'lg' || deviceSize.value === 'xl' || deviceSize.value === '2xl';
+
+    if (soundEnabled.value && isLargeDevice) {
         audio.currentTime = 0;
         audio.play().catch(error => {
-            // console.log('Sound play failed:', error);
+            console.log('Sound play failed:', error);
         });
     }
 }
-
 // Computed property to get the current number letter
 const currentNumberLetter = computed(() => {
     if (currentNumber.value === null) return null;
