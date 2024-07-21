@@ -5,6 +5,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Loading from "@/Components/Loading.vue";
+import {ref} from "vue";
 
 const form = useForm({
     name: '',
@@ -14,16 +16,21 @@ const form = useForm({
     type: 'player',
 });
 
+const isLoading = ref(false);
 const submit = () => {
+    isLoading.value = true;
     form.phone_number = `+251${form.phone_number}`;
     form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+        onFinish: () => {
+            isLoading.value = false;
+            form.reset('password', 'password_confirmation');
+        },
     });
 };
 </script>
 
 <template>
-
+    <Loading v-if="isLoading" type="brand" is-full-screen/>
     <div class="px-4 w-full flex justify-evenly min-h-screen md:min-h-fit py-16 md:pt-0">
         <div class="w-full lg:w-7/12 max-w-sm md:max-w-md">
             <div class="text-5xl md:text-6xl font-medium pb-10">
