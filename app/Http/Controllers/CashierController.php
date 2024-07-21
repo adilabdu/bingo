@@ -2,17 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\AddCashierPlayerEvent;
-use App\Models\Cartela;
 use App\Models\Cashier;
-use App\Models\Game;
-use App\Models\GameCategory;
-use App\Models\GamePlayer;
-use App\Services\DrawGameService;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Spatie\Activitylog\Models\Activity;
 
@@ -23,7 +16,7 @@ class CashierController extends Controller
         // Get cashier transactions
         $transactions = Activity::where('causer_type', 'App\Models\Cashier')
             ->where('causer_id', auth()->user()->cashier->id)
-            ->get();
+            ->paginate(10);
 
         return Inertia::render('Cashier/Finance', [
             'transactions' => $transactions,

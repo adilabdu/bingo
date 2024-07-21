@@ -8,6 +8,7 @@ import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import {useForm, usePage} from '@inertiajs/vue3';
 import moment from "moment";
+import Pagination from "@/Components/Pagination.vue";
 
 defineProps({
     transactions: {
@@ -43,7 +44,7 @@ const user = computed(()=> usePage().props.auth.user)
                 </TableRow>
             </TableBody>
             <TableBody>
-                <TableRow v-for="item in transactions" :key="item.id" class="border-b !text-xs">
+                <TableRow v-for="item in transactions.data" :key="item.id" class="border-b !text-xs">
                     <TableCell>{{ moment(item.created_at).format('DD/MM/YY') }}</TableCell>
                     <TableCell>{{ item.event }}</TableCell>
                     <TableCell>{{ item.properties['amount']}}</TableCell>
@@ -54,17 +55,7 @@ const user = computed(()=> usePage().props.auth.user)
                 </TableRow>
             </TableBody>
         </Table>
-
-        <!-- Pagination Controls -->
-<!--        <div class="flex justify-between items-center mt-4">-->
-<!--            <Button @click="/* add previous page logic */" :disabled="/* disable condition */">-->
-<!--                &laquo; Previous-->
-<!--            </Button>-->
-<!--            <span>Page 1 of 1</span>-->
-<!--            <Button @click="/* add next page logic */" :disabled="/* disable condition */">-->
-<!--                Next &raquo;-->
-<!--            </Button>-->
-<!--        </div>-->
+        <Pagination :links="transactions.links"/>
     </div>
 </template>
 
