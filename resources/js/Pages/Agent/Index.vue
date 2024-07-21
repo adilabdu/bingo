@@ -72,10 +72,10 @@ function refreshData() {
             </div>
             <div class="flex flex-wrap justify-between">
                 <OverViewItem base-class="bg-lime-100" label="Today" :value="todayRevenue + ' Br'"/>
-                <OverViewItem base-class="bg-emerald-100" label="This Week" :value="thisWeekRevenue + ' Br'"/>
-                <OverViewItem base-class="bg-purple-100" label="This Month" :value="thisMonthRevenue + ' Br'"/>
-                <OverViewItem base-class="bg-zinc-200" label="Total" :value="totalRevenue + ' Br'"/>
-              </div>
+                <OverViewItem base-class="bg-emerald-100" label="This Week's Revenue" :value="thisWeekRevenue + ' Br'"/>
+                <OverViewItem base-class="bg-purple-100" label="This Month Revenue" :value="thisMonthRevenue + ' Br'"/>
+                <OverViewItem base-class="bg-zinc-200" label="Total Revenue" :value="totalRevenue + ' Br'"/>
+            </div>
         </div>
 
         <div>

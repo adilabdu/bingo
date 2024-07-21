@@ -43,7 +43,6 @@ function refreshData() {
 
 <template>
     <Loading v-if="isLoading" type="brand" is-full-screen/>
-        <!-- Revenue and Profit Section -->
         <div class="flex flex-col space-y-4">
             <div class="flex items-center pt-2 w-full justify-between ">
                 <Header class="font-semibold !w-fit" value="Revenue Numbers"/>
@@ -56,8 +55,8 @@ function refreshData() {
 
             <div class="flex flex-wrap justify-between">
                 <OverViewItem base-class="bg-lime-100" label="Today's revenue" :value="todayRevenue+ ' Br'"/>
-                <OverViewItem base-class="bg-emerald-100" label="This Week" :value="thisWeekRevenue + ' Br'"/>
-                <OverViewItem base-class="bg-amber-100" label="This Month" :value="thisMonthRevenue + ' Br'"/>
+                <OverViewItem base-class="bg-emerald-100" label="This Week's Revenue" :value="thisWeekRevenue + ' Br'"/>
+                <OverViewItem base-class="bg-amber-100" label="This Month Revenue" :value="thisMonthRevenue + ' Br'"/>
                 <OverViewItem base-class="bg-zinc-100" label="Total Revenue" :value="totalRevenue + ' Br'"/>
             </div>
 
@@ -65,11 +64,11 @@ function refreshData() {
                 <Header class="font-semibold" value="Cashier Stats"/>
                 <div class="flex flex-wrap justify-between">
                     <OverViewItem base-class="bg-gray-100" label="Today's Revenue" :value="todayCashierRevenue + ' Br'"/>
-                    <OverViewItem base-class="bg-emerald-100" label="This Week" :value="thisWeekCashierRevenue + ' Br'"/>
-                    <OverViewItem base-class="bg-purple-100" label="This Month" :value="thisMonthCashierRevenue + ' Br'"/>
+                    <OverViewItem base-class="bg-emerald-100" label="This Week's Revenue" :value="thisWeekCashierRevenue + ' Br'"/>
+                    <OverViewItem base-class="bg-purple-100" label="This Month Revenue" :value="thisMonthCashierRevenue + ' Br'"/>
                     <OverViewItem base-class="bg-amber-100" label="Total Revenue" :value="totalCashierRevenue + ' Br'"/>
-                    <OverViewItem base-class="bg-sky-100" label="Agents" :value="totalAgents"/>
-                    <OverViewItem base-class="bg-lime-100" label=" Branches" :value="totalBranches"/>
+                    <OverViewItem base-class="bg-sky-100" label="Total Agents" :value="totalAgents"/>
+                    <OverViewItem base-class="bg-lime-100" label="Total Branches" :value="totalBranches"/>
                     <OverViewItem base-class="bg-zinc-100" label="Today's Games" :value="todayCashierGames"/>
                     <OverViewItem base-class="bg-emerald-100" label="Total Games" :value="totalCashierGames"/>
                 </div>
@@ -79,8 +78,8 @@ function refreshData() {
                 <div class="flex flex-wrap justify-between">
                     <OverViewItem base-class="bg-gray-100" label="Today's Revenue" :value="todayPlayerRevenue + ' Br'"/>
                     <OverViewItem base-class="bg-lime-100" label="Total Revenue" :value="totalPlayerRevenue + ' Br'"/>
-                    <OverViewItem base-class="bg-emerald-100" label="This Week" :value="thisWeekPlayerRevenue + ' Br'"/>
-                    <OverViewItem base-class="bg-rose-100" label="This Month" :value="thisMonthPlayerRevenue + ' Br'"/>
+                    <OverViewItem base-class="bg-emerald-100" label="This Week's Revenue" :value="thisWeekPlayerRevenue + ' Br'"/>
+                    <OverViewItem base-class="bg-rose-100" label="This Month Revenue" :value="thisMonthPlayerRevenue + ' Br'"/>
                     <OverViewItem base-class="bg-sky-100" label="Registered Today" :value="todayRegisteredPlayers"/>
                     <OverViewItem base-class="bg-amber-100" label="Total Players" :value="totalRegisteredPlayers"/>
                     <OverViewItem base-class="bg-lime-100" label="Today's Games" :value="todayPlayerGames"/>
