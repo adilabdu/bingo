@@ -128,7 +128,7 @@ class CashierGameController extends Controller
 
             activity()
                 ->causedBy(auth()->user()->cashier)
-                ->event('Start Game')
+                ->event('Start Game '.$game->id)
                 ->performedOn($game)
                 ->withProperties(['amount' => $totalAmount . ' Br'])
                 ->log('Started a game with amount: ' . $totalAmount . ' Br');
@@ -181,7 +181,7 @@ class CashierGameController extends Controller
         activity()
             ->causedBy(auth()->user()->cashier)
             ->performedOn($game)
-            ->event('Payout')
+            ->event('Finish Game '.$game->id)
             ->withProperties(['amount' => $game->winner_net_amount . ' Br'])
             ->log('Game completed successfully, with payout amount: ' . $game->winner_net_amount . ' Br');
 

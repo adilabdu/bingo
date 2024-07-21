@@ -50,7 +50,7 @@ const user = computed(()=> usePage().props.auth.user)
                     <TableCell>{{ item.properties['amount']}}</TableCell>
                     <TableCell>{{ item.description }}</TableCell>
                 </TableRow>
-                <TableRow v-if="transactions.length === 0">
+                <TableRow v-if="transactions.data.length === 0">
                     <TableCell class="p-4 text-center" colspan="4">No transactions found.</TableCell>
                 </TableRow>
             </TableBody>
