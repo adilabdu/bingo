@@ -119,7 +119,7 @@ Echo.private('cashier-players')
             <div class=" w-full lg:w-7/12 flex items-center justify-between flex-wrap bg-white pt-3 md:pt-0 px-5 rounded-lg lg:shadow-md">
                 <div v-for="i in 50"
                      @click="isCartelaAdded(i) ? removeCartela(i) : addCartela(i)"
-                     :class="['min-w-10 w-10 h-10 lg:min-w-16 lg:w-12 lg:h-16 mr-2 mb-2 lg:mr-5 flex items-center justify-center  border-2 border-black px-2 rounded-lg font-bold text-2xl lg:text-3xl cursor-pointer hover:bg-brand-secondary hover:text-white',
+                     :class="['min-w-10 w-14 h-14 lg:min-w-16 lg:w-12 lg:h-16 mr-2 mb-2 lg:mr-5 flex items-center justify-center  border-2 border-black px-2 rounded-lg font-bold text-2xl lg:text-3xl cursor-pointer hover:bg-brand-secondary hover:text-white',
                       isCartelaAdded(i) ? 'bg-brand-secondary text-white' : '']">
                     {{ i }}
                 </div>
