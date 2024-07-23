@@ -228,4 +228,84 @@ class AdminController extends Controller
     {
         return Inertia::render('Admin/Profile/Edit');
     }
+
+    public function agents(Request $request): Response
+    {
+        $agents = Agent::with('branches.cashiers', 'user')->get();
+        $selectedAgentId = $request->query('agent_id', $agents->first()->id);
+
+        $selectedAgent = Agent::with('branches.cashiers.games')->findOrFail($selectedAgentId);
+        $branches = $selectedAgent->branches;
+
+        $startDate = $request->query('start_date') ? Carbon::parse($request->query('start_date'))->startOfDay() : null;
+        $endDate = $request->query('end_date') ? Carbon::parse($request->query('end_date'))->endOfDay() : null;
+
+        $todayRevenue = $branches->sum(function ($branch) use ($startDate, $endDate) {
+            return $branch->cashiers->sum(function ($cashier) use ($startDate, $endDate) {
+                $query = $cashier->games();
+                if ($startDate && $endDate) {
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                } elseif ($startDate) {
+                    $query->where('created_at', '>=', $startDate);
+                } elseif ($endDate) {
+                    $query->where('created_at', '<=', $endDate);
+                }
+                return $query->sum('profit');
+            });
+        });
+
+        $thisWeekRevenue = $branches->sum(function ($branch) use ($startDate, $endDate) {
+            return $branch->cashiers->sum(function ($cashier) use ($startDate, $endDate) {
+                $query = $cashier->games();
+                if ($startDate && $endDate) {
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                } elseif ($startDate) {
+                    $query->where('created_at', '>=', $startDate);
+                } elseif ($endDate) {
+                    $query->where('created_at', '<=', $endDate);
+                }
+                return $query->sum('profit');
+            });
+        });
+
+        $totalRevenue = $branches->sum(function ($branch) use ($startDate, $endDate) {
+            return $branch->cashiers->sum(function ($cashier) use ($startDate, $endDate) {
+                $query = $cashier->games();
+                if ($startDate && $endDate) {
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                } elseif ($startDate) {
+                    $query->where('created_at', '>=', $startDate);
+                } elseif ($endDate) {
+                    $query->where('created_at', '<=', $endDate);
+                }
+                return $query->sum('profit');
+            });
+        });
+
+        $activeGames = $branches->sum(function ($branch) {
+            return $branch->cashiers->sum(function ($cashier) {
+                return $cashier->games->where('status', Game::STATUS_ACTIVE)->count();
+            });
+        });
+
+        $totalGames = $branches->sum(function ($branch) {
+            return $branch->cashiers->sum(function ($cashier) {
+                return $cashier->games->count();
+            });
+        });
+
+        return Inertia::render('Admin/Agents/Index', [
+            'agents' => $agents,
+            'selectedAgent' => $selectedAgent,
+            'todayRevenue' => $todayRevenue,
+            'thisWeekRevenue' => $thisWeekRevenue,
+            'totalRevenue' => $totalRevenue,
+            'activeGames' => $activeGames,
+            'totalGames' => $totalGames,
+            'branches' => $branches,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ]);
+    }
+
 }

@@ -3,7 +3,7 @@ import { router } from "@inertiajs/vue3";
 import { RefreshCcw } from "lucide-vue-next";
 import Header from "@/Components/Header.vue";
 import OverViewItem from "@/Views/Agent/Dashboard/OverViewItem.vue";
-import DateFilterComponent from "@/Views/Admin/Dashboard/DateFilter.vue";
+import DateFilter from "@/Views/Admin/Dashboard/DateFilter.vue";
 import { ref, computed, onMounted } from "vue";
 import Loading from "@/Components/Loading.vue";
 
@@ -108,7 +108,7 @@ onMounted(() => {
             </div>
         </div>
 
-        <DateFilterComponent
+        <DateFilter
             :filteredDateRange="filteredDateRange"
             :startDate="startDate"
             :endDate="endDate"
