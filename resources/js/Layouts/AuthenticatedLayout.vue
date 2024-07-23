@@ -46,7 +46,7 @@ function closeNavigationDropDown(){
                             <ResponsiveNavLink :href="route('game.initiate')"> Play </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('wallet.index')"> Wallet </ResponsiveNavLink>
-                            <div class="px-2 bg-gray-50 min-w-fit text-lg mr-2 rounded-lg h-fit font-bold my-auto mb-4">
+                            <div v-if="$page.props.auth.user.type ==='player'" class="px-2 bg-gray-50 min-w-fit text-lg mr-2 rounded-lg h-fit font-bold my-auto mb-4">
                                 {{ $page.props.auth.user?.player?.balance }} Br
                             </div>
                         </div>

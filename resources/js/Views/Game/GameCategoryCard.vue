@@ -30,13 +30,13 @@ const isBalanceEnough = computed(() => balance >= props.amount);
 </script>
 
 <template>
-    <div class="bg-white w-full max-w-lg hover:shadow-2xl hover:bg-brand-secondary hover:text-white cursor-pointer rounded-md flex flex-col space-y-4 mb-2" :class="view === 'cashier' ? 'py-3 px-10' : isBalanceEnough ? 'bg-white opacity-100 p-4' : 'px-4 py-2'">
+    <div class="bg-gray-50 border md:border-0 border-gray-600 w-full hover:shadow-2xl hover:bg-brand-secondary hover:text-white cursor-pointer rounded-md flex flex-col space-y-4 mb-2" :class="view === 'cashier' ? 'py-5 lg:py-3 px-10' : isBalanceEnough ? 'bg-white opacity-100 p-4' : 'px-4 py-2'">
 
     <div  class="flex justify-between items-center" >
-        <div class="flex items-center w-full" :class="view==='player' ? 'space-x-5':'space-x-10'">
+        <div class="flex items-center w-full" :class="view==='player' ? 'space-x-5':'space-x-5 lg:space-x-10'">
             <CircleDollarSign />
-            <div :class="view === 'player' ? 'flex flex-col': 'flex w-full items-center justify-evenly'">
-                <div class=" " :class="view === 'player' ? 'text-lg font-semibold' : 'font-bold text-6xl pb-2'">{{ amount }} Birr</div>
+            <div :class="view === 'player' ? 'flex flex-col': 'flex  w-full items-center space-x-5 lg:justify-evenly'">
+                <div class=" " :class="view === 'player' ? 'text-lg font-semibold' : 'font-bold text-xl lg:text-6xl lg:pb-2'">{{ amount }} Birr</div>
                 <div class="text-xs">{{ name }}</div>
             </div>
         </div>

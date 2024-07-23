@@ -17,7 +17,7 @@ class CreateAdmin extends Command
      *
      * @var string
      */
-    protected $signature = 'app:create-admin {name} {phone_number}';
+    protected $signature = 'app:create-admin {name} {phone_number} {isSuperAdmin?}';
 
     /**
      * The console command description.
@@ -43,7 +43,7 @@ class CreateAdmin extends Command
                 'name' => $this->argument('name'),
                 'phone_number' => $this->argument('phone_number'),
                 'password' => Hash::make('secret'),
-                'type' => User::TYPE_ADMIN,
+                'type' => $this->argument('isSuperAdmin') ? 'super-admin' : User::TYPE_ADMIN,
             ]);
 
             Admin::create([
@@ -67,9 +67,11 @@ class CreateAdmin extends Command
         $validator = Validator::make([
             'name' => $this->argument('name'),
             'phone_number' => $this->argument('phone_number'),
+            'isSuperAdmin' => $this->argument('isSuperAdmin'),
         ], [
             'name' => ['required'],
             'phone_number' => ['required', 'regex:/^\+2519[0-9]{8}$/', 'max:13' , 'unique:users,phone_number'],
+            'isSuperAdmin' => ['nullable', 'boolean'],
         ]);
 
         if ($validator->fails()) {

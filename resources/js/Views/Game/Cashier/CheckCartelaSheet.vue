@@ -89,6 +89,12 @@ function getCartela(){
                         <div v-if="cartela === null && cartelaName && !isLoading" class="text-2xl font-bold bg-red-600 text-white px-5 py-2 rounded-lg">
                             Cartela Not found!
                         </div>
+                        <div
+                            v-if="cartela?.numbers && cartelaName"
+                            class="flex w-full flex-col py-3 lg:h-36 space-y-2 items-center justify-center bg-gray-800 text-white px-4 rounded-lg shadow-2xl font-bold text-4xl lg:text-7xl">
+                            <span class="font-normal text-sm lg:text-2xl"> Winner Amount</span>
+                            <span>{{ game.winner_net_amount }} Birr</span>
+                        </div>
                     </div>
                 </SheetDescription>
             </SheetHeader>

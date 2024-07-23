@@ -6,6 +6,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Loading from "@/Components/Loading.vue";
+import {ref} from "vue";
 
 defineProps({
     canResetPassword: {
@@ -22,17 +24,23 @@ const form = useForm({
     remember: false,
 });
 
+const isLoading = ref(false);
 const submit = () => {
+    isLoading.value = true;
     form.login = `+251${form.login}`;
     form.post(route('login'),{
         onError: () => {
             form.reset('password');
-        }
+        },
+        onFinish: () => {
+            isLoading.value = false;
+        },
     });
 };
 </script>
 
 <template>
+    <Loading v-if="isLoading" type="brand" is-full-screen/>
     <div class="px-3 w-full flex justify-evenly mx-auto min-h-screen md:min-h-fit py-16 md:pt-0 ">
         <div class="w-full lg:w-7/12 max-w-sm md:max-w-md">
             <div class="flex justify-between items-center pb-10">

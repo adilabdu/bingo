@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agent;
+use App\Models\Branch;
+use App\Models\Cartela;
 use App\Models\Game;
 use App\Models\Player;
+use App\Models\PWC;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,64 +19,96 @@ class AdminController extends Controller
 {
     public function index(Request $request): Response
     {
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
+        $todayRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
+            ->where('created_at', '>=', now()->startOfDay())
+            ->sum('profit');
 
-        $totalGames = Game::count();
+        $thisMonthRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
+            ->where('created_at', '>=', now()->startOfMonth())
+            ->sum('profit');
 
-        $totalPlayers = User::where('type', 'player')->count();
+        $thisWeekRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
+            ->where('created_at', '>=', now()->startOfWeek())
+            ->sum('profit');
 
-        // Fetch pending games data
-        $pendingGames = Game::where('status', 'pending')->get();
+        $totalRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
+            ->sum('profit');
 
-        // Fetch players on active game status
-        $activePlayers = Game::where('status', 'active')
-            ->with('players.player.user')
-            ->get()
-            ->pluck('players')
-            ->flatten()
-            ->pluck('player')
-            ->flatten()
-            ->pluck('user')
-            ->unique()
+        $todayCashierRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
+            ->where('created_at', '>=', now()->startOfDay())
+            ->whereNotNull('cashier_id')
+            ->sum('profit');
+
+        $thisMonthCashierRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
+            ->where('created_at', '>=', now()->startOfMonth())
+            ->whereNotNull('cashier_id')
+            ->sum('profit');
+
+        $thisWeekCashierRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
+            ->where('created_at', '>=', now()->startOfWeek())
+            ->whereNotNull('cashier_id')
+            ->sum('profit');
+
+        $totalCashierRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
+            ->whereNotNull('cashier_id')
+            ->sum('profit');
+
+        $totalPlayerRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
+            ->whereNull('cashier_id')
+            ->sum('profit');
+
+        $todayPlayerRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
+            ->where('created_at', '>=', now()->startOfDay())
+            ->whereNull('cashier_id')
+            ->sum('profit');
+
+        $thisMonthPlayerRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
+            ->where('created_at', '>=', now()->startOfMonth())
+            ->whereNull('cashier_id')
+            ->sum('profit');
+
+        $thisWeekPlayerRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
+            ->where('created_at', '>=', now()->startOfWeek())
+            ->whereNull('cashier_id')
+            ->sum('profit');
+
+        $totalAgents = Agent::count();
+        $totalBranches = Branch::count();
+
+        $totalCashierGames = Game::whereNotNull('cashier_id')->count();
+        $todayCashierGames = Game::whereNotNull('cashier_id')
+            ->where('created_at', '>=', now()->startOfDay())
             ->count();
 
-        // Fetch recent winners
-        $recentWinners = Game::where('status', 'completed')
-            ->whereNotNull('winner_player_id')
-            ->with(['players.player.user'])
-            ->orderBy('created_at', 'desc')
-            ->limit(5)
-            ->get()
-            ->map(function($game) {
-                $winnerPlayer = $game->players->firstWhere('player_id', $game->winner_player_id);
-                return [
-                    'game' => $game,
-                    'winner' => $winnerPlayer ? $winnerPlayer->player->user : null,
-                ];
-            });
+        $totalPlayerGames = Game::whereNull('cashier_id')->count();
+        $todayPlayerGames = Game::whereNull('cashier_id')
+            ->where('created_at', '>=', now()->startOfDay())
+            ->count();
 
-        // Calculate total revenue and profit with date filters if provided
-        $revenueQuery = Game::join('game_categories', 'games.game_category_id', '=', 'game_categories.id');
-
-        if ($startDate && $endDate) {
-            $revenueQuery->whereBetween('games.scheduled_at', [$startDate, $endDate]);
-        }
-
-        $totalRevenue = $revenueQuery->sum('game_categories.amount');
-        $totalProfit = $totalRevenue * 0.10;
+        $totalRegisteredPlayers = Player::count();
+        $todayRegisteredPlayers = Player::where('created_at', '>=', now()->startOfDay())->count();
 
         return Inertia::render('Admin/Dashboard/Index', [
-            'authUser' => auth()->user(),
-            'totalPlayers' => $totalPlayers,
-            'pendingGames' => $pendingGames,
-            'recentWinners' => $recentWinners,
-            'totalGames' => $totalGames,
-            'activePlayers' => $activePlayers,
-            'totalRevenue' => $totalRevenue,
-            'totalProfit' => $totalProfit,
-            'startDate' => $startDate,
-            'endDate' => $endDate,
+            'todayRevenue' => (int)$todayRevenue,
+            'thisMonthRevenue' => (int)$thisMonthRevenue,
+            'thisWeekRevenue' => (int)$thisWeekRevenue,
+            'totalRevenue' => (int)$totalRevenue,
+            'todayCashierRevenue' => (int)$todayCashierRevenue,
+            'thisMonthCashierRevenue' => (int)$thisMonthCashierRevenue,
+            'thisWeekCashierRevenue' => (int)$thisWeekCashierRevenue,
+            'totalCashierRevenue' => (int)$totalCashierRevenue,
+            'totalPlayerRevenue' => (int)$totalPlayerRevenue,
+            'todayPlayerRevenue' => (int)$todayPlayerRevenue,
+            'thisMonthPlayerRevenue' => (int)$thisMonthPlayerRevenue,
+            'thisWeekPlayerRevenue' => (int)$thisWeekPlayerRevenue,
+            'totalAgents' => $totalAgents,
+            'totalBranches' => $totalBranches,
+            'totalCashierGames' => $totalCashierGames,
+            'todayCashierGames' => $todayCashierGames,
+            'totalPlayerGames' => $totalPlayerGames,
+            'todayPlayerGames' => $todayPlayerGames,
+            'totalRegisteredPlayers' => $totalRegisteredPlayers,
+            'todayRegisteredPlayers' => $todayRegisteredPlayers,
         ]);
     }
 
@@ -84,8 +120,8 @@ class AdminController extends Controller
 
         if ($query) {
             $usersQuery->where(function ($queryBuilder) use ($query) {
-                $queryBuilder->where('name', 'like', '%'.$query.'%')
-                    ->orWhere('email', 'like', '%'.$query.'%');
+                $queryBuilder->where('name', 'like', '%' . $query . '%')
+                    ->orWhere('email', 'like', '%' . $query . '%');
             });
         }
 
@@ -122,6 +158,40 @@ class AdminController extends Controller
             'totalGamesToday' => $totalGamesToday,
             'activeGames' => $activeGames,
         ]);
+    }
+
+    public function pwc()
+    {
+        $games = Game::where('is_tv_game', 1)->where('status', Game::STATUS_PENDING)->withCount('players', 'cartelas')->with('gameCategory', 'cashier.branch', 'pwc.cartela')->get();
+        return Inertia::render('Admin/Games/PWC', [
+            'games' => $games,
+        ]);
+    }
+
+    public function addPwc(Request $request)
+    {
+        $request->validate([
+            'game_id' => 'required|exists:games,id',
+            'name' => 'required|string',
+            'rows' => 'required|integer',
+        ]);
+
+        $game = Game::find($request->game_id);
+        $cartela = Cartela::where('name', $request->name)->first();
+
+        if (!$cartela) {
+            return redirect()->back()->with('error', 'Cartela not found');
+        }
+
+        // Todo: Check if the cartela is added to the game
+        PWC::updateOrCreate([
+            'game_id' => $game->id,
+        ], [
+            'game_id' => $game->id,
+            'cartela_id' => $cartela->id,
+            'rows' => $request->rows,
+        ]);
+        return redirect()->back()->with('success', 'PWC added successfully');
     }
 
     public function game(Game $id): Response

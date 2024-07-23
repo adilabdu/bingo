@@ -23,3 +23,7 @@ Broadcast::channel('game-result', function () {
 Broadcast::channel('game-players', function () {
     return Auth::check();
 });
+
+Broadcast::channel('cashier-players', function () {
+    return Auth::check();
+});
