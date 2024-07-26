@@ -242,4 +242,20 @@ class CashierGameController extends Controller
 
         return redirect()->to('/cashier/game/create/'.$game->game_category_id)->with('success', 'Player removed successfully');
     }
+
+    public function cartela($name = null)
+    {
+        $cartela = Cartela::where('name', $name)->first();
+        return Inertia::render('Game/Cashier/Cartela',[
+            'cartela' => $cartela
+        ]);
+    }
+
+    public function playCartela($cartelaId)
+    {
+        $cartela = Cartela::find($cartelaId);
+        return Inertia::render('Game/Cashier/PlayCartela',[
+            'cartela' => $cartela
+        ]);
+    }
 }
