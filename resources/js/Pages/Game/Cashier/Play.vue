@@ -161,6 +161,12 @@ const currentNumberLetter = computed(() => {
     return 'O';
 });
 
+function repeatGame(){
+    router.get(`/cashier/game/create/${props.game.game_category_id}`,{
+        repeatGame: true,
+        gameToRepeatId: props.game.id
+    })
+}
 
 </script>
 
@@ -191,6 +197,10 @@ const currentNumberLetter = computed(() => {
                 <div @click="finishGame"
                      class="text-5xl font-bold uppercase bg-rose-600 text-white px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl">
                     Finish
+                </div>
+                <div @click="repeatGame"
+                     class="text-5xl font-bold uppercase bg-blue-500 text-white px-3 py-2 text-center rounded-lg cursor-pointer hover:scale-105 hover:shadow-xl">
+                    Repeat
                 </div>
             </div>
 
