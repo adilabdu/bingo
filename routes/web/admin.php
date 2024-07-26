@@ -13,4 +13,5 @@ Route::middleware(['auth', 'checkUserType:admin', 'checkIfBlocked'])->prefix('ad
     Route::get('users/register', [AdminController::class, 'register'])->name('users.register');
     Route::get('users/{userId}', [AdminController::class, 'player'])->name('users.player');
     Route::get('profile', [AdminController::class, 'profile'])->name('admin.profile.edit');
+    Route::get('agents', [AdminController::class, 'agents'])->name('admin.agents');
 });

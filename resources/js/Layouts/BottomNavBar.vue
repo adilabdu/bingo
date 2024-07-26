@@ -2,7 +2,7 @@
 import BottomNavigationItem from "@/Components/BottomNavigationItem.vue";
 import {computed, ref} from "vue";
 import {router, usePage} from "@inertiajs/vue3";
-import {LayoutDashboard, User, MapPin, Gamepad, Wallet, Home} from "lucide-vue-next";
+import {LayoutDashboard, User, MapPin, Gamepad, Wallet, Users, Home} from "lucide-vue-next";
 import Notification from "@/Components/Notification.vue";
 
 const user = computed(() => {
@@ -63,6 +63,7 @@ const toggleDropdown = (state) => {
         </div>
         <div v-else-if="user.type === 'admin'" class="flex w-full justify-around py-1.5 bg-white border-t border-gray-100 ">
             <BottomNavigationItem :icon="LayoutDashboard" label="Dashboard" to="/admin" :active="route().current('admin.index')" />
+            <BottomNavigationItem :icon="Users" label="Agents" to="/admin/agents" :active="route().current('admin.agents')" />
             <BottomNavigationItem :icon="User" label="Profile" to="/profile" :active="route().current('profile.edit')" />
         </div>
         </div>
