@@ -240,6 +240,6 @@ class CashierGameController extends Controller
         $cashier = Cashier::where('user_id', auth()->user()->id)->first();
         $cashier->update(['balance' => $cashier->balance - $game->gameCategory->amount]);
 
-        return redirect()->back()->with('success', 'Player removed successfully');
+        return redirect()->to('/cashier/game/create/'.$game->game_category_id)->with('success', 'Player removed successfully');
     }
 }
