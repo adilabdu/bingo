@@ -17,7 +17,7 @@ const props = defineProps({
 
 const isLoading = ref(false);
 const isDrawerOpen = ref(false);
-const cartelaName = ref(props.cartela.name ?? '');
+const cartelaName = ref(props?.cartela?.name ?? '');
 function getCartela() {
     isLoading.value = true;
     router.visit(`/cartela/${cartelaName.value}`,{
