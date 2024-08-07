@@ -129,7 +129,7 @@ const positionClass = computed(() => {
         case "bottom-right":
             return "bottom-0 right-0";
         default:
-            return "top-0 lg:bottom-0 md:bottom-10 right-0 left-0 transform md:-translate-x-1/2  ";
+            return "bottom-10 right-0";
     }
 });
 </script>
