@@ -20,13 +20,16 @@ class AdminController extends Controller
 {
     public function index(Request $request): Response
     {
-        $startDate = $request->query('start_date') ? Carbon::parse($request->query('start_date'))->startOfDay() : null;
-        $endDate = $request->query('end_date') ? Carbon::parse($request->query('end_date'))->endOfDay() : null;
+        $startDate = $request->query('start_date') ? Carbon::parse($request->input('start_date'))->startOfDay() : today();
+        $endDate = $request->query('end_date') ? Carbon::parse($request->input('end_date'))->endOfDay() : now()->endOfDay();
 
-        $gameQuery = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE]);
+       $gameQuery = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE]);
 
-        if ($startDate && $endDate) {
-            $gameQuery->whereBetween('created_at', [$startDate, $endDate]);
+        $dateFilterQuery = null;
+        if ($startDate || $endDate) {
+            $dateFilterQuery = $gameQuery->clone()->where( 'created_at','>=', $startDate)
+                ->where('created_at', '<=', $endDate)
+                ->sum('profit');
         }
 
         // Revenue numbers
@@ -83,6 +86,9 @@ class AdminController extends Controller
             'todayPlayerGames' => $todayPlayerGames,
             'totalRegisteredPlayers' => $totalRegisteredPlayers,
             'todayRegisteredPlayers' => $todayRegisteredPlayers,
+            'dateFilterQuery' => $dateFilterQuery,
+            'startDateQuery' => $startDate,
+            'endDateQuery' => $endDate,
         ]);
     }
 
