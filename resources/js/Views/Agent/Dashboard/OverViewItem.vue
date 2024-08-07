@@ -18,7 +18,7 @@ defineProps({
 <template>
     <div
         :class="baseClass"
-        class="flex flex-col space-y-1 my-2 w-5/12 p-2 rounded-md items-center max-w-sm">
+        class="flex flex-col space-y-1 my-2 w-5/12 p-2 rounded-md items-center max-w-40">
         <span class="text-[0.70rem] font-light">{{ label }}</span>
         <span class="font-semibold text-lg">{{ value }}</span>
     </div>
