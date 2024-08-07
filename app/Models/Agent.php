@@ -14,6 +14,9 @@ class Agent extends Model
 
     protected $fillable = [
         'user_id',
+        'profit_percentage',
+        'is_active',
+        'balance',
     ];
 
     public function user(): BelongsTo
