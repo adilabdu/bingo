@@ -24,6 +24,7 @@ const form = useForm({
     password_confirmation: '',
     type: '',
     branch_id: '',
+    profit_percentage: '',
 });
 
 const submit = () => {
@@ -35,13 +36,13 @@ const submit = () => {
 </script>
 
 <template>
-    <form @submit.prevent="submit" class="w-10/12 flex flex-col space-y-5 mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <form @submit.prevent="submit" class="w-full flex flex-col space-y-5 mx-auto p-4">
         <h1 class="text-2xl font-bold mb-6 text-center">
             Register New User
         </h1>
 
         <div>
-            <InputLabel for="type" value="User Type" />
+            <InputLabel class="pb-2" for="type" value="User Type" />
             <Select v-model="form.type">
                 <SelectTrigger class="w-full">
                     <SelectValue placeholder="Select User Type" />
@@ -60,7 +61,7 @@ const submit = () => {
         </div>
 
         <div v-if="form.type === 'cashier'">
-            <InputLabel for="branch_id" value="Branch" />
+            <InputLabel for="branch_id" value="Branch" class="pb-2"/>
             <Select v-model="form.branch_id">
                 <SelectTrigger class="w-full">
                     <SelectValue placeholder="Select branch" />
@@ -76,13 +77,23 @@ const submit = () => {
             </Select>
             <InputError class="mt-2" :message="form.errors.branch_id" />
         </div>
-
+        <div v-if="form.type === 'agent'" class="mt-4">
+            <InputLabel for="percent" value="Percent" />
+            <TextInput
+                id="percent"
+                type="number"
+                class="mt-2 block w-full border"
+                v-model="form.profit_percentage"
+                required
+            />
+            <InputError class="mt-2" :message="form.errors.profit_percentage" />
+        </div>
         <div>
             <InputLabel for="name" value="Name" />
             <TextInput
                 id="name"
                 type="text"
-                class="mt-1 block w-full border"
+                class="mt-2 block w-full border"
                 v-model="form.name"
                 required
                 autofocus
@@ -96,7 +107,7 @@ const submit = () => {
             <TextInput
                 id="phone"
                 type="number"
-                class="mt-1 block w-full border"
+                class="mt-2 block w-full border"
                 v-model="form.phone_number"
                 required
                 autocomplete="tel"
@@ -109,7 +120,7 @@ const submit = () => {
             <TextInput
                 id="password"
                 type="password"
-                class="mt-1 block w-full border"
+                class="mt-2 block w-full border"
                 v-model="form.password"
                 required
                 autocomplete="new-password"
@@ -122,7 +133,7 @@ const submit = () => {
             <TextInput
                 id="password_confirmation"
                 type="password"
-                class="mt-1 block w-full border"
+                class="mt-2 block w-full border"
                 v-model="form.password_confirmation"
                 required
                 autocomplete="new-password"
@@ -130,8 +141,8 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.password_confirmation" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+        <div class="flex items-center justify-end w-full mt-4">
+            <PrimaryButton class="!h-11 w-full" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                 Register
             </PrimaryButton>
         </div>
