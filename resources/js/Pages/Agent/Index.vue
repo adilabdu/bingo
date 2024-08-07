@@ -44,7 +44,7 @@ const submit = () => {
 const isLoading = ref(false);
 function refreshData() {
     isLoading.value = true;
-    router.visit('/agent',{
+    router.visit('/agent', {
         replace: true,
         onFinish: () => {
             isLoading.value = false;
@@ -64,12 +64,24 @@ function refreshData() {
 
         <div>
             <div class="flex justify-between pb-2">
-            <Header class="font-semibold" value="Revenue Numbers"/>
-                <div @click="refreshData" class="flex items-center space-x-2 text-xs bg-brand-secondary rounded-md shadow-md text-white px-2">
-                <RefreshCcw class="w-3" />
+                <Header class="font-semibold" value="Revenue Numbers"/>
+                <div @click="refreshData"
+                     class="flex items-center space-x-2 text-xs bg-brand-secondary rounded-md shadow-md text-white px-2">
+                    <RefreshCcw class="w-3"/>
                     <span>Refresh</span>
                 </div>
             </div>
+
+            <div class="flex justify-around divide-x p-2 mt-2 mb-4 rounded-lg items-center bg-indigo-600 text-white h-20">
+                <div class="flex flex-col items-center font-light text-sm w-6/12"><span
+                    class="text-2xl font-bold">{{ agent.agent.balance }}Br</span>
+                    Balance
+                </div>
+                <div class="flex flex-col justify-center items-center text-sm font-light w-6/12"><span
+                    class="text-2xl font-bold">{{ 100 - agent.agent.profit_percentage }}%</span>Profit
+                </div>
+            </div>
+
             <div class="flex flex-wrap justify-between">
                 <OverViewItem base-class="bg-lime-100" label="Today" :value="todayRevenue + ' Br'"/>
                 <OverViewItem base-class="bg-emerald-100" label="This Week's Revenue" :value="thisWeekRevenue + ' Br'"/>
