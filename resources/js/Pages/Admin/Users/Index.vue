@@ -1,14 +1,23 @@
 <script setup>
-import { ref, watch, onMounted, computed } from 'vue';
-import { Table, TableBody, TableRow, TableCell } from '@/Components/shadcn/ui/table/index.js';
-import { Button } from '@/Components/shadcn/ui/button/index.js';
-import { Input } from '@/Components/shadcn/ui/input/index.js';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/Components/shadcn/ui/select/index.js';
+import {ref, watch, onMounted, computed} from 'vue';
+import {Table, TableBody, TableRow, TableCell} from '@/Components/shadcn/ui/table/index.js';
+import {Button} from '@/Components/shadcn/ui/button/index.js';
+import {Input} from '@/Components/shadcn/ui/input/index.js';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue
+} from '@/Components/shadcn/ui/select/index.js';
 import Modal from '@/Components/AdminModal.vue';
-import { router, usePage } from "@inertiajs/vue3";
-import { debounce } from "lodash";
-import { Link } from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
+import {debounce} from "lodash";
+import {Link} from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import Loading from "@/Components/Loading.vue";
 
 // Initialize paginated users with usePage props
 const pageData = usePage().props;
@@ -18,17 +27,22 @@ const roles = ['Admin', 'Player'];
 const query = ref('');
 const selectedRole = ref('');
 const isModalOpen = ref(false);
-const selectedUser = ref({ name: '', email: '', role: '' });
+const selectedUser = ref({name: '', email: '', role: ''});
 const isConfirmModalOpen = ref(false);
 const userToToggle = ref(null);
 
+const isLoading = ref(false);
 const fetchUsers = (url = '/admin/users') => {
-    const params = { search: query.value, role: selectedRole.value };
+    isLoading.value = true;
+    const params = {search: query.value, role: selectedRole.value};
     router.get(url, params, {
         preserveState: true,
         replace: true,
         onSuccess: (page) => {
             paginatedUsers.value = page.props.users;
+        },
+        onFinish: () => {
+            isLoading.value = false;
         }
     });
 };
@@ -46,13 +60,13 @@ watch([selectedRole], () => {
 });
 
 const openModal = (user) => {
-    selectedUser.value = user ? { ...user } : { name: '', email: '', role: '' };
+    selectedUser.value = user ? {...user} : {name: '', email: '', role: ''};
     isModalOpen.value = true;
 };
 
 const closeModal = () => {
     isModalOpen.value = false;
-    selectedUser.value = { name: '', email: '', role: '' };
+    selectedUser.value = {name: '', email: '', role: ''};
 };
 
 const saveUser = () => {
@@ -97,16 +111,12 @@ const closeConfirmModal = () => {
 onMounted(() => {
     fetchUsers();
 });
+
 </script>
 
 <template>
+    <Loading is-full-screen v-if="isLoading" type="brand"/>
     <div class="space-y-8">
-        <!-- Header Section -->
-        <div class="bg-gradient-to-r from-brand-secondary to-brand-secondary/50 text-white p-8 rounded-lg shadow-lg">
-            <h2 class="text-4xl font-bold mb-4">User Management</h2>
-            <p class="text-lg">Manage your users, roles, and permissions with ease.</p>
-        </div>
-
         <!-- Search and Filters -->
         <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
             <Input
@@ -115,31 +125,41 @@ onMounted(() => {
                 class="w-full sm:w-1/3 mb-4 sm:mb-0"
             />
 
-            <div class="relative w-full sm:w-1/4 mb-4 sm:mb-0">
-                <Select v-model="selectedRole">
-                    <SelectTrigger class="w-full">
-                        <SelectValue
-                            placeholder="Select User Type"
-                        >
-                            {{ selectedRole ? selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1) : 'All' }}
-                        </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectLabel value="">Select User Type</SelectLabel>
-                            <SelectItem value="Admin" :disabled="isDisabled('Admin')" class="cursor-pointer">Admin</SelectItem>
-                            <SelectItem value="Agent" :disabled="isDisabled('Agent')" class="cursor-pointer">Agent</SelectItem>
-                            <SelectItem value="Cashier" :disabled="isDisabled('Cashier')" class="cursor-pointer">Cashier</SelectItem>
-                            <SelectItem value="Player" :disabled="isDisabled('Player')" class="cursor-pointer">Player</SelectItem>
-                            <SelectItem :value="null" :disabled="isDisabled(null)" class="cursor-pointer">All</SelectItem>
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </div>
+            <div class="flex w-full justify-between">
+                <div class="w-1/2 sm:w-1/4">
+                    <Select v-model="selectedRole">
+                        <SelectTrigger class="w-full">
+                            <SelectValue placeholder="Select User Type">
+                                {{
+                                    selectedRole ? selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1) : 'All'
+                                }}
+                            </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel value="">Select User Type</SelectLabel>
+                                <SelectItem value="Admin" :disabled="isDisabled('Admin')" class="cursor-pointer">Admin
+                                </SelectItem>
+                                <SelectItem value="Agent" :disabled="isDisabled('Agent')" class="cursor-pointer">Agent
+                                </SelectItem>
+                                <SelectItem value="Cashier" :disabled="isDisabled('Cashier')" class="cursor-pointer">
+                                    Cashier
+                                </SelectItem>
+                                <SelectItem value="Player" :disabled="isDisabled('Player')" class="cursor-pointer">
+                                    Player
+                                </SelectItem>
+                                <SelectItem :value="null" :disabled="isDisabled(null)" class="cursor-pointer">All
+                                </SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
 
-            <PrimaryButton @click="router.visit(route('users.register'))">
-                Add New User
-            </PrimaryButton>
+                <PrimaryButton @click="router.visit(route('users.register'))">
+                    Add New User
+                </PrimaryButton>
+
+            </div>
         </div>
 
         <!-- Users Table -->
@@ -156,7 +176,8 @@ onMounted(() => {
                 <TableBody>
                     <TableRow v-for="user in filteredUsers" :key="user.id" class="border-b">
                         <TableCell class="p-4">
-                            <Link v-if="user.type === 'player'" :href="route('users.player', user.id)" class="hover:underline">
+                            <Link v-if="user.type === 'player'" :href="route('users.player', user.id)"
+                                  class="hover:underline">
                                 {{ user.name }}
                             </Link>
                             <span v-else>{{ user.name }}</span>
