@@ -34,7 +34,7 @@ class CashierGameController extends Controller
 
         $cashier = auth()->user()->cashier->load('branch.agent');
         if (!$this->checkIfCashierIsAllowedToPlay($cashier)) {
-            return redirect()->back()->with('error', 'You are not allowed to play, not enough balance. Contact your agent.');
+            return redirect()->back()->with('error', 'You are not allowed to play. Contact your agent.');
         }
         // Check if there is a pending game where the category is the same and is a tv game
         $game = Game::where('game_category_id', $gameCategory->id)
@@ -268,7 +268,7 @@ class CashierGameController extends Controller
 
     private function checkIfCashierIsAllowedToPlay( $cashier)
     {
-      if ($cashier->branch->agent->balance < 10) {
+      if ($cashier->branch->agent->balance < 10 || !$cashier->branch->agent->is_active) {
           return false;
       }
 
