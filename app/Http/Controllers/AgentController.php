@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agent;
 use App\Models\Branch;
 use App\Models\Game;
 use Illuminate\Http\Request;
@@ -120,6 +121,19 @@ class AgentController extends Controller
             ->log('created a branch');
 
         return redirect()->route('agent.branches')->with('success', 'Branch created successfully.');
+    }
+
+    public function toggle(Request $request)
+    {
+        $request->validate([
+            'agent_id' => 'required|exists:agents,id',
+            'is_active' => 'required|boolean',
+        ]);
+
+        $agent = Agent::find($request->agent_id);
+        $agent->update(['is_active' => $request->is_active]);
+
+        return redirect()->back()->with('success', 'Agent status updated successfully.');
     }
 }
 

@@ -2,7 +2,7 @@
 import {ref, watch} from "vue";
 import {router, usePage} from "@inertiajs/vue3";
 import Loading from "@/Components/Loading.vue";
-import {RefreshCcw} from "lucide-vue-next";
+import {RefreshCcw, Smile, Frown} from "lucide-vue-next";
 import OverViewItem from "@/Views/Agent/Dashboard/OverViewItem.vue";
 import Header from "@/Components/Header.vue";
 import DateFilter from "@/Views/Admin/Dashboard/DateFilter.vue";
@@ -14,18 +14,22 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/Components/shadcn/ui/select/index.js";
+import {Switch} from "@/Components/shadcn/ui/switch/index.js";
+import InputLabel from "@/Components/InputLabel.vue";
 
 const isLoading = ref(false);
 const page = usePage();
 const agents = page.props.agents;
 
-const selectedAgent = ref(page.props.selectedAgent.id);
+const selectedAgentId = ref(page.props.selectedAgent.id);
 const todayRevenue = ref(page.props.todayRevenue);
 const thisWeekRevenue = ref(page.props.thisWeekRevenue);
 const totalRevenue = ref(page.props.totalRevenue);
 const activeGames = ref(page.props.activeGames);
 const totalGames = ref(page.props.totalGames);
 const branches = ref(page.props.branches);
+const agent = ref(page.props.selectedAgent);
+const isActive = ref(agent.value.is_active);
 
 const startDate = ref(page.props.startDate);
 const endDate = ref(page.props.endDate);
@@ -44,7 +48,7 @@ function applyDateFilter(start, end) {
     isLoading.value = true;
     router.get('/admin/agents', {
 
-        agent_id: selectedAgent.value,
+        agent_id: selectedAgentId.value,
         start_date: start,
         end_date: end,
     }, {
@@ -68,11 +72,11 @@ watch([startDate, endDate], () => {
 
 function handleAgentChange() {
     isLoading.value = true;
-    router.visit(`/admin/agents?agent_id=${selectedAgent.value}`, {
+    router.visit(`/admin/agents?agent_id=${selectedAgentId.value}`, {
         replace: true,
         onSuccess: (page) => {
             const newProps = page.props;
-            selectedAgent.value = newProps.selectedAgent.id;
+            selectedAgentId.value = newProps.selectedAgent.id;
             todayRevenue.value = newProps.todayRevenue;
             thisWeekRevenue.value = newProps.thisWeekRevenue;
             totalRevenue.value = newProps.totalRevenue;
@@ -89,9 +93,25 @@ function handleAgentChange() {
     });
 }
 
-watch(selectedAgent, () => {
+watch(selectedAgentId, () => {
     handleAgentChange();
 });
+
+watch(isActive, () => {
+    isLoading.value = true;
+    router.post('/agent/toggle', {
+        is_active: isActive.value,
+        agent_id: selectedAgentId.value
+    }, {
+        preserveState: true,
+        replace: true,
+        onFinish: () => {
+            isLoading.value = false;
+        }
+    });
+});
+
+
 </script>
 
 <template>
@@ -102,7 +122,7 @@ watch(selectedAgent, () => {
         </div>
 
         <div class="w-full flex justify-between items-center gap-3 max-w-sm">
-            <Select v-model="selectedAgent" class="max-w-sm">
+            <Select v-model="selectedAgentId" class="max-w-sm">
                 <SelectTrigger>
                     <SelectValue placeholder="Select Agent"/>
                 </SelectTrigger>
@@ -122,24 +142,29 @@ watch(selectedAgent, () => {
             </div>
         </div>
 
-
-        <DateFilter
-            :filteredDateRange="filteredDateRange"
-            :startDate="startDate"
-            :endDate="endDate"
-            :applyDateFilter="applyDateFilter"
-            :clearDateFilter="clearDateFilter"
-        />
+        <div class="flex justify-around p-2 mt-2 mb-4 rounded-lg items-center bg-indigo-600 text-white h-20">
+            <div class="flex flex-col items-center font-light text-xs"><span
+                class="text-2xl font-bold">{{ agent.balance }}Br</span>
+                Balance
+            </div>
+            <div class="flex flex-col justify-center items-center text-xs font-light "><span
+                class="text-2xl font-bold">{{ 100 - agent.profit_percentage }}%</span>Profit
+            </div>
+            <div class="flex flex-col justify-center items-center text-xs font-light"><span
+                class="text-2xl font-bold">
+                <Switch @update:checked="isActive = !isActive"
+                                                   :checked="isActive"/></span>
+                <span v-if="isActive">Active</span><span v-else>Blocked</span>
+            </div>
+        </div>
 
 
         <div>
-
             <Header class="font-semibold w-full " value="Revenue Numbers"/>
-
             <div class="flex flex-wrap justify-between">
-                <OverViewItem base-class="bg-lime-100" label="Today's Revenue" :value="todayRevenue + ' Br'"/>
-                <OverViewItem base-class="bg-emerald-100" label="This Week's Revenue" :value="thisWeekRevenue + ' Br'"/>
-                <OverViewItem base-class="bg-purple-100" label="Total Revenue" :value="totalRevenue + ' Br'"/>
+                <OverViewItem base-class="bg-lime-100" label="Today's Revenue" :value="Number(todayRevenue).toFixed(2) + ' Br'"/>
+                <OverViewItem base-class="bg-emerald-100" label="This Week's Revenue" :value="Number(thisWeekRevenue).toFixed(2) + ' Br'"/>
+                <OverViewItem base-class="bg-purple-100" label="Total Revenue" :value="Number(totalRevenue).toFixed(2) + ' Br'"/>
                 <OverViewItem base-class="bg-zinc-200" label="Active Games" :value="activeGames"/>
                 <OverViewItem base-class="bg-zinc-200" label="Total Games" :value="totalGames"/>
             </div>
