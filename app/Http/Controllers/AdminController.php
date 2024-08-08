@@ -9,6 +9,7 @@ use App\Models\Game;
 use App\Models\Player;
 use App\Models\PWC;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -19,71 +20,44 @@ class AdminController extends Controller
 {
     public function index(Request $request): Response
     {
-        $todayRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
-            ->where('created_at', '>=', now()->startOfDay())
-            ->sum('profit');
+        $startDate = $request->query('start_date') ? Carbon::parse($request->query('start_date'))->startOfDay() : null;
+        $endDate = $request->query('end_date') ? Carbon::parse($request->query('end_date'))->endOfDay() : null;
 
-        $thisMonthRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
-            ->where('created_at', '>=', now()->startOfMonth())
-            ->sum('profit');
+        $gameQuery = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE]);
 
-        $thisWeekRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
-            ->where('created_at', '>=', now()->startOfWeek())
-            ->sum('profit');
+        if ($startDate && $endDate) {
+            $gameQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
 
-        $totalRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
-            ->sum('profit');
+        // Revenue numbers
+        $todayRevenue = $gameQuery->clone()->where('created_at', '>=', now()->startOfDay())->sum('profit');
+        $thisMonthRevenue = $gameQuery->clone()->where('created_at', '>=', now()->startOfMonth())->sum('profit');
+        $thisWeekRevenue = $gameQuery->clone()->where('created_at', '>=', now()->startOfWeek())->sum('profit');
+        $totalRevenue = $gameQuery->sum('profit');
 
-        $todayCashierRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
-            ->where('created_at', '>=', now()->startOfDay())
-            ->whereNotNull('cashier_id')
-            ->sum('profit');
+        // Cashier stats
+        $cashierQuery = $gameQuery->clone()->whereNotNull('cashier_id');
+        $todayCashierRevenue = $cashierQuery->clone()->where('created_at', '>=', now()->startOfDay())->sum('profit');
+        $thisMonthCashierRevenue = $cashierQuery->clone()->where('created_at', '>=', now()->startOfMonth())->sum('profit');
+        $thisWeekCashierRevenue = $cashierQuery->clone()->where('created_at', '>=', now()->startOfWeek())->sum('profit');
+        $totalCashierRevenue = $cashierQuery->sum('profit');
 
-        $thisMonthCashierRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
-            ->where('created_at', '>=', now()->startOfMonth())
-            ->whereNotNull('cashier_id')
-            ->sum('profit');
+        // Player stats
+        $playerQuery = $gameQuery->clone()->whereNull('cashier_id');
+        $todayPlayerRevenue = $playerQuery->clone()->where('created_at', '>=', now()->startOfDay())->sum('profit');
+        $thisMonthPlayerRevenue = $playerQuery->clone()->where('created_at', '>=', now()->startOfMonth())->sum('profit');
+        $thisWeekPlayerRevenue = $playerQuery->clone()->where('created_at', '>=', now()->startOfWeek())->sum('profit');
+        $totalPlayerRevenue = $playerQuery->sum('profit');
 
-        $thisWeekCashierRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
-            ->where('created_at', '>=', now()->startOfWeek())
-            ->whereNotNull('cashier_id')
-            ->sum('profit');
-
-        $totalCashierRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
-            ->whereNotNull('cashier_id')
-            ->sum('profit');
-
-        $totalPlayerRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
-            ->whereNull('cashier_id')
-            ->sum('profit');
-
-        $todayPlayerRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
-            ->where('created_at', '>=', now()->startOfDay())
-            ->whereNull('cashier_id')
-            ->sum('profit');
-
-        $thisMonthPlayerRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
-            ->where('created_at', '>=', now()->startOfMonth())
-            ->whereNull('cashier_id')
-            ->sum('profit');
-
-        $thisWeekPlayerRevenue = Game::whereIn('status', [Game::STATUS_COMPLETED, Game::STATUS_ACTIVE])
-            ->where('created_at', '>=', now()->startOfWeek())
-            ->whereNull('cashier_id')
-            ->sum('profit');
-
+        // Additional stats
         $totalAgents = Agent::count();
         $totalBranches = Branch::count();
 
-        $totalCashierGames = Game::whereNotNull('cashier_id')->count();
-        $todayCashierGames = Game::whereNotNull('cashier_id')
-            ->where('created_at', '>=', now()->startOfDay())
-            ->count();
+        $totalCashierGames = $cashierQuery->count();
+        $todayCashierGames = $cashierQuery->clone()->where('created_at', '>=', now()->startOfDay())->count();
 
-        $totalPlayerGames = Game::whereNull('cashier_id')->count();
-        $todayPlayerGames = Game::whereNull('cashier_id')
-            ->where('created_at', '>=', now()->startOfDay())
-            ->count();
+        $totalPlayerGames = $playerQuery->count();
+        $todayPlayerGames = $playerQuery->clone()->where('created_at', '>=', now()->startOfDay())->count();
 
         $totalRegisteredPlayers = Player::count();
         $todayRegisteredPlayers = Player::where('created_at', '>=', now()->startOfDay())->count();
@@ -111,6 +85,7 @@ class AdminController extends Controller
             'todayRegisteredPlayers' => $todayRegisteredPlayers,
         ]);
     }
+
 
     public function users(Request $request): Response
     {
@@ -253,4 +228,84 @@ class AdminController extends Controller
     {
         return Inertia::render('Admin/Profile/Edit');
     }
+
+    public function agents(Request $request): Response
+    {
+        $agents = Agent::with('branches.cashiers', 'user')->get();
+        $selectedAgentId = $request->query('agent_id', $agents->first()->id);
+
+        $selectedAgent = Agent::with('branches.cashiers.games')->findOrFail($selectedAgentId);
+        $branches = $selectedAgent->branches;
+
+        $startDate = $request->query('start_date') ? Carbon::parse($request->query('start_date'))->startOfDay() : null;
+        $endDate = $request->query('end_date') ? Carbon::parse($request->query('end_date'))->endOfDay() : null;
+
+        $todayRevenue = $branches->sum(function ($branch) use ($startDate, $endDate) {
+            return $branch->cashiers->sum(function ($cashier) use ($startDate, $endDate) {
+                $query = $cashier->games();
+                if ($startDate && $endDate) {
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                } elseif ($startDate) {
+                    $query->where('created_at', '>=', $startDate);
+                } elseif ($endDate) {
+                    $query->where('created_at', '<=', $endDate);
+                }
+                return $query->sum('profit');
+            });
+        });
+
+        $thisWeekRevenue = $branches->sum(function ($branch) use ($startDate, $endDate) {
+            return $branch->cashiers->sum(function ($cashier) use ($startDate, $endDate) {
+                $query = $cashier->games();
+                if ($startDate && $endDate) {
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                } elseif ($startDate) {
+                    $query->where('created_at', '>=', $startDate);
+                } elseif ($endDate) {
+                    $query->where('created_at', '<=', $endDate);
+                }
+                return $query->sum('profit');
+            });
+        });
+
+        $totalRevenue = $branches->sum(function ($branch) use ($startDate, $endDate) {
+            return $branch->cashiers->sum(function ($cashier) use ($startDate, $endDate) {
+                $query = $cashier->games();
+                if ($startDate && $endDate) {
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                } elseif ($startDate) {
+                    $query->where('created_at', '>=', $startDate);
+                } elseif ($endDate) {
+                    $query->where('created_at', '<=', $endDate);
+                }
+                return $query->sum('profit');
+            });
+        });
+
+        $activeGames = $branches->sum(function ($branch) {
+            return $branch->cashiers->sum(function ($cashier) {
+                return $cashier->games->where('status', Game::STATUS_ACTIVE)->count();
+            });
+        });
+
+        $totalGames = $branches->sum(function ($branch) {
+            return $branch->cashiers->sum(function ($cashier) {
+                return $cashier->games->count();
+            });
+        });
+
+        return Inertia::render('Admin/Agents/Index', [
+            'agents' => $agents,
+            'selectedAgent' => $selectedAgent,
+            'todayRevenue' => $todayRevenue,
+            'thisWeekRevenue' => $thisWeekRevenue,
+            'totalRevenue' => $totalRevenue,
+            'activeGames' => $activeGames,
+            'totalGames' => $totalGames,
+            'branches' => $branches,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ]);
+    }
+
 }

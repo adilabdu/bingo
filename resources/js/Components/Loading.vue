@@ -2,7 +2,7 @@
     <div
         :class="
             isFullScreen
-                ? 'fixed inset-0 flex items-center  space-x-2 justify-center bg-black bg-opacity-70 z-50'
+                ? 'fixed inset-0 flex items-center  space-x-2 justify-center bg-black bg-opacity-70 z-[100]'
                 : ''
         "
     >

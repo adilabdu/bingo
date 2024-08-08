@@ -25,6 +25,12 @@ class CashierGameController extends Controller
     {
         $gameCategory = GameCategory::find($request->gameCategoryId);
 
+        $gameToRepeat = null;
+        if ($request->repeatGame) {
+            $gameToRepeat = Game::find($request->gameToRepeatId);
+            $gameToRepeat->update(['status' => Game::STATUS_COMPLETED]);
+        }
+
         // Check if there is a pending game where the category is the same and is a tv game
         $game = Game::where('game_category_id', $gameCategory->id)
             ->where('is_tv_game', true)
@@ -45,6 +51,29 @@ class CashierGameController extends Controller
         $selectedCartelas = $game->cartelas()->get();
 
         AddCashierPlayerEvent::dispatch($game, $selectedCartelas);
+
+        if ($request->repeatGame) {
+            if ($gameToRepeat) {
+                $cashier = Cashier::where('user_id', auth()->user()->id)->first();
+                $gameToRepeat->cartelas()->get()->each(function ($cartela) use ($game, $cashier) {
+                    $cartelaInUse = GamePlayer::where('cartela_id', $cartela->id)
+                        ->whereRelation('game', function ($query) use ($game) {
+                            $query->where('id', $game->id);
+                        })->exists();
+                    if ($cartelaInUse) {
+                        return;
+                    }
+                    GamePlayer::create([
+                        'game_id' => $game->id,
+                        'cartela_id' => $cartela->id,
+                    ]);
+                    $cashier->update(['balance' => $cashier->balance + $game->gameCategory->amount]);
+                });
+
+                $selectedCartelas = $game->cartelas()->get();
+                AddCashierPlayerEvent::dispatch($game, $selectedCartelas);
+            }
+        }
 
         return Inertia::render('Game/Cashier/Add', [
             'gameCategory' => $gameCategory,
@@ -128,7 +157,7 @@ class CashierGameController extends Controller
 
             activity()
                 ->causedBy(auth()->user()->cashier)
-                ->event('Start Game '.$game->id)
+                ->event('Start Game ' . $game->id)
                 ->performedOn($game)
                 ->withProperties(['amount' => $totalAmount . ' Br'])
                 ->log('Started a game with amount: ' . $totalAmount . ' Br');
@@ -181,18 +210,19 @@ class CashierGameController extends Controller
         activity()
             ->causedBy(auth()->user()->cashier)
             ->performedOn($game)
-            ->event('Finish Game '.$game->id)
+            ->event('Finish Game ' . $game->id)
             ->withProperties(['amount' => $game->winner_net_amount . ' Br'])
             ->log('Game completed successfully, with payout amount: ' . $game->winner_net_amount . ' Br');
 
         return redirect()->route('cashier.game.initiate')->with('success', 'Game completed successfully');
     }
-    public  function remove($cartelaName, $gameId)
+
+    public function remove($cartelaName, $gameId)
     {
         $cartela = Cartela::where('name', $cartelaName)->first();
         $game = Game::findOrFail($gameId);
 
-        if (!$game || !$cartela ) {
+        if (!$game || !$cartela) {
             return redirect()->back()->with('error', 'Game not found');
         }
 
@@ -210,6 +240,22 @@ class CashierGameController extends Controller
         $cashier = Cashier::where('user_id', auth()->user()->id)->first();
         $cashier->update(['balance' => $cashier->balance - $game->gameCategory->amount]);
 
-        return redirect()->back()->with('success', 'Player removed successfully');
+        return redirect()->to('/cashier/game/create/'.$game->game_category_id)->with('success', 'Player removed successfully');
+    }
+
+    public function cartela($name = null)
+    {
+        $cartela = Cartela::where('name', $name)->first();
+        return Inertia::render('Game/Cashier/Cartela',[
+            'cartela' => $cartela
+        ]);
+    }
+
+    public function playCartela($cartelaId)
+    {
+        $cartela = Cartela::find($cartelaId);
+        return Inertia::render('Game/Cashier/PlayCartela',[
+            'cartela' => $cartela
+        ]);
     }
 }

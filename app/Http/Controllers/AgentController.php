@@ -14,7 +14,10 @@ class AgentController extends Controller
     public function index()
     {
         $agent = auth()->user()->agent;
-        $branches = $agent?->branches()->with('cashiers', 'transactions')->get();
+        $branches = $agent?->branches()
+            ->with('cashiers', 'transactions')
+            ->withCount('cashiers')
+            ->get();
 
 
         // Fetch recent activities
@@ -74,10 +77,10 @@ class AgentController extends Controller
             'agent' => $agent,
             'branches' => $branches,
             'recentActivities' => $recentActivities,
-            'totalRevenue' => $totalRevenue,
-            'todayRevenue' => $todayRevenue,
-            'thisMonthRevenue' => $thisMonthRevenue,
-            'thisWeekRevenue' => $thisWeekRevenue,
+            'totalRevenue' => (int)$totalRevenue,
+            'todayRevenue' => (int)$todayRevenue,
+            'thisMonthRevenue' => (int)$thisMonthRevenue,
+            'thisWeekRevenue' => (int)$thisWeekRevenue,
             'totalGames' => $totalGames,
             'activeGames' => $activeGames,
         ]);

@@ -19,6 +19,10 @@ Route::middleware(['auth', 'checkIfBlocked'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('coming-soon', function () {
+    return Inertia::render('ComingSoon');
+})->name('coming-soon');
+
 $directory = new RecursiveDirectoryIterator(__DIR__.'/web');
 $iterator = new RecursiveIteratorIterator($directory);
 
