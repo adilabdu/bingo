@@ -135,5 +135,20 @@ class AgentController extends Controller
 
         return redirect()->back()->with('success', 'Agent status updated successfully.');
     }
+
+    public function topUp(Request $request){
+        $request->validate([
+            'amount' => 'required|numeric|min:1',
+            'agent_id' => 'required|exists:agents,id'
+        ]);
+
+        $agent = Agent::find($request->agent_id);
+        $newBalance = $agent->balance + ( (100 - $agent->profit_percentage) * $request->input('amount'));
+        $agent->update(['balance' => $newBalance]);
+
+        Log::info('Previous Balance: ' . $agent->balance);
+        Log::info('New Balance: ' . $newBalance);
+        return redirect()->back()->with('success', 'Balance topped up successfully.');
+    }
 }
 

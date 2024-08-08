@@ -8,4 +8,5 @@ Route::prefix('agent/')->middleware('auth')->group(function () {
     Route::get('branches', [AgentController::class, 'branches'])->name('agent.branches');
     Route::post('branches', [AgentController::class, 'storeBranch'])->name('agent.branches.store');
     Route::post('toggle', [AgentController::class, 'toggle'])->name('agent.toggle');
+    Route::post('top-up', [AgentController::class, 'topUp'])->name('agent.top-up');
 });

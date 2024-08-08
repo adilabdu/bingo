@@ -75,7 +75,7 @@ class CashierGameController extends Controller
                     $cashier->update(['balance' => $cashier->balance + $game->gameCategory->amount]);
                 });
 
-                $cashier->branch->agent->update(['balance' => $cashier->branch->agent->balance - ($game->profit * $cashier->branch->agent->profit_percentage / 100)]);
+                $cashier->branch->agent->update(['balance' => $cashier->branch->agent->balance - $game->profit]);
                 $selectedCartelas = $game->cartelas()->get();
                 AddCashierPlayerEvent::dispatch($game, $selectedCartelas);
             }
@@ -212,7 +212,7 @@ class CashierGameController extends Controller
 
         $cashier = Cashier::where('user_id', auth()->user()->id)->first()->load('branch.agent');
         $cashier->update(['balance' => $cashier->balance - $game->winner_net_amount]);
-        $cashier->branch->agent->update(['balance' => $cashier->branch->agent->balance - ($game->profit * $cashier->branch->agent->profit_percentage / 100)]);
+        $cashier->branch->agent->update(['balance' => $cashier->branch->agent->balance - $game->profit]);
 
         activity()
             ->causedBy(auth()->user()->cashier)

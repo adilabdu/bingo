@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="!z-[10000]">
         <transition
             v-if="showNotification"
             name="notification"
