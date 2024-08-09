@@ -64,7 +64,7 @@ const toggleDropdown = (state) => {
             <BottomNavigationItem :icon="Wallet" label="Wallet" to="/cashier/finance" :active="route().current('cashier.finance')" />
             <BottomNavigationItem :icon="User" label="Profile" to="/profile" :active="route().current('profile.edit')" />
         </div>
-        <div v-else-if="user?.type === 'admin'" class="flex w-full justify-around py-1.5 bg-white border-t border-gray-100 ">
+        <div v-else-if="user?.type === 'admin' || user?.type === 'super-admin'" class="flex w-full justify-around py-1.5 bg-white border-t border-gray-100 ">
             <BottomNavigationItem :icon="LayoutDashboard" label="Dashboard" to="/admin" :active="route().current('admin.index')" />
             <BottomNavigationItem :icon="Users" label="Agents" to="/admin/agents" :active="route().current('admin.agents')" />
             <BottomNavigationItem :icon="User" label="Profile" to="/profile" :active="route().current('profile.edit')" />

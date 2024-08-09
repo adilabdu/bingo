@@ -52,7 +52,7 @@ class RegisteredUserController extends Controller
             'admin' => Admin::create(['user_id' => $user->id]),
             'player' => Player::create(['user_id' => $user->id, 'balance' => env('INITIAL_PLAYER_BONUS_BALANCE', 0)]),
             'cashier' => Cashier::create(['user_id' => $user->id, 'branch_id' => $request->branch_id, 'balance' => 0]),
-            'agent' => Agent::create(['user_id' => $user->id]),
+            'agent' => Agent::create(['user_id' => $user->id, 'profit_percentage' => $request->input('profit_percentage', 0)]),
         };
         event(new Registered($user));
 

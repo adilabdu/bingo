@@ -10,6 +10,7 @@ use App\Models\GameCategory;
 use App\Models\GamePlayer;
 use App\Services\DrawGameService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class CashierGameController extends Controller
@@ -31,10 +32,14 @@ class CashierGameController extends Controller
             $gameToRepeat->update(['status' => Game::STATUS_COMPLETED]);
         }
 
+        $cashier = auth()->user()->cashier->load('branch.agent');
+        if (!$this->checkIfCashierIsAllowedToPlay($cashier)) {
+            return redirect()->back()->with('error', 'You are not allowed to play. Contact your agent.');
+        }
         // Check if there is a pending game where the category is the same and is a tv game
         $game = Game::where('game_category_id', $gameCategory->id)
             ->where('is_tv_game', true)
-            ->where('cashier_id', auth()->user()->cashier->id)
+            ->where('cashier_id', $cashier->id)
             ->whereIn('status', [Game::STATUS_PENDING, Game::STATUS_ACTIVE])
             ->first();
 
@@ -54,7 +59,7 @@ class CashierGameController extends Controller
 
         if ($request->repeatGame) {
             if ($gameToRepeat) {
-                $cashier = Cashier::where('user_id', auth()->user()->id)->first();
+                $cashier = Cashier::where('user_id', auth()->user()->id)->first()->load('branch.agent');
                 $gameToRepeat->cartelas()->get()->each(function ($cartela) use ($game, $cashier) {
                     $cartelaInUse = GamePlayer::where('cartela_id', $cartela->id)
                         ->whereRelation('game', function ($query) use ($game) {
@@ -70,6 +75,7 @@ class CashierGameController extends Controller
                     $cashier->update(['balance' => $cashier->balance + $game->gameCategory->amount]);
                 });
 
+                $cashier->branch->agent->update(['balance' => $cashier->branch->agent->balance - $game->profit]);
                 $selectedCartelas = $game->cartelas()->get();
                 AddCashierPlayerEvent::dispatch($game, $selectedCartelas);
             }
@@ -204,8 +210,9 @@ class CashierGameController extends Controller
 
         $game->update(['status' => Game::STATUS_COMPLETED]);
 
-        $cashier = Cashier::where('user_id', auth()->user()->id)->first();
+        $cashier = Cashier::where('user_id', auth()->user()->id)->first()->load('branch.agent');
         $cashier->update(['balance' => $cashier->balance - $game->winner_net_amount]);
+        $cashier->branch->agent->update(['balance' => $cashier->branch->agent->balance - $game->profit]);
 
         activity()
             ->causedBy(auth()->user()->cashier)
@@ -257,5 +264,14 @@ class CashierGameController extends Controller
         return Inertia::render('Game/Cashier/PlayCartela',[
             'cartela' => $cartela
         ]);
+    }
+
+    private function checkIfCashierIsAllowedToPlay( $cashier)
+    {
+      if ($cashier->branch->agent->balance < 10 || !$cashier->branch->agent->is_active) {
+          return false;
+      }
+
+      return true;
     }
 }

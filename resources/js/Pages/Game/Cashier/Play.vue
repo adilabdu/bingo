@@ -229,7 +229,7 @@ function repeatGame(){
                 </div>
                 <div class="flex flex-col space-y-2 items-center w-2/5">
                     <div class="font-normal text-xl">Winning Amount</div>
-                    <div class="text-6xl   font-bold">{{ game.winner_net_amount }} Br</div>
+                    <div class="text-6xl   font-bold">{{ Number(game.winner_net_amount).toFixed(0) }} Br</div>
                 </div>
                 <div class="flex flex-col cursor-pointer space-y-2 w-1/5 h-full justify-center items-center ">
                     <div @click="toggleSound()">

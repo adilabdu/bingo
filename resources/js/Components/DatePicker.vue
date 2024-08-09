@@ -6,25 +6,26 @@ import { Button } from '@/Components/shadcn/ui/button/index.js'
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/shadcn/ui/popover/index.js'
 import moment from "moment";
 
-const emit = defineEmits(['update:date']);
-defineProps({
+const emit = defineEmits(['update:date', 'update:modelValue']);
+const props = defineProps({
     label: {
         type: String,
         default: "Pick a date"
-    }
+    },
 });
-const value = ref('');
+const value = ref();
 
 watch(value, (newValue) => {
-    emit('update:date', newValue);
+    emit('update:date', moment(newValue).toDate());
+    emit('update:modelValue', new Date(newValue));
 });
 </script>
 
 <template>
-    <Popover class="!bg-red-600">
+    <Popover>
         <PopoverTrigger as-child>
             <Button
-                class="min-w-36"
+                class="min-w-32 w-6/12"
                 variant="outline"
             >
                 <CalendarIcon class="mr-2 h-4 w-4" />

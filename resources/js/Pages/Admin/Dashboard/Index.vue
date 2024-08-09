@@ -6,8 +6,9 @@ import OverViewItem from "@/Views/Agent/Dashboard/OverViewItem.vue";
 import DateFilter from "@/Views/Admin/Dashboard/DateFilter.vue";
 import { ref, computed, onMounted } from "vue";
 import Loading from "@/Components/Loading.vue";
+import moment from "moment";
 
-defineProps({
+const props = defineProps({
     todayRevenue: Number,
     thisWeekRevenue: Number,
     thisMonthRevenue: Number,
@@ -28,24 +29,16 @@ defineProps({
     totalPlayerGames: Number,
     todayRegisteredPlayers: Number,
     totalRegisteredPlayers: Number,
+    startDateQuery: String,
+    endDateQuery: String,
+    dateFilterQuery: String,
 });
 
 const isLoading = ref(false);
-const startDate = ref(null);
-const endDate = ref(null);
+const startDate = ref(props.startDateQuery);
+const endDate = ref(props.endDateQuery);
 const appliedStartDate = ref(null);
 const appliedEndDate = ref(null);
-
-const filteredDateRange = computed(() => {
-    if (appliedStartDate.value && appliedEndDate.value) {
-        return `Filtered from ${appliedStartDate.value} to ${appliedEndDate.value}`;
-    } else if (appliedStartDate.value) {
-        return `Filtered from ${appliedStartDate.value}`;
-    } else if (appliedEndDate.value) {
-        return `Filtered to ${appliedEndDate.value}`;
-    }
-    return 'No filter applied';
-});
 
 function refreshData() {
     isLoading.value = true;
@@ -58,17 +51,14 @@ function refreshData() {
 }
 
 function applyDateFilter(start, end) {
-    isLoading.value = true;
     startDate.value = start;
-    endDate.value = end;
-    appliedStartDate.value = start;
-    appliedEndDate.value = end;
-    router.visit('/admin', {
-        method: 'get',
-        data: {
+    endDate.value = end
+    isLoading.value = true;
+    router.get('/admin', {
             start_date: start,
             end_date: end
-        },
+        }, {
+        preserveState: true,
         replace: true,
         onFinish: () => {
             isLoading.value = false;
@@ -99,22 +89,24 @@ onMounted(() => {
 
 <template>
     <Loading v-if="isLoading" type="brand" is-full-screen />
-    <div class="flex flex-col space-y-4">
+    <div class="flex flex-col space-y-4 max-w-xl mx-auto">
         <div class="flex items-center pt-2 w-full justify-between">
             <Header class="font-semibold !w-fit" value="Revenue Numbers" />
             <div @click="refreshData" class="flex items-center space-x-2 text-xs py-1 bg-brand-secondary rounded-md shadow-md w-fit text-white px-2">
-                <RefreshCcw class="w-3" />
+                 <RefreshCcw class="w-3" />
                 <span>Refresh</span>
             </div>
         </div>
 
         <DateFilter
-            :filteredDateRange="filteredDateRange"
             :startDate="startDate"
             :endDate="endDate"
             :applyDateFilter="applyDateFilter"
             :clearDateFilter="clearDateFilter"
         />
+        <div class="flex flex-wrap justify-between">
+            <OverViewItem base-class="bg-indigo-600 text-white !w-full !max-w-full " :label="moment(startDate).format('ddd DD, MMM YYYY') + ' - ' + moment(endDate).format('ddd DD, MMM YYYY') " :value="dateFilterQuery + ' Br'" />
+        </div>
 
         <div class="flex flex-wrap justify-between">
             <OverViewItem base-class="bg-lime-100" label="Today's revenue" :value="todayRevenue + ' Br'" />

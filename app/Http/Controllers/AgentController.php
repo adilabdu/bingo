@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agent;
 use App\Models\Branch;
 use App\Models\Game;
 use Illuminate\Http\Request;
@@ -120,6 +121,34 @@ class AgentController extends Controller
             ->log('created a branch');
 
         return redirect()->route('agent.branches')->with('success', 'Branch created successfully.');
+    }
+
+    public function toggle(Request $request)
+    {
+        $request->validate([
+            'agent_id' => 'required|exists:agents,id',
+            'is_active' => 'required|boolean',
+        ]);
+
+        $agent = Agent::find($request->agent_id);
+        $agent->update(['is_active' => $request->is_active]);
+
+        return redirect()->back()->with('success', 'Agent status updated successfully.');
+    }
+
+    public function topUp(Request $request){
+        $request->validate([
+            'amount' => 'required|numeric|min:1',
+            'agent_id' => 'required|exists:agents,id'
+        ]);
+
+        $agent = Agent::find($request->agent_id);
+        $newBalance = $agent->balance + ( (100 - $agent->profit_percentage) * $request->input('amount'));
+        $agent->update(['balance' => $newBalance]);
+
+        Log::info('Previous Balance: ' . $agent->balance);
+        Log::info('New Balance: ' . $newBalance);
+        return redirect()->back()->with('success', 'Balance topped up successfully.');
     }
 }
 

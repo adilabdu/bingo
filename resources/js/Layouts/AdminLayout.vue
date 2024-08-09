@@ -36,7 +36,7 @@ provide("notificationData", notificationData);
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col bg-gray-100">
+    <div class="min-h-screen flex flex-col bg-white">
         <!-- Header -->
         <header class="bg-white shadow">
             <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">

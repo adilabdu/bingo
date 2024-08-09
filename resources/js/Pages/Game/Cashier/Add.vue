@@ -158,21 +158,11 @@ Echo.private('cashier-players')
                 <span class="text-sm font-normal">Players Joined</span>
                 <span class="text-5xl font-bold">{{ selectedCartelas.length }} </span>
             </div>
-            <div
-                class="flex w-full lg:w-3/12 flex-col py-3 lg:h-36 space-y-2 items-center justify-center bg-gray-800 text-white px-4 rounded-lg shadow-2xl font-bold text-4xl lg:text-7xl">
-                <span class="font-normal text-sm lg:text-2xl">Game</span>
-                <span>{{ gameCategory.amount }} Birr</span>
-            </div>
-            <div
-                class="flex w-full lg:w-3/12 flex-col py-3 lg:h-36 space-y-2 items-center justify-center bg-gray-800 text-white px-4 rounded-lg shadow-2xl font-bold text-4xl lg:text-7xl">
-                <span class="font-normal text-sm lg:text-2xl"> Winner Amount</span>
-                <span v-if="selectedCartelas.length > 1">{{ winnerAmount }} Birr</span>
-                <span v-else>-</span>
-            </div>
+
             <div
                 @click="startGame"
                 :class="selectedCartelas.length <= 1 ?'bg-gray-800 opacity-40 cursor-not-allowed': 'bg-brand-secondary hover:scale-105 cursor-pointer opacity-100'"
-                class=" border-8 border-black hover:shadow-2xl shadow-md rounded-xl text-white w-full lg:w-4/12 font-bold py-3 text-3xl lg:text-5xl text-center h-3/5 flex items-center justify-center">
+                class=" border-8 border-black hover:shadow-2xl shadow-md rounded-xl text-white w-full lg:w-7/12 font-bold py-3 text-3xl lg:text-5xl text-center h-3/5 flex items-center justify-center">
                 START BINGO
             </div>
         </div>
