@@ -171,6 +171,15 @@ class CashierGameController extends Controller
 
         $batchIndex = $request->input('batch_index', 0);
 
+        /**
+         * TODO:
+         * Define a separate web route for this page
+         * and move to separate Controller Action
+         */
+        return Inertia::render('Game/Cashier/Shuffle', [
+            'duration' => 3000,
+        ]);
+
         return Inertia::render('Game/Cashier/Play', [
             'game' => $game,
             'gamePlayersCount' => $game->players()->count(),
